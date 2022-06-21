@@ -1,0 +1,19 @@
+server:
+  port: 8004
+
+spring:
+
+  application:
+    name: userManage-service
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 150.158.85.93:9000
+        username: nacos
+        password: nacos
+        namespace: public
+
+
+mybatis-plus:
+  type-aliases-package: com.soft.entity
