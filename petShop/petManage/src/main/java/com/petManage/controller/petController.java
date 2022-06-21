@@ -18,7 +18,7 @@ public class petController {
     @RequestMapping("/test")
     public String test(){
         System.out.println("petController");
-        //Nacos的服务名
+        //调用其他服务 使用Nacos的服务名
         String res = restTemplate.getForObject("https://login-service/login/test",String.class);
         return "petController"+res;
     }
