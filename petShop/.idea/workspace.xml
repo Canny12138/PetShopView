@@ -17,16 +17,11 @@
       </list>
     </option>
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="C:/Program Files/apache-maven-3.8.2" />
-        <option name="showDialogWithAdvancedSettings" value="true" />
-        <option name="userSettingsFile" value="C:\Program Files\apache-maven-3.8.2\conf\settings.xml" />
-      </MavenGeneralSettings>
-    </option>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="2AqJ8PBsVhZELuDz7bpDpOmsl2K" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
@@ -51,7 +46,14 @@
       <recent name="E:\springboot\petShop\petManage\src\main\resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.LoginApplication">
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.PetManageApplication">
     <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
@@ -117,6 +119,7 @@
       <updated>1655731024935</updated>
       <workItem from="1655731026684" duration="4864000" />
       <workItem from="1655770933114" duration="3442000" />
+      <workItem from="1655780516566" duration="1461000" />
     </task>
     <servers />
   </component>
