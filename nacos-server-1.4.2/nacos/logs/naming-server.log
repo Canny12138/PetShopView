@@ -38,19 +38,3 @@
 
 2022-06-21 09:33:32,458 INFO [DEAD-SERVICE] {"name":"DEFAULT_GROUP@@petManage-service","protectThreshold":0.0,"groupName":"DEFAULT_GROUP","metadata":{},"finalizeCount":5,"owners":[],"resetWeight":false,"enabled":true,"selector":{"type":"none"},"namespaceId":"public","ipDeleteTimeout":30000,"lastModifiedMillis":1655775087365,"checksum":"a94231ba5568e9c503961a4ae59d0901","clusterMap":{"DEFAULT":{"serviceName":"DEFAULT_GROUP@@petManage-service","name":"DEFAULT","healthChecker":{"type":"TCP"},"defaultPort":80,"defaultCheckPort":80,"useIPPort4Check":true,"metadata":{},"sitegroup":"","defCkport":80,"empty":true,"defIPPort":80}},"empty":true}
 
-2022-06-21 10:12:44,204 INFO GlobalConfig{taskDispatchPeriod=2000, batchSyncKeyCount=1000, syncRetryDelay=5000, dataWarmup=false, expireInstance=true, loadDataRetryDelayMillis=30000}
-
-2022-06-21 10:12:44,900 INFO open empty service auto clean job, initialDelay : 50000 ms, period : 30000 ms
-
-2022-06-21 10:12:44,900 INFO listen for service meta change
-
-2022-06-21 10:12:49,205 INFO [NACOS-DISTRO] healthy server list changed, old: [192.168.117.2:9000], new: [192.168.117.2:9000]
-
-2022-06-21 10:13:14,684 INFO creating empty service public:DEFAULT_GROUP@@login-service
-
-2022-06-21 10:13:14,799 INFO [NEW-SERVICE] {"name":"DEFAULT_GROUP@@login-service","protectThreshold":0.0,"groupName":"DEFAULT_GROUP","metadata":{},"finalizeCount":0,"owners":[],"resetWeight":false,"enabled":true,"selector":{"type":"none"},"namespaceId":"public","ipDeleteTimeout":30000,"lastModifiedMillis":1655777594685,"checksum":"7420ac1db2a00dff8bab5a7eafdf71a4","clusterMap":{},"empty":true}
-
-2022-06-21 10:13:14,804 WARN cluster: DEFAULT not found, ip: {"instanceId":"192.168.117.2#8001#DEFAULT#DEFAULT_GROUP@@login-service","ip":"192.168.117.2","port":8001,"weight":1.0,"healthy":true,"enabled":true,"ephemeral":true,"clusterName":"DEFAULT","serviceName":"DEFAULT_GROUP@@login-service","metadata":{"preserved.register.source":"SPRING_CLOUD"},"lastBeat":1655777594682,"marked":false,"app":"unknown","ipDeleteTimeout":30000,"instanceHeartBeatInterval":5000,"instanceHeartBeatTimeOut":15000}, will create new cluster with default configuration.
-
-2022-06-21 10:13:14,808 INFO [NACOS-RAFT] datum is changed, key: com.alibaba.nacos.naming.iplist.ephemeral.public##DEFAULT_GROUP@@login-service, value: {"instanceList":[{"instanceId":"192.168.117.2#8001#DEFAULT#DEFAULT_GROUP@@login-service","ip":"192.168.117.2","port":8001,"weight":1.0,"healthy":true,"enabled":true,"ephemeral":true,"clusterName":"DEFAULT","serviceName":"DEFAULT_GROUP@@login-service","metadata":{"preserved.register.source":"SPRING_CLOUD"},"lastBeat":1655777594682,"marked":false,"app":"unknown","ipDeleteTimeout":30000,"instanceHeartBeatInterval":5000,"instanceHeartBeatTimeOut":15000}]}
-

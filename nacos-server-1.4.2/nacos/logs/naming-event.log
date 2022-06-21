@@ -18,7 +18,3 @@
 
 2022-06-21 09:31:30,195 INFO [IP-UPDATED] namespace: public, service: DEFAULT_GROUP@@login-service, ips: 
 
-2022-06-21 10:13:14,809 INFO DEFAULT_GROUP@@login-service {SYNC} {IP-NEW} cluster: DEFAULT, new ips size: 1, content: [192.168.117.2:8001:unknown:DEFAULT_1.0_true_false_DEFAULT]
-
-2022-06-21 10:13:14,811 INFO [IP-UPDATED] namespace: public, service: DEFAULT_GROUP@@login-service, ips: 192.168.117.2:8001_true,
-

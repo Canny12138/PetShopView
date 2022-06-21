@@ -22,11 +22,3 @@
 
 2022-06-21 09:31:31,200 INFO DEFAULT_GROUP@@login-service is changed, add it to push queue.
 
-2022-06-21 10:13:15,817 INFO DEFAULT_GROUP@@login-service is changed, add it to push queue.
-
-2022-06-21 10:13:15,831 INFO serviceName: DEFAULT_GROUP@@login-service changed, schedule push for: 192.168.163.2:56769, agent: Nacos-Java-Client:v1.4.2, key: 192.168.163.2,56769,6783777863700
-
-2022-06-21 10:13:15,832 INFO send udp packet: 192.168.163.2,56769,6783777863700
-
-2022-06-21 10:13:15,836 INFO received ack: {"type": "push-ack", "lastRefTime":"6783777863700", "data":""} from: 192.168.163.2:56769, cost: 4 ms, unacked: 0, total push: 1
-
