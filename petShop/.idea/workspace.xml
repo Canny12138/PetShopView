@@ -7,8 +7,6 @@
 <<<<<<< Updated upstream
     <list default="true" id="83c5333c-6dac-4005-a84c-abd8e17bc9a9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login/src/main/java/com/login/controller/loginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/login/src/main/java/com/login/controller/loginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/petManage/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/petManage/src/main/resources/application.yml" afterDir="false" />
     </list>
 =======
     <list default="true" id="83c5333c-6dac-4005-a84c-abd8e17bc9a9" name="Default Changelist" comment="" />
