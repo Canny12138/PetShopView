@@ -1670,3 +1670,27 @@
 
 2022-06-21 10:13:14,979 INFO [long-pulling] client count 0
 
+2022-06-21 10:13:24,951 INFO toNotifyTaskSize = 0
+
+2022-06-21 10:13:24,967 INFO groupCount = 0, subscriberClientCount = 0, subscriberCount = 0
+
+2022-06-21 10:13:24,983 INFO [long-pulling] client count 0
+
+2022-06-21 10:13:34,963 INFO toNotifyTaskSize = 0
+
+2022-06-21 10:13:34,978 INFO groupCount = 0, subscriberClientCount = 0, subscriberCount = 0
+
+2022-06-21 10:13:34,994 INFO [long-pulling] client count 0
+
+2022-06-21 10:13:44,978 INFO toNotifyTaskSize = 0
+
+2022-06-21 10:13:44,978 INFO groupCount = 0, subscriberClientCount = 0, subscriberCount = 0
+
+2022-06-21 10:13:44,994 INFO [long-pulling] client count 0
+
+2022-06-21 10:13:54,991 INFO toNotifyTaskSize = 0
+
+2022-06-21 10:13:54,991 INFO groupCount = 0, subscriberClientCount = 0, subscriberCount = 0
+
+2022-06-21 10:13:55,007 INFO [long-pulling] client count 0
+
