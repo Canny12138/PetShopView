@@ -1,0 +1,24 @@
+2022-06-21 09:22:15,464 INFO DEFAULT_GROUP@@login-service is changed, add it to push queue.
+
+2022-06-21 09:22:15,483 INFO serviceName: DEFAULT_GROUP@@login-service changed, schedule push for: 192.168.163.2:50809, agent: Nacos-Java-Client:v1.4.2, key: 192.168.163.2,50809,3723423533700
+
+2022-06-21 09:22:15,483 INFO send udp packet: 192.168.163.2,50809,3723423533700
+
+2022-06-21 09:22:15,491 INFO received ack: {"type": "push-ack", "lastRefTime":"3723423533700", "data":""} from: 192.168.163.2:50809, cost: 8 ms, unacked: 0, total push: 1
+
+2022-06-21 09:22:47,444 INFO DEFAULT_GROUP@@petManage-service is changed, add it to push queue.
+
+2022-06-21 09:22:47,445 INFO serviceName: DEFAULT_GROUP@@petManage-service changed, schedule push for: 192.168.163.2:63190, agent: Nacos-Java-Client:v1.4.2, key: 192.168.163.2,63190,3755395318100
+
+2022-06-21 09:22:47,445 INFO send udp packet: 192.168.163.2,63190,3755395318100
+
+2022-06-21 09:22:47,449 INFO received ack: {"type": "push-ack", "lastRefTime":"3755395318100", "data":""} from: 192.168.163.2:63190, cost: 4 ms, unacked: 0, total push: 2
+
+2022-06-21 09:31:13,266 INFO DEFAULT_GROUP@@petManage-service is changed, add it to push queue.
+
+2022-06-21 09:31:16,175 INFO DEFAULT_GROUP@@login-service is changed, add it to push queue.
+
+2022-06-21 09:31:28,377 INFO DEFAULT_GROUP@@petManage-service is changed, add it to push queue.
+
+2022-06-21 09:31:31,200 INFO DEFAULT_GROUP@@login-service is changed, add it to push queue.
+

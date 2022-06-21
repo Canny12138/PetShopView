@@ -1,0 +1,20 @@
+2022-06-21 09:22:14,448 INFO DEFAULT_GROUP@@login-service {SYNC} {IP-NEW} cluster: DEFAULT, new ips size: 1, content: [192.168.117.2:8001:unknown:DEFAULT_1.0_true_false_DEFAULT]
+
+2022-06-21 09:22:14,449 INFO [IP-UPDATED] namespace: public, service: DEFAULT_GROUP@@login-service, ips: 192.168.117.2:8001_true,
+
+2022-06-21 09:22:46,433 INFO DEFAULT_GROUP@@petManage-service {SYNC} {IP-NEW} cluster: DEFAULT, new ips size: 1, content: [192.168.117.2:8002:unknown:DEFAULT_1.0_true_false_DEFAULT]
+
+2022-06-21 09:22:46,433 INFO [IP-UPDATED] namespace: public, service: DEFAULT_GROUP@@petManage-service, ips: 192.168.117.2:8002_true,
+
+2022-06-21 09:31:12,261 INFO {POS} {IP-DISABLED} valid: 192.168.117.2:8002@DEFAULT@DEFAULT_GROUP@@petManage-service, region: unknown, msg: client timeout after 15000, last beat: 1655775052514
+
+2022-06-21 09:31:15,173 INFO {POS} {IP-DISABLED} valid: 192.168.117.2:8001@DEFAULT@DEFAULT_GROUP@@login-service, region: unknown, msg: client timeout after 15000, last beat: 1655775055566
+
+2022-06-21 09:31:27,365 INFO DEFAULT_GROUP@@petManage-service {SYNC} {IP-DEAD} cluster: DEFAULT, dead ips size: 1, content: [192.168.117.2:8002:unknown:DEFAULT_1.0_false_false_DEFAULT]
+
+2022-06-21 09:31:27,365 INFO [IP-UPDATED] namespace: public, service: DEFAULT_GROUP@@petManage-service, ips: 
+
+2022-06-21 09:31:30,195 INFO DEFAULT_GROUP@@login-service {SYNC} {IP-DEAD} cluster: DEFAULT, dead ips size: 1, content: [192.168.117.2:8001:unknown:DEFAULT_1.0_false_false_DEFAULT]
+
+2022-06-21 09:31:30,195 INFO [IP-UPDATED] namespace: public, service: DEFAULT_GROUP@@login-service, ips: 
+
