@@ -18,7 +18,8 @@ public class petController {
     @RequestMapping("/test")
     public String test(){
         System.out.println("petController");
-        String res = restTemplate.getForObject("http://127.0.0.1:8002/pet/test",String.class);
+        //Nacos的服务名
+        String res = restTemplate.getForObject("https://login-service/login/test",String.class);
         return "petController"+res;
     }
 }
