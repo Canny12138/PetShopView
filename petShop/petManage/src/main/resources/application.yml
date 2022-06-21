@@ -1,0 +1,13 @@
+server:
+  port: 8002
+spring:
+  application:
+    name: petManage-service
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:9000
+        username: nacos
+        password: nacos
+        namespace: public
