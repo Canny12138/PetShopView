@@ -14,5 +14,6 @@ public class LoginApplication {
         SpringApplication.run(LoginApplication.class);
     }
 }
+
 //canny test
 //nofat test
