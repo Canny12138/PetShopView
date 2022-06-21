@@ -19,7 +19,7 @@ public class petController {
     public String test(){
         System.out.println("petController");
         //调用其他服务 使用Nacos的服务名
-        String res = restTemplate.getForObject("https://login-service/login/test",String.class);
+        String res = restTemplate.getForObject("http://login-service/login/test",String.class);
         return "petController"+res;
     }
 }

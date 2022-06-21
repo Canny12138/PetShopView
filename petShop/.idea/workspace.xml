@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="83c5333c-6dac-4005-a84c-abd8e17bc9a9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/petManage/src/main/java/com/petManage/controller/petController.java" beforeDir="false" afterPath="$PROJECT_DIR$/petManage/src/main/java/com/petManage/controller/petController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login/src/main/java/com/login/controller/loginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/login/src/main/java/com/login/controller/loginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petManage/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/petManage/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +57,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.PetManageApplication">
+  <component name="RunManager" selected="Spring Boot.PetManageApplication(8003)">
     <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
@@ -81,7 +82,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="LoginApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+    <configuration name="LoginApplication(8001)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true">
       <module name="login" />
       <extension name="coverage">
         <pattern>
@@ -90,13 +91,39 @@
         </pattern>
       </extension>
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.login.LoginApplication" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SHORTEN_COMMAND_LINE" value="NONE" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PetManageApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <configuration name="LoginApplication(8002)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true">
+      <module name="login" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.login.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.login.LoginApplication" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SHORTEN_COMMAND_LINE" value="NONE" />
+      <additionalParameters>
+        <param>
+          <option name="enabled" value="true" />
+          <option name="name" value="server.port" />
+          <option name="value" value="8002" />
+        </param>
+      </additionalParameters>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PetManageApplication(8003)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="petManage" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.petManage.PetManageApplication" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SHORTEN_COMMAND_LINE" value="NONE" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -110,7 +137,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.LoginApplication" />
+        <item itemvalue="Spring Boot.LoginApplication(8001)" />
+        <item itemvalue="Spring Boot.LoginApplication(8002)" />
       </list>
     </recent_temporary>
   </component>
