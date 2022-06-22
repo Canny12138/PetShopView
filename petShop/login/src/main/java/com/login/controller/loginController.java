@@ -35,7 +35,7 @@ public class loginController {
         Result result = new Result();
         User user = userFeignService.getUserByUsername(username);
         result.setData(user);
-        result.success();
+        result.success("请求成功");
         return result;
     }
 

@@ -67,6 +67,12 @@
             <artifactId>spring-boot-devtools</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
+        <!--JWT-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
