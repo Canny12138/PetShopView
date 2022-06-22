@@ -28,5 +28,5 @@ public class loginController {
         List users = userFeignService.all();
         return users;
     }
-    
+
 }
