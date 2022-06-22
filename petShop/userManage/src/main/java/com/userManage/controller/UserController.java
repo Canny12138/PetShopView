@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.soft.entity.User;
 import com.userManage.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,10 +24,12 @@ public class UserController {
         return userMapper.selectList(null);
     }
     @RequestMapping(method = RequestMethod.POST,value = "/getUserByUsername")
-    public User getUserByUsername(String username){
+    public User getUserByUsername(@RequestParam("username") String username){
+        System.out.println(username);
         User param = new User();
         QueryWrapper<User> wrapper = new QueryWrapper<>(param);
         wrapper.eq("username",username);
+        System.out.println(userMapper.selectList(wrapper).get(0));
         return userMapper.selectList(wrapper).get(0);
     }
 //    @RequestMapping(method = RequestMethod.POST,value = "/addUser")
