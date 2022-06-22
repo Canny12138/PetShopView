@@ -1,4 +1,4 @@
-package com.login;
+package com.userManage;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,14 +6,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * Project name:petShop
  * Author: NoFat
- * Create time:2022/6/20 21:38
+ * Create time:2022/6/21 22:12
  **/
 @SpringBootApplication
-public class LoginApplication {
+public class UserManageApplication {
     public static void main(String[] args){
-        SpringApplication.run(LoginApplication.class);
+        SpringApplication.run(UserManageApplication.class);
     }
 }
-
-//canny test
-//nofat test

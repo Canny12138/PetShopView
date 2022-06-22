@@ -1,7 +1,9 @@
 package com.petManage.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * Project name:petShop
@@ -11,10 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/pet")
 public class petController {
-
+    @Autowired
+    RestTemplate restTemplate;
     @RequestMapping("/test")
     public String test(){
         System.out.println("petController");
-        return "petController";
+        //调用其他服务 使用Nacos的服务名
+        String res = restTemplate.getForObject("http://login-service/login/test",String.class);
+        return "petController"+res;
     }
 }
