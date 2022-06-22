@@ -3,19 +3,17 @@
 		<image class="logo" src="/static/logo.png"></image>
 		<view class="text-area">
 			<text class="title">{{title}}</text>
-			<u-button type="primary" text="确定"></u-button>
+			<navigator url="pages/shop/shop" open-type="redirect" hover-class="other-navigator-hover">
+				<button type="default">在当前页打开</button>
+			</navigator>
 		</view>
-		<u-tabbar
-			:value="value2"
-			:placeholder="false"
-			@change="name => value2 = name"
-			:fixed="false"
-			:safeAreaInsetBottom="false"
-		>
-			<u-tabbar-item text="首页" icon="home" dot ></u-tabbar-item>
+		<router-view></router-view>
+		<u-tabbar :list="tabBar" :placeholder="true" :fixed="false" 
+			:safeAreaInsetBottom="true">
+			<u-tabbar-item text="HOME" icon="home" dot></u-tabbar-item>
 			<u-tabbar-item text="放映厅" icon="photo" badge="3"></u-tabbar-item>
-			<u-tabbar-item text="直播" icon="play-right" ></u-tabbar-item>
-			<u-tabbar-item text="我的" icon="account" ></u-tabbar-item>
+	<!-- 		<u-tabbar-item text="直播" icon="play-right"></u-tabbar-item>
+			<u-tabbar-item text="我的" icon="account"></u-tabbar-item> -->
 		</u-tabbar>
 	</view>
 </template>
@@ -24,7 +22,15 @@
 	export default {
 		data() {
 			return {
-				title: 'Hello',
+				title: "Hello",
+				tabBar: [{
+						pagePath: "pages/index",
+						"text": "HOME"
+					},
+					{
+						pagePath: "pages/pages/shop/shop"
+					}
+				],
 				value2: 1,
 			}
 		},
