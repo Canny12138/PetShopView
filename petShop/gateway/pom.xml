@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>userManage</artifactId>
+    <artifactId>gateway</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -17,20 +17,14 @@
     </properties>
 
     <dependencies>
+        <!--gateway-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
-        <!--Nacos 服务注册发现-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
-        <!--base类-->
-        <dependency>
-            <groupId>com.example</groupId>
-            <artifactId>base</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

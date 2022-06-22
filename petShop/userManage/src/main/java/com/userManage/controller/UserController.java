@@ -25,11 +25,9 @@ public class UserController {
     }
     @RequestMapping(method = RequestMethod.POST,value = "/getUserByUsername")
     public User getUserByUsername(@RequestParam("username") String username){
-        System.out.println(username);
         User param = new User();
         QueryWrapper<User> wrapper = new QueryWrapper<>(param);
         wrapper.eq("username",username);
-        System.out.println(userMapper.selectList(wrapper).get(0));
         return userMapper.selectList(wrapper).get(0);
     }
 //    @RequestMapping(method = RequestMethod.POST,value = "/addUser")
