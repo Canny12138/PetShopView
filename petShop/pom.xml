@@ -9,6 +9,7 @@
         <module>userManage</module>
         <module>gateway</module>
         <module>goodManage</module>
+        <module>surroundingManage</module>
     </modules>
 <!--    <parent>-->
 <!--        <groupId>org.springframework.boot</groupId>-->
