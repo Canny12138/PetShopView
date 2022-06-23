@@ -2,12 +2,14 @@ package com.userManage.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.soft.entity.User;
+import com.soft.util.Md5Util;
 import com.userManage.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Project name:petShop
@@ -29,12 +31,25 @@ public class UserController {
         User param = new User();
         QueryWrapper<User> wrapper = new QueryWrapper<>(param);
         wrapper.eq("username",username);
-        List<User> res = new ArrayList<>();
+        List<User> res;
         res = userMapper.selectList(wrapper);
         if(res.size()==0){
             return null;
         }
         return res.get(0);
+    }
+    @RequestMapping(method = RequestMethod.POST,value = ("/addUser"))
+    public Boolean addUser(@RequestBody User user) throws Exception{
+        User param = new User();
+        QueryWrapper<User> wrapper = new QueryWrapper<>(param);
+        wrapper.eq("username",user.getUsername());
+        List<User> res;
+        res = userMapper.selectList(wrapper);
+        if(res.size()!=0){
+            return false;
+        }
+        userMapper.insert(user);
+        return true;
     }
 //    @RequestMapping(method = RequestMethod.POST,value = "/addUser")
 //    public Boolean addUser(User user){
