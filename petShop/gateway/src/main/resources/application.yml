@@ -1,0 +1,35 @@
+server:
+  port: 9001
+
+spring:
+  application:
+    name: api-gateway
+
+  datasource:
+    username: root
+    password: Admin12138
+    url: jdbc:mysql://150.158.85.93:3308/user?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 150.158.85.93:9000
+        username: nacos
+        password: nacos
+        namespace: public
+    # gateway 配置
+    gateway:
+      routes:
+        - id: login_route # 路由的唯一标识
+          uri: lb://login-service # 转发地址 lb:使用nacos中的本地负载均衡策略
+          # 断言规则 用于路由规则的匹配
+          predicates:
+            - Path=/login-server/**
+            # http://localhost:9001/login-server/login/test =>
+            # http://localhost:8001/login-server/login/test =>
+          filters:
+            - StripPrefix=1 #去掉第一层
+            # http://localhost:8001/login/test
+
+        # -id: ****
