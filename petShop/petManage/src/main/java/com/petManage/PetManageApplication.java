@@ -16,9 +16,4 @@ public class PetManageApplication {
     public static void main(String[] args){
         SpringApplication.run(PetManageApplication.class);
     }
-    @Bean
-    @LoadBalanced //负载均衡器
-    public RestTemplate restTemplate(){
-        return new RestTemplate();
-    }
 }

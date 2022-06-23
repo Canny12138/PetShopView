@@ -64,7 +64,7 @@ public class UserController {
         userMapper.deleteById(userId);
         return true;
     }
-    @RequestMapping(method = RequestMethod.POST,value = ("updateUser"))
+    @RequestMapping(method = RequestMethod.POST,value = ("/updateUser"))
     public Boolean updateUser(@RequestBody User user){
         User param = new User();
         QueryWrapper<User> wrapper = new QueryWrapper<>(param);
@@ -77,10 +77,4 @@ public class UserController {
         userMapper.updateById(user);
         return true;
     }
-//    @RequestMapping(method = RequestMethod.POST,value = "/addUser")
-//    public Boolean addUser(User user){
-//        if(user.getUser_id()==null){
-//            user.setUser_id();
-//        }
-//    }
 }
