@@ -57,7 +57,7 @@ public class Result<T> implements Serializable {
     /*
         成功请求
      */
-    public void success(){
+    public void success(String message){
         this.isSuccess = true;
     }
     /*

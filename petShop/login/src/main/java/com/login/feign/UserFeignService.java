@@ -3,6 +3,7 @@ package com.login.feign;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.soft.entity.User;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,4 +21,7 @@ public interface UserFeignService {
 
     @RequestMapping(method = RequestMethod.GET,value = "/all")
     List<User> all();
+
+    @RequestMapping(method = RequestMethod.POST,value = ("/addUser"))
+    Boolean addUser(@RequestBody User user);
 }
