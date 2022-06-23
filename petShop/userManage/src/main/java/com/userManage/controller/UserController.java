@@ -51,6 +51,32 @@ public class UserController {
         userMapper.insert(user);
         return true;
     }
+    @RequestMapping(method = RequestMethod.DELETE,value = ("/deleteUser"))
+    public Boolean deleteUser(@RequestParam("userId") String userId){
+        User param = new User();
+        QueryWrapper<User> wrapper = new QueryWrapper<>(param);
+        wrapper.eq("userId",userId);
+        List<User> res;
+        res = userMapper.selectList(wrapper);
+        if(res.size()==0){
+            return false;
+        }
+        userMapper.deleteById(userId);
+        return true;
+    }
+    @RequestMapping(method = RequestMethod.POST,value = ("updateUser"))
+    public Boolean updateUser(@RequestBody User user){
+        User param = new User();
+        QueryWrapper<User> wrapper = new QueryWrapper<>(param);
+        wrapper.eq("userId", user.getUserId());
+        List<User> res;
+        res = userMapper.selectList(wrapper);
+        if(res.size()==0){
+            return false;
+        }
+        userMapper.updateById(user);
+        return true;
+    }
 //    @RequestMapping(method = RequestMethod.POST,value = "/addUser")
 //    public Boolean addUser(User user){
 //        if(user.getUser_id()==null){
