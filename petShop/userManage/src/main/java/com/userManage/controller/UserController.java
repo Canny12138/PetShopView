@@ -51,11 +51,11 @@ public class UserController {
         userMapper.insert(user);
         return true;
     }
-    @RequestMapping(method = RequestMethod.DELETE,value = ("/deleteUser"))
+    @RequestMapping(method = RequestMethod.POST,value = ("/deleteUser"))
     public Boolean deleteUser(@RequestParam("userId") String userId){
         User param = new User();
         QueryWrapper<User> wrapper = new QueryWrapper<>(param);
-        wrapper.eq("userId",userId);
+        wrapper.eq("user_id",userId);
         List<User> res;
         res = userMapper.selectList(wrapper);
         if(res.size()==0){
@@ -65,15 +65,16 @@ public class UserController {
         return true;
     }
     @RequestMapping(method = RequestMethod.POST,value = ("/updateUser"))
-    public Boolean updateUser(@RequestBody User user){
+    public Boolean updateUser(@RequestBody User user) throws Exception {
         User param = new User();
         QueryWrapper<User> wrapper = new QueryWrapper<>(param);
-        wrapper.eq("userId", user.getUserId());
+        wrapper.eq("user_id", user.getUserId());
         List<User> res;
         res = userMapper.selectList(wrapper);
         if(res.size()==0){
             return false;
         }
+        user.setPassword(Md5Util.getEncode(user.getPassword()));
         userMapper.updateById(user);
         return true;
     }
