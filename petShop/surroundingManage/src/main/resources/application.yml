@@ -1,0 +1,28 @@
+server:
+  port: 8005
+
+spring:
+
+  application:
+    name: surroundingManage-service
+
+  cloud:
+    ## nacos 配置
+    nacos:
+      discovery:
+        server-addr: 150.158.85.93:9000
+        username: nacos
+        password: nacos
+        namespace: public
+
+
+  datasource:
+    username: root
+    password: Admin12138
+    url: jdbc:mysql://150.158.85.93:3308/surrounding?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+
+mybatis-plus:
+  type-aliases-package: com.soft.entity
