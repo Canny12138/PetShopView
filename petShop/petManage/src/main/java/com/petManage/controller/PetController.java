@@ -22,17 +22,18 @@ public class PetController {
     private PetMapper petMapper;
     @RequestMapping(method = RequestMethod.GET,value = "/all")
     public List<Pet> all(){ return petMapper.selectList(null);}
-    @RequestMapping(method = RequestMethod.POST,value = "/getPetByPetname")
-    public Pet getPetByPetname(@RequestParam("pet_name") String petname){
+
+    @RequestMapping(method = RequestMethod.POST,value = "/getPetByPetid")
+    public Pet getPetByPetid(@RequestParam("petId") String petId){
         Pet param = new Pet();
         QueryWrapper<Pet> wrapper = new QueryWrapper<>(param);
-        wrapper.eq("pet_name",petname);
-        List<Pet> res;
-        res = petMapper.selectList(wrapper);
-        if(res.size()==0){
+        wrapper.eq("pet_id",petId);
+        Pet res;
+        res = petMapper.selectById(petId);
+        if(res==null){
             return null;
         }
-        return res.get(0);
+        return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = ("/addPet"))
     public Boolean addPet(@RequestBody Pet pet) throws Exception{
@@ -52,9 +53,9 @@ public class PetController {
         Pet param = new Pet();
         QueryWrapper<Pet> wrapper = new QueryWrapper<>(param);
         wrapper.eq("pet_id",petId);
-        List<Pet> res;
-        res = petMapper.selectList(wrapper);
-        if(res.size()==0){
+        Pet res;
+        res = petMapper.selectById(petId);
+        if(res==null){
             return false;
         }
         petMapper.deleteById(petId);
@@ -65,9 +66,9 @@ public class PetController {
         Pet param = new Pet();
         QueryWrapper<Pet> wrapper = new QueryWrapper<>(param);
         wrapper.eq("pet_id",pet.getPetId());
-        List<Pet> res;
-        res = petMapper.selectList(wrapper);
-        if(res.size()==0){
+        Pet res;
+        res = petMapper.selectById(pet.getPetId());
+        if(res==null){
             return false;
         }
         petMapper.updateById(pet);
