@@ -3,6 +3,8 @@ package com.login.controller;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.login.feign.UserFeignService;
 import com.soft.entity.User;
+import com.soft.util.JwtUtils;
+import com.soft.util.Md5Util;
 import com.soft.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,11 +33,19 @@ public class loginController {
     }
 
     @RequestMapping(method = RequestMethod.POST,value = "/useLogin")
-    public Result login(@RequestParam("username") String username,@RequestParam("password") String password){
+    public Result login(@RequestParam("username") String username,@RequestParam("password") String password) throws Exception {
         Result result = new Result();
         User user = userFeignService.getUserByUsername(username);
-        result.setData(user);
-        result.success("请求成功");
+        if(user==null){
+            result.fail("用户不存在");
+            return result;
+        }
+        password = Md5Util.getEncode(password);
+        if(user.getPassword().equals(password)){
+            String token = JwtUtils.getToken(user);
+            result.setData(token);
+        }
+        result.success("登录成功");
         return result;
     }
 

@@ -6,6 +6,7 @@ import com.userManage.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +29,12 @@ public class UserController {
         User param = new User();
         QueryWrapper<User> wrapper = new QueryWrapper<>(param);
         wrapper.eq("username",username);
-        return userMapper.selectList(wrapper).get(0);
+        List<User> res = new ArrayList<>();
+        res = userMapper.selectList(wrapper);
+        if(res.size()==0){
+            return null;
+        }
+        return res.get(0);
     }
 //    @RequestMapping(method = RequestMethod.POST,value = "/addUser")
 //    public Boolean addUser(User user){
