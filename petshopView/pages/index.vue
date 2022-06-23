@@ -1,45 +1,64 @@
 <template>
 	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view class="text-area">
-			<text class="title">{{title}}</text>
-			<navigator url="pages/shop/shop" open-type="redirect" hover-class="other-navigator-hover">
-				<button type="default">在当前页打开</button>
-			</navigator>
-		</view>
-		<router-view></router-view>
-		<u-tabbar :list="tabBar" :placeholder="true" :fixed="false" 
+		<component :is="component"></component>
+		<u-tabbar :list="tabbar" v-model="current" @change="changeTb" :placeholder="true" :fixed="true"
 			:safeAreaInsetBottom="true">
 			<u-tabbar-item text="HOME" icon="home" dot></u-tabbar-item>
 			<u-tabbar-item text="放映厅" icon="photo" badge="3"></u-tabbar-item>
-	<!-- 		<u-tabbar-item text="直播" icon="play-right"></u-tabbar-item>
+			<!-- 		<u-tabbar-item text="直播" icon="play-right"></u-tabbar-item>
 			<u-tabbar-item text="我的" icon="account"></u-tabbar-item> -->
 		</u-tabbar>
 	</view>
 </template>
 
 <script>
+	import Home from './pages/Home.vue'
+	import Shop from './pages/Shop.vue'
 	export default {
+		components: {
+			Home,
+			Shop
+		},
 		data() {
 			return {
 				title: "Hello",
-				tabBar: [{
-						pagePath: "pages/index",
-						"text": "HOME"
+				current: 0,
+				tabbar: [{
+						name: 'Home',
 					},
 					{
-						pagePath: "pages/pages/shop/shop"
+						name: 'Shop',
 					}
 				],
-				value2: 1,
+				// value2: 1,
 			}
 		},
-		onLoad() {
-
+		mounted() {
+			uni.request({
+				url: 'http://172.16.193.131:9001/login-server/login/test',
+				method: 'GET',
+				success: ((res) => {
+					console.log(res)
+				}),
+				// fail: ((err) => {
+				// 	uni.showToast({
+				// 		title: '请求接口失败',
+				// 		duration: 2000
+				// 	})
+				// 	reject(err)
+				// })
+			})
 		},
 		methods: {
-
-		}
+			changeTb(index) {
+				this.current = index
+			}
+		},
+		computed: {
+			component: function() {
+				return this.tabbar[this.current].name
+			}
+		},
 	}
 </script>
 
@@ -49,24 +68,5 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-	}
-
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin-top: 200rpx;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 50rpx;
-	}
-
-	.text-area {
-		display: flex;
-		justify-content: center;
-	}
-
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
 	}
 </style>

@@ -11,24 +11,34 @@
 			}
 		}, {
 			"name": "shop",
-			"path": "pages/pages/shop/shop",
+			"path": "pages/pages/Shop",
 			"style": {}
 
 		}
-	],
+	    ,{
+            "path" : "pages/pages/Home",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 
-	"tabBar": {
-		"list": [{
-				"pagePath": "pages/index",
-				"text": "HOME"
-			},
-			{
-				"pagePath": "pages/pages/shop/shop"
-			}
-		]
-	},
+	// "tabBar": {
+	// 	"list": [{
+	// 			"pagePath": "pages/index",
+	// 			"text": "HOME"
+	// 		},
+	// 		{
+	// 			"pagePath": "pages/pages/Shop"
+	// 		}
+	// 	]
+	// },
 
 	"globalStyle": {
+		"navigationStyle":"custom",
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
