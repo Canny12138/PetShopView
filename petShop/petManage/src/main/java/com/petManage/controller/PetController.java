@@ -23,8 +23,8 @@ public class PetController {
     @RequestMapping(method = RequestMethod.GET,value = "/all")
     public List<Pet> all(){ return petMapper.selectList(null);}
 
-    @RequestMapping(method = RequestMethod.POST,value = "/getPetByPetid")
-    public Pet getPetByPetid(@RequestParam("petId") String petId){
+    @RequestMapping(method = RequestMethod.POST,value = "/getPetByPetId")
+    public Pet getPetByPetId(@RequestParam("petId") String petId){
         Pet param = new Pet();
         QueryWrapper<Pet> wrapper = new QueryWrapper<>(param);
         wrapper.eq("pet_id",petId);
