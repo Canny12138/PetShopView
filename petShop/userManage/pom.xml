@@ -26,6 +26,7 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
+        <!--base类-->
         <dependency>
             <groupId>com.example</groupId>
             <artifactId>base</artifactId>

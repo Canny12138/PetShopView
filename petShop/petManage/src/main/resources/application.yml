@@ -11,3 +11,9 @@ spring:
         username: nacos
         password: nacos
         namespace: public
+
+  datasource:
+    username: root
+    password: Admin12138
+    url: jdbc:mysql://150.158.85.93:3308/pet?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver

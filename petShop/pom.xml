@@ -7,6 +7,7 @@
         <module>petManage</module>
         <module>login</module>
         <module>userManage</module>
+        <module>gateway</module>
     </modules>
 <!--    <parent>-->
 <!--        <groupId>org.springframework.boot</groupId>-->
@@ -59,6 +60,24 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <!--热部署-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+        <!--JWT-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+        <!--redis-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>${spring.boot.version}</version>
         </dependency>
     </dependencies>
 
