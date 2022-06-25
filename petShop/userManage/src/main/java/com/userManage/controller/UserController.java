@@ -50,12 +50,9 @@ public class UserController {
     }
     @RequestMapping(method = RequestMethod.POST,value = ("/deleteUser"))
     public Boolean deleteUser(@RequestParam("userId") String userId){
-        User param = new User();
-        QueryWrapper<User> wrapper = new QueryWrapper<>(param);
-        wrapper.eq("user_id",userId);
-        List<User> res;
-        res = userMapper.selectList(wrapper);
-        if(res.size()==0){
+        User res;
+        res = userMapper.selectById(userId);
+        if(res==null){
             return false;
         }
         userMapper.deleteById(userId);
