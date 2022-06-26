@@ -30,19 +30,13 @@ public class PetController {
         wrapper.eq("pet_id",petId);
         Pet res;
         res = petMapper.selectById(petId);
-        if(res==null){
-            return null;
-        }
         return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = ("/addPet"))
     public Boolean addPet(@RequestBody Pet pet) throws Exception{
-        Pet param = new Pet();
-        QueryWrapper<Pet> wrapper = new QueryWrapper<>(param);
-        wrapper.eq("pet_id",pet.getPetId());
-        List<Pet> res;
-        res = petMapper.selectList(wrapper);
-        if(res.size()!=0){
+        Pet res;
+        res = petMapper.selectById(pet.getPetId());
+        if(res!=null){
             return false;
         }
         petMapper.insert(pet);
