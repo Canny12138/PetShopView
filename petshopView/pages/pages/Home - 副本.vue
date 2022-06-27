@@ -44,7 +44,7 @@
 			</swiper-item>
 			<swiper-item style="background-color: #fff7fc;">
 				<scroll-view style="height: 1300px;" scroll-y="true" refresher-enabled="true"
-					:refresher-triggered="triggered" :refresher-threshold="100" refresher-background="#fff7fc"
+					:refresher-triggered="triggered" :refresher-threshold="100" refresher-background="lightgreen"
 					@refresherpulling="onPulling" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
 					@refresherabort="onAbort">
 					<u-list @scrolltolower="scrolltolower">
