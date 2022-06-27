@@ -21,7 +21,7 @@ public class SurroundingController {
         res = surroundingMapper.selectById(SurroundingId);
         return res;
     }
-    @RequestMapping(method = RequestMethod.POST,value = ("/addSurrounding"))
+    @RequestMapping(method = RequestMethod.POST,value = "/addSurrounding")
     public Boolean addSurrounding(@RequestBody Surrounding surrounding){
         Surrounding res;
         res = surroundingMapper.selectById(surrounding.getSurroundingId());
@@ -31,7 +31,7 @@ public class SurroundingController {
         surroundingMapper.insert(surrounding);
         return true;
     }
-    @RequestMapping(method = RequestMethod.POST,value = ("/deleteSurrounding"))
+    @RequestMapping(method = RequestMethod.POST,value = "/deleteSurrounding")
     public Boolean deleteSurrounding(@RequestParam("surroundingId") String surroundId){
         Surrounding res;
         res = surroundingMapper.selectById(surroundId);
@@ -41,7 +41,7 @@ public class SurroundingController {
         surroundingMapper.deleteById(surroundId);
         return true;
     }
-    @RequestMapping(method = RequestMethod.POST,value = ("/updateSurrounding"))
+    @RequestMapping(method = RequestMethod.POST,value = "/updateSurrounding")
     public Boolean updateSurrounding(@RequestBody Surrounding surrounding){
         Surrounding res;
         res = surroundingMapper.selectById(surrounding.getSurroundingId());

@@ -67,7 +67,7 @@ public class GoodManageController {
         goodMapper.deleteById(goodId);
         return true;
     }
-    @RequestMapping(method = RequestMethod.POST,value = ("/updateGood"))
+    @RequestMapping(method = RequestMethod.POST,value = "/updateGood")
     public Boolean updateGood(@RequestBody Good good){
         Good res;
         res = goodMapper.selectById(good.getGoodId());

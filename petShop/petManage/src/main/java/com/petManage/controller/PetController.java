@@ -29,7 +29,7 @@ public class PetController {
         res = petMapper.selectById(petId);
         return res;
     }
-    @RequestMapping(method = RequestMethod.POST,value = ("/addPet"))
+    @RequestMapping(method = RequestMethod.POST,value = "/addPet")
     public Boolean addPet(@RequestBody Pet pet) throws Exception{
         Pet res;
         res = petMapper.selectById(pet.getPetId());
@@ -39,7 +39,7 @@ public class PetController {
         petMapper.insert(pet);
         return true;
     }
-    @RequestMapping(method = RequestMethod.POST,value = ("/deletePet"))
+    @RequestMapping(method = RequestMethod.POST,value = "/deletePet")
     public Boolean deletePet(@RequestParam("petId") String petId){
         Pet res;
         res = petMapper.selectById(petId);
@@ -49,7 +49,7 @@ public class PetController {
         petMapper.deleteById(petId);
         return true;
     }
-    @RequestMapping(method = RequestMethod.POST,value = ("/updatePet"))
+    @RequestMapping(method = RequestMethod.POST,value = "/updatePet")
     public Boolean updatePet(@RequestBody Pet pet){
         Pet res;
         res = petMapper.selectById(pet.getPetId());
