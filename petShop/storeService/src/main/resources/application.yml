@@ -2,10 +2,10 @@ server:
   port: 8007
 
 spring:
-
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: store-service
-
   cloud:
     ## nacos 配置
     nacos:
@@ -26,3 +26,10 @@ spring:
 
 mybatis-plus:
   type-aliases-package: com.soft.entity
+  
+feign:
+  client:
+    config:
+      store-service:
+        connectTimeout: 5000
+        readTimeout: 10000

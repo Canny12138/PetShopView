@@ -28,9 +28,13 @@ public class GoodOVController {
     @Autowired
     PetTypeFeignService petTypeFeignService;
     @Autowired
+    PetInfoFeignService petInfoFeignService;
+    @Autowired
     SurroundingFeignService surroundingFeignService;
     @Autowired
     SurroundingTypeFeignService surroundingTypeFeignService;
+    @Autowired
+    SurroundingInfoFeignService surroundingInfoFeignService;
     @RequestMapping(method = RequestMethod.GET,value = "/getGoodOVByPage")
     public Result getGoodOVByPage(
             @RequestParam("pageNum") Integer pageNum,
@@ -51,12 +55,15 @@ public class GoodOVController {
                     temp.setThing(surrounding);
                     SurroundingType surroundingType = surroundingTypeFeignService.getSurroundingTypeByTypeValue(surrounding.getSurroundType());
                     temp.setType(surroundingType);
-
+                    SurroundingInfo surroundingInfo = surroundingInfoFeignService.getPetInfoById(good.getThingId());
+                    temp.setThingInfo(surroundingInfo);
                 }else {
                     Pet pet = petFeignService.getPetByPetId(good.getThingId());
                     temp.setThing(pet);
-                    PetType petType = petTypeFeignService.getPetTypeByTypeValue(good.getType());
+                    PetType petType = petTypeFeignService.getPetTypeByTypeValue(pet.getPetType());
                     temp.setType(petType);
+                    PetInfo petInfo = petInfoFeignService.getPetInfoById(good.getThingId());
+                    temp.setThingInfo(petInfo);
                 }
                 resData.add(temp);
             }
@@ -64,5 +71,15 @@ public class GoodOVController {
         res.setData(resData);
         return res;
     }
+//    @RequestMapping(method = RequestMethod.POST,value = "/addGoodOV")
+//    public Result addGood(
+//            @RequestParam("goodName") String goodName,
+//            @RequestParam("goodType") String goodType,
+//            @RequestParam("price") Double price,
+//            @RequestParam("img") String img,
+//            @RequestParam("stock") Integer stock,
+//            @RequestParam("thingType")
+//
+//    )
 
 }
