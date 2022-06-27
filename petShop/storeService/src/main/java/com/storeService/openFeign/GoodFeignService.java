@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 /**
  * Project name:petShop
  * Author: NoFat
@@ -16,14 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name="goodManage-service",path = "/good")
 public interface GoodFeignService {
     @RequestMapping(method = RequestMethod.GET,value = "/page")
-    Page<Good> page(
+    List<Good> page(
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam("goodName") String goodName
     );
 
     @RequestMapping(method = RequestMethod.GET,value = "/pageByStoreId")
-    Page<Good> pageByStoreId(
+    List<Good> pageByStoreId(
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam("storeId") String storeId

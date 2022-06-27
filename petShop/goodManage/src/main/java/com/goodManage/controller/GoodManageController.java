@@ -20,7 +20,7 @@ public class GoodManageController {
     @Autowired
     private GoodMapper goodMapper;
     @RequestMapping(method = RequestMethod.GET,value = "/page")
-    public Page<Good> page(
+    public List<Good> page(
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam("goodName") String goodName
@@ -32,10 +32,10 @@ public class GoodManageController {
             wrapper.like("good_name",goodName);
         }
         Page<Good> res = goodMapper.selectPage(page,wrapper);
-        return res;
+        return res.getRecords();
     }
     @RequestMapping(method = RequestMethod.GET,value = "/pageByStoreId")
-    public Page<Good> pageByStoreId(
+    public List<Good> pageByStoreId(
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam("storeId") String storeId
@@ -45,7 +45,7 @@ public class GoodManageController {
         QueryWrapper<Good> wrapper = new QueryWrapper<>(params);
         wrapper.eq("store_id",storeId);
         Page<Good> res = goodMapper.selectPage(page,wrapper);
-        return res;
+        return res.getRecords();
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addGood")
     public Boolean addGood(@RequestBody Good good){

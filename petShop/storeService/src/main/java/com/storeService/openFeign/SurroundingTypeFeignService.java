@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name="surroundingManage-service",path = "/surroundingType")
-public interface SurroundTypeFeignService {
+public interface SurroundingTypeFeignService {
     @RequestMapping(method = RequestMethod.POST,value = "/getSurroundingType")
     SurroundingType getSurroundingTypeByTypeValue(@RequestParam("typeValue") Integer typeValue);
 
@@ -19,5 +19,5 @@ public interface SurroundTypeFeignService {
     Boolean deleteSurroundingType(@RequestParam("typeId") String typeId);
 
     @RequestMapping(method = RequestMethod.POST,value = "/updateSurroundingType")
-    Boolean updatePetType(@RequestBody SurroundingType surroundingType);
+    Boolean updateSurroundingType(@RequestBody SurroundingType surroundingType);
 }

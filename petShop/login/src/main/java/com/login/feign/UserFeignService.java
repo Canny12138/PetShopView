@@ -1,6 +1,5 @@
 package com.login.feign;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.soft.entity.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
