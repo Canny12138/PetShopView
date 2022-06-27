@@ -9,8 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Create time:2022/6/27 10:44
  **/
 @SpringBootApplication
-public class goodManageApplication {
+public class GoodManageApplication {
     public static void main(String[] args) {
-        SpringApplication.run(goodManageApplication.class);
+        SpringApplication.run(GoodManageApplication.class);
     }
 }

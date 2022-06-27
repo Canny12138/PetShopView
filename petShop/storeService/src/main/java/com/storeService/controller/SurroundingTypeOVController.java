@@ -28,9 +28,10 @@ public class SurroundingTypeOVController {
         surroundingType.setTypeId(UUID.randomUUID().toString());
         surroundingType.setTypeValue(typeValue);
         surroundingType.setType(type);
-        if(surroundingTypeFeignService.addSurroundingType(surroundingType)){
+        try {
+            surroundingTypeFeignService.addSurroundingType(surroundingType);
             res.success("添加成功");
-        }else {
+        }catch (Exception e){
             res.fail("类型已存在");
         }
         return res;

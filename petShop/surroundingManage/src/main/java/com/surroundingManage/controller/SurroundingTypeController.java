@@ -26,8 +26,7 @@ public class SurroundingTypeController {
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addSurroundingType")
     public Boolean addSurroundingType(@RequestBody SurroundingType surroundingType){
-        SurroundingType res;
-        res = surroundingTypeMapper.selectById(surroundingType.getTypeId());
+        SurroundingType res = surroundingTypeMapper.selectById(surroundingType.getTypeId());
         if(res!=null){
             return false;
         }

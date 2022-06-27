@@ -29,9 +29,10 @@ public class PetTypeOVController {
         petType.setTypeId(UUID.randomUUID().toString());
         petType.setTypeValue(typeValue);
         petType.setType(type);
-        if(petTypeFeignService.addPetType(petType)){
+        try {
+            petTypeFeignService.addPetType(petType);
             res.success("添加成功");
-        }else {
+        }catch (Exception e){
             res.fail("类型已存在");
         }
         return res;
