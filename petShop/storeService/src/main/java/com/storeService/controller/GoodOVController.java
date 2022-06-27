@@ -44,23 +44,24 @@ public class GoodOVController {
             res.fail("未找到商品");
         }else {
             res.success("success");
-        }
-        for(Good good:records){
-            GoodOV temp = new GoodOV(good);
-            if(good.getType()==0){
-                Surrounding surrounding = surroundingFeignService.getSurroundingBySurroundingId(good.getThingId());
-                temp.setThing(surrounding);
-                SurroundingType surroundingType = surroundingTypeFeignService.getSurroundingTypeByTypeValue(surrounding.getSurroundType());
-                temp.setType(surroundingType);
+            for(Good good:records){
+                GoodOV temp = new GoodOV(good);
+                if(good.getType()==0){
+                    Surrounding surrounding = surroundingFeignService.getSurroundingBySurroundingId(good.getThingId());
+                    temp.setThing(surrounding);
+                    SurroundingType surroundingType = surroundingTypeFeignService.getSurroundingTypeByTypeValue(surrounding.getSurroundType());
+                    temp.setType(surroundingType);
 
-            }else {
-                Pet pet = petFeignService.getPetByPetId(good.getThingId());
-                temp.setThing(pet);
-                PetType petType = petTypeFeignService.getPetTypeByTypeValue(good.getType());
-                temp.setType(petType);
+                }else {
+                    Pet pet = petFeignService.getPetByPetId(good.getThingId());
+                    temp.setThing(pet);
+                    PetType petType = petTypeFeignService.getPetTypeByTypeValue(good.getType());
+                    temp.setType(petType);
+                }
+                resData.add(temp);
             }
-            resData.add(temp);
         }
+        res.setData(resData);
         return res;
     }
 
