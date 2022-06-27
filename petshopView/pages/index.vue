@@ -4,7 +4,9 @@
 		<u-tabbar :list="tabbar" v-model="current" @change="changeTb" :placeholder="true" :fixed="true"
 			:safeAreaInsetBottom="true">
 			<u-tabbar-item text="HOME" icon="home" dot></u-tabbar-item>
-			<u-tabbar-item text="放映厅" icon="photo" badge="3"></u-tabbar-item>
+			<u-tabbar-item text="商店" icon="photo" badge="3"></u-tabbar-item>
+			<u-tabbar-item text="商店" icon="photo" badge="3"></u-tabbar-item>
+			<u-tabbar-item text="商店" icon="photo" badge="3"></u-tabbar-item>
 			<!-- 		<u-tabbar-item text="直播" icon="play-right"></u-tabbar-item>
 			<u-tabbar-item text="我的" icon="account"></u-tabbar-item> -->
 		</u-tabbar>
