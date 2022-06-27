@@ -38,27 +38,30 @@
 		<!-- <view v-if="indexN == 0">page0</view>
 		<view v-if="indexN == 1">page1</view>
 		<view v-if="indexN == 2">page2</view> -->
-		<swiper :current="indexN" @change="sIndexToindexN" class="swiper" style="margin: 0px;">
+		<swiper :current="indexN" @change="sIndexToindexN" class="swiper" style="margin: 0px">
 			<swiper-item>
 				page0
+			</swiper-item>
+			<swiper-item>
+				<view v-show="showBackTop" style="position: fixed; right: 100px; bottom: 100px">aaa</view>
 			</swiper-item>
 			<swiper-item style="background-color: #fff7fc;">
 				<scroll-view style="height: 1300px;" scroll-y="true" refresher-enabled="true"
 					:refresher-triggered="triggered" :refresher-threshold="100" refresher-background="#fff7fc"
 					@refresherpulling="onPulling" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
 					@refresherabort="onAbort">
-					<u-list @scrolltolower="scrolltolower">
+					<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll" :scrollTop="scrollTop">
 						<u-list-item v-for="(item, index) in indexList" :key="index">
 							<u-cell :title="`商品-${index + 1}`">
 								<u-avatar slot="icon" shape="square" size="80" :src="item.url"
 									customStyle="margin: -3px 5px -3px 0"></u-avatar>
 							</u-cell>
 						</u-list-item>
+						<u-transition :show="showBackTop" style="position: fixed; right: 50px; bottom: 100px">
+							<u-avatar icon="arrow-up" fontSize="22" @click="backTop"></u-avatar>
+						</u-transition>
 					</u-list>
 				</scroll-view>
-			</swiper-item>
-			<swiper-item>
-				page2
 			</swiper-item>
 			<swiper-item>
 				page3
@@ -88,6 +91,8 @@
 				indexN: 1,
 				pageIndex: 2,
 				triggered: true,
+				showBackTop: false,
+				scrollTop: 0,
 				menuBaseUrl: 'https://cdn.uviewui.com/uview/menu/',
 				text1: 'uView UI众多组件覆盖开发过程的各个需求，组件功能丰富，多端兼容。让您快速集成，开箱即用',
 				list3: [{
@@ -181,6 +186,9 @@
 			click1(e) {
 				console.log('click1', e);
 			},
+			backTop() {
+				this.scrollTop = 0;
+			},
 			indexToindexN(index) {
 				this.indexN = index.index;
 				// console.log(this.indexN);
@@ -190,7 +198,15 @@
 				// console.log(this.indexN);
 			},
 			scrolltolower() {
-				this.loadmore()
+				this.loadmore();
+			},
+			scrolltoupper() {
+				this.showBackTop = false;
+			},
+			scroll(e) {
+				// console.log(e);
+				this.showBackTop = true;
+				this.scrollTop = e;
 			},
 			loadmore() {
 				for (let i = 0; i < 30; i++) {

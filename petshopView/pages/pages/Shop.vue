@@ -1,9 +1,12 @@
 <template>
-	<view>this is Shop Page
-		<scroll-view style="height: 1300px;" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
+	<view>
+		<scroll-view style="height: 1300rpx;" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
 			:refresher-threshold="100" refresher-background="white" @refresherpulling="onPulling"
 			@refresherrefresh="onRefresh" @refresherrestore="onRestore" @refresherabort="onAbort">
-			<u-list @scrolltolower="scrolltolower">
+			<u-list @scrolltolower="scrolltolower" :scrollTop="currentN">
+				<u-transition :show="true" style="position: fixed; right: 50px; bottom: 100px">
+					<u-avatar icon="arrow-up" fontSize="22" @click="backTop"></u-avatar>
+				</u-transition>
 				<u-list-item v-for="(item, index) in indexList" :key="index">
 					<u-cell :title="`商品-${index + 1}`">
 						<u-avatar slot="icon" shape="square" size="80" :src="item.url"
@@ -20,6 +23,8 @@
 			return {
 				triggered: true,
 				indexList: [],
+				scrollTop: 0,
+				currentN: 0,
 				urls: [
 					'https://cdn.uviewui.com/uview/album/1.jpg',
 					'https://cdn.uviewui.com/uview/album/2.jpg',
@@ -34,6 +39,9 @@
 				]
 			}
 		},
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop;
+		},
 		mounted() {
 			this.loadmore();
 			this._freshing = false;
@@ -44,6 +52,14 @@
 		methods: {
 			scrolltolower() {
 				this.loadmore()
+			},
+			backTop() {
+				// console.log(this.currentN);
+				// this.currentN = 0;
+				// uni.pageScrollTo({
+				// 	scrollTop: 0,
+				// 	duration: 300
+				// });
 			},
 			loadmore() {
 				for (let i = 0; i < 30; i++) {
