@@ -26,7 +26,7 @@ spring:
 
 mybatis-plus:
   type-aliases-package: com.soft.entity
-  
+
 feign:
   client:
     config:

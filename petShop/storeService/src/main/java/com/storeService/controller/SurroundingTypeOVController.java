@@ -1,7 +1,14 @@
 package com.storeService.controller;
 
+import com.soft.entity.SurroundingType;
+import com.soft.util.Result;
+import com.storeService.openFeign.SurroundingTypeFeignService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 /**
  * Project name:petShop
@@ -11,5 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/surroundingTypeOV")
 public class SurroundingTypeOVController {
-
+    @Autowired
+    SurroundingTypeFeignService surroundingTypeFeignService;
+    public Result addSurroundingType(@RequestParam("typeValue") Integer typeValue, @RequestParam("type") String type){
+        Result res = new Result();
+        SurroundingType surroundingType = new SurroundingType();
+        surroundingType.setTypeId(UUID.randomUUID().toString());
+        surroundingType.setTypeValue(typeValue);
+        surroundingType.setType(type);
+        if(surroundingTypeFeignService.addSurroundingType(surroundingType)){
+            res.success("添加成功");
+        }else {
+            res.fail("类型已存在");
+        }
+        return res;
+    }
 }
