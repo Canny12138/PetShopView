@@ -25,9 +25,6 @@ public class PetController {
 
     @RequestMapping(method = RequestMethod.POST,value = "/getPetByPetId")
     public Pet getPetByPetId(@RequestParam("petId") String petId){
-        Pet param = new Pet();
-        QueryWrapper<Pet> wrapper = new QueryWrapper<>(param);
-        wrapper.eq("pet_id",petId);
         Pet res;
         res = petMapper.selectById(petId);
         return res;
@@ -44,9 +41,6 @@ public class PetController {
     }
     @RequestMapping(method = RequestMethod.POST,value = ("/deletePet"))
     public Boolean deletePet(@RequestParam("petId") String petId){
-        Pet param = new Pet();
-        QueryWrapper<Pet> wrapper = new QueryWrapper<>(param);
-        wrapper.eq("pet_id",petId);
         Pet res;
         res = petMapper.selectById(petId);
         if(res==null){
@@ -57,9 +51,6 @@ public class PetController {
     }
     @RequestMapping(method = RequestMethod.POST,value = ("/updatePet"))
     public Boolean updatePet(@RequestBody Pet pet){
-        Pet param = new Pet();
-        QueryWrapper<Pet> wrapper = new QueryWrapper<>(param);
-        wrapper.eq("pet_id",pet.getPetId());
         Pet res;
         res = petMapper.selectById(pet.getPetId());
         if(res==null){

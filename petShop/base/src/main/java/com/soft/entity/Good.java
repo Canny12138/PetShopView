@@ -14,6 +14,7 @@ import lombok.Data;
 public class Good {
     @TableId
     private String goodId;
+    private String goodName;
     private int type;
     private String storeId;
     private String thingId;

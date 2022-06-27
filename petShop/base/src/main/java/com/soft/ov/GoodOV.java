@@ -11,6 +11,7 @@ public class GoodOV {
     private Good good;
     private Object thing;
     private Object thingInfo;
+    private Object type;
     public  GoodOV(Good good){
         this.good = good;
     }
@@ -37,5 +38,13 @@ public class GoodOV {
 
     public void setThingInfo(Object thingInfo) {
         this.thingInfo = thingInfo;
+    }
+
+    public void setType(Object type) {
+        this.type = type;
+    }
+
+    public Object getType() {
+        return type;
     }
 }
