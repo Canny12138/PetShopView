@@ -50,7 +50,7 @@
 					:refresher-triggered="triggered" :refresher-threshold="100" refresher-background="#fff7fc"
 					@refresherpulling="onPulling" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
 					@refresherabort="onAbort">
-					<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll" :scrollTop="currentItem">
+					<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll" :scrollTop="scrollTop">
 						<u-list-item v-for="(item, index) in indexList" :key="index">
 							<u-cell :title="`商品-${index + 1}`">
 								<u-avatar slot="icon" shape="square" size="80" :src="item.url"
@@ -92,7 +92,7 @@
 				pageIndex: 2,
 				triggered: true,
 				showBackTop: false,
-				currentItem: 0,
+				scrollTop: 0,
 				menuBaseUrl: 'https://cdn.uviewui.com/uview/menu/',
 				text1: 'uView UI众多组件覆盖开发过程的各个需求，组件功能丰富，多端兼容。让您快速集成，开箱即用',
 				list3: [{
@@ -187,12 +187,7 @@
 				console.log('click1', e);
 			},
 			backTop() {
-				this.currentItem = 0;
-				// uni.pageScrollTo({
-				//     scrollTop: 0,
-				//     duration: 300
-				// });
-				console.log("aaa");
+				this.scrollTop = 0;
 			},
 			indexToindexN(index) {
 				this.indexN = index.index;
@@ -208,8 +203,10 @@
 			scrolltoupper() {
 				this.showBackTop = false;
 			},
-			scroll() {
+			scroll(e) {
+				// console.log(e);
 				this.showBackTop = true;
+				this.scrollTop = e;
 			},
 			loadmore() {
 				for (let i = 0; i < 30; i++) {
