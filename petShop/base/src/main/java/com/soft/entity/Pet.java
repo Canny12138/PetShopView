@@ -15,6 +15,6 @@ public class Pet {
     @TableId
     private String petId;
     private String petName;
-    private int petType;
+    private Integer petType;
 
 }

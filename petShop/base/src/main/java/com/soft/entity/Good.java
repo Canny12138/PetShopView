@@ -15,10 +15,11 @@ public class Good {
     @TableId
     private String goodId;
     private String goodName;
-    private int type;
+    private Integer type;
     private String storeId;
     private String thingId;
-    private int stock;
-    private double price;
-    private Boolean useful;
+    private Integer stock;
+    private Double price;
+    private Integer useful;
+    private String img;
 }

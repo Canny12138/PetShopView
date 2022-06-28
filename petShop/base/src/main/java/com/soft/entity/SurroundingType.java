@@ -14,6 +14,6 @@ import lombok.Data;
 public class SurroundingType {
     @TableId
     private String typeId;
-    private int typeValue;
+    private Integer typeValue;
     private String type;
 }
