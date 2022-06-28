@@ -9,34 +9,44 @@ import com.soft.entity.Store;
  * Create time:2022/6/26 18:36
  **/
 public class GoodOV {
-    private Good good;
-    private Store store;
-    private Object type;
+    private String goodName;
+    private String img;
+    private String storeName;
+    private Double price;
     public  GoodOV(Good good){
-        this.good = good;
+        this.goodName = good.getGoodName();
+        this.img = good.getImg();
     }
 
-    public Good getGood() {
-        return good;
-    };
-
-    public void setGood(Good good) {
-        this.good = good;
+    public Double getPrice() {
+        return price;
     }
 
-    public Store getStore() {
-        return store;
+    public String getGoodName() {
+        return goodName;
     }
 
-    public void setStore(Store store) {
-        this.store = store;
+    public String getImg() {
+        return img;
     }
 
-    public void setType(Object type) {
-        this.type = type;
+    public String getStoreName() {
+        return storeName;
     }
 
-    public Object getType() {
-        return type;
+    public void setGoodName(String goodName) {
+        this.goodName = goodName;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 }
