@@ -35,7 +35,7 @@ public class UserController {
         res = userMapper.selectOne(wrapper);
         return res;
     }
-    @RequestMapping(method = RequestMethod.POST,value = ("/addUser"))
+    @RequestMapping(method = RequestMethod.POST,value = "/addUser")
     public Boolean addUser(@RequestBody User user) throws Exception{
         User param = new User();
         QueryWrapper<User> wrapper = new QueryWrapper<>(param);
@@ -48,20 +48,17 @@ public class UserController {
         userMapper.insert(user);
         return true;
     }
-    @RequestMapping(method = RequestMethod.POST,value = ("/deleteUser"))
+    @RequestMapping(method = RequestMethod.POST,value = "/deleteUser")
     public Boolean deleteUser(@RequestParam("userId") String userId){
-        User param = new User();
-        QueryWrapper<User> wrapper = new QueryWrapper<>(param);
-        wrapper.eq("user_id",userId);
-        List<User> res;
-        res = userMapper.selectList(wrapper);
-        if(res.size()==0){
+        User res;
+        res = userMapper.selectById(userId);
+        if(res==null){
             return false;
         }
         userMapper.deleteById(userId);
         return true;
     }
-    @RequestMapping(method = RequestMethod.POST,value = ("/updatePassword"))
+    @RequestMapping(method = RequestMethod.POST,value = "/updatePassword")
     public Boolean updatePassword(@RequestBody User user) throws Exception {
         User res;
         res = userMapper.selectById(user.getUserId());
@@ -73,7 +70,7 @@ public class UserController {
         return true;
     }
 
-    @RequestMapping(method = RequestMethod.POST,value = ("/updateUser"))
+    @RequestMapping(method = RequestMethod.POST,value = "/updateUser")
     public Boolean updateUser(@RequestBody User user) {
         User res = userMapper.selectById(user.getUserId());
         if(res==null){

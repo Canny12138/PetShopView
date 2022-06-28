@@ -14,10 +14,12 @@ import lombok.Data;
 public class Good {
     @TableId
     private String goodId;
-    private int type;
+    private String goodName;
+    private Integer type;
     private String storeId;
     private String thingId;
-    private int stock;
-    private double price;
-    private Boolean useful;
+    private Integer stock;
+    private Double price;
+    private Integer useful;
+    private String img;
 }

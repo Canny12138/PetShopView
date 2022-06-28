@@ -14,6 +14,6 @@ import lombok.Data;
 public class Surrounding {
     @TableId
     private String surroundingId;
-    private String surroundName;
-    private int surroundType;
+    private String surroundingName;
+    private Integer surroundingType;
 }
