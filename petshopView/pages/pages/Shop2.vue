@@ -14,12 +14,14 @@
 					<u-grid :border="false" @click="click" col="2">
 						<u-grid-item v-for="(item, index) in item" :key="index">
 							<uni-card style="width: 85%; height:250px; margin: 5px; background-color: #fff7fc">
-								<image slot='cover' :src="item.url" mode="aspectFill"
+								<!-- <image slot='cover' :src="item.url" mode="aspectFill"
 									style="width: 150px; height: 130px">
-								</image>
-								<text>商品-{{index + 1}}口口口口口口口口口口口口口口口口</text>
+								</image> -->
+								<!-- <text>商品-{{index + 1}}口口口口口口口口口口口口口口口口</text> -->
+								<text>{{item.goodName}}</text>
 								<text style="color: #ffb300;font-weight: bold; font-size: 18px;">\n¥8888\n</text>
-								<text style="background-color: #eee7ec;border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">旺角大学城店 ></text>
+								<text
+									style="background-color: #eee7ec;border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">旺角大学城店 ></text>
 							</uni-card>
 						</u-grid-item>
 					</u-grid>
@@ -39,6 +41,7 @@
 				triggered: true,
 				showBackTop: false,
 				scrollTop: 0,
+				currentPage: 1,
 				indexList: [],
 				lineTemp: [],
 				urls: [
@@ -63,8 +66,50 @@
 			// setTimeout(() => {
 			// this.triggered = true;
 			// }, 1000)
+			// uni.$u.http.setConfig((config) => {
+			// 	/* config 为默认全局配置*/
+			// 	config.baseURL = `https://172.16.193.151:9001`; /* 根域名 */
+			// 	return config
+			// });
+			// this.getGood();
 		},
 		methods: {
+			getGood() {
+				console.log("a")
+				uni.request({
+					url: 'http://172.16.193.151:9001/store-server/goodOV/getGoodOVByPage',
+					method: 'GET',
+					data: {
+						pageNum: this.currentPage,
+						pageSize: 2,
+						goodName: "",
+					},
+					success: ((res) => {
+						// console.log(res.data.data);
+						this.lineTemp = res.data.data;
+						console.log(this.lineTemp);
+						// console.log(this.lineTemp[0].good.goodName);
+						for (let j = 0; j < 2; j++) {
+							this.lineTemp.push({
+								goodName: this.lineTemp[j].goodName,
+								img: this.lineTemp[j].img,
+								price: this.lineTemp[j].price,
+								storeName: this.lineTemp[j].storeName,
+								// url: this.urls[uni.$u.random(0, this.urls.length - 1)]
+							});
+						}
+						this.indexList.push(this.lineTemp);
+					}),
+					// fail: ((err) => {
+					// 	uni.showToast({
+					// 		title: '请求接口失败',
+					// 		duration: 2000
+					// 	})
+					// 	reject(err)
+					// })
+				});
+				this.currentPage ++ ;
+			},
 			click(name) {
 				// this.$refs.uToast.success(`点击了第${name}个`)
 			},
@@ -83,15 +128,12 @@
 				this.scrollTop = e;
 			},
 			loadmore() {
-				for (let i = 0; i < 30; i++) {
+				for (let i = 0; i < 7; i++) {
 					this.lineTemp = [];
-					for (let j = 0; j < 2; j++) {
-						this.lineTemp.push({
-							url: this.urls[uni.$u.random(0, this.urls.length - 1)]
-						});
-					}
-					this.indexList.push(this.lineTemp);
+					this.getGood();
+
 				}
+				console.log(this.indexList);
 			},
 			onPulling(e) {
 				// console.log("onpulling", e);
