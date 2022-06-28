@@ -1,6 +1,7 @@
 package com.soft.ov;
 
 import com.soft.entity.Good;
+import com.soft.entity.Store;
 
 /**
  * Project name:petShop
@@ -9,8 +10,7 @@ import com.soft.entity.Good;
  **/
 public class GoodOV {
     private Good good;
-    private Object thing;
-    private Object thingInfo;
+    private Store store;
     private Object type;
     public  GoodOV(Good good){
         this.good = good;
@@ -24,20 +24,12 @@ public class GoodOV {
         this.good = good;
     }
 
-    public Object getThing() {
-        return thing;
+    public Store getStore() {
+        return store;
     }
 
-    public Object getThingInfo() {
-        return thingInfo;
-    }
-
-    public void setThing(Object thing) {
-        this.thing = thing;
-    }
-
-    public void setThingInfo(Object thingInfo) {
-        this.thingInfo = thingInfo;
+    public void setStore(Store store) {
+        this.store = store;
     }
 
     public void setType(Object type) {
