@@ -15,4 +15,5 @@ public class Store {
     @TableId
     private String storeId;
     private String storeName;
+    private String addressId;
 }

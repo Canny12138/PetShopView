@@ -31,62 +31,49 @@ public class UserController {
         User param = new User();
         QueryWrapper<User> wrapper = new QueryWrapper<>(param);
         wrapper.eq("username",username);
-        List<User> res;
-        res = userMapper.selectList(wrapper);
-        if(res.size()==0){
-            return null;
-        }
-        return res.get(0);
+        User res;
+        res = userMapper.selectOne(wrapper);
+        return res;
     }
-    @RequestMapping(method = RequestMethod.POST,value = ("/addUser"))
+    @RequestMapping(method = RequestMethod.POST,value = "/addUser")
     public Boolean addUser(@RequestBody User user) throws Exception{
         User param = new User();
         QueryWrapper<User> wrapper = new QueryWrapper<>(param);
         wrapper.eq("username",user.getUsername());
-        List<User> res;
-        res = userMapper.selectList(wrapper);
-        if(res.size()!=0){
+        User res;
+        res = userMapper.selectOne(wrapper);
+        if(res!=null){
             return false;
         }
         userMapper.insert(user);
         return true;
     }
-    @RequestMapping(method = RequestMethod.POST,value = ("/deleteUser"))
+    @RequestMapping(method = RequestMethod.POST,value = "/deleteUser")
     public Boolean deleteUser(@RequestParam("userId") String userId){
-        User param = new User();
-        QueryWrapper<User> wrapper = new QueryWrapper<>(param);
-        wrapper.eq("user_id",userId);
-        List<User> res;
-        res = userMapper.selectList(wrapper);
-        if(res.size()==0){
+        User res;
+        res = userMapper.selectById(userId);
+        if(res==null){
             return false;
         }
         userMapper.deleteById(userId);
         return true;
     }
-    @RequestMapping(method = RequestMethod.POST,value = ("/updatePassword"))
+    @RequestMapping(method = RequestMethod.POST,value = "/updatePassword")
     public Boolean updatePassword(@RequestBody User user) throws Exception {
-        User param = new User();
-        QueryWrapper<User> wrapper = new QueryWrapper<>(param);
-        wrapper.eq("user_id", user.getUserId());
-        List<User> res;
-        res = userMapper.selectList(wrapper);
-        if(res.size()==0){
+        User res;
+        res = userMapper.selectById(user.getUserId());
+        if(res==null){
             return false;
         }
-        user.setPassword(Md5Util.getEncode(user.getPassword()));
-        userMapper.updateById(user);
+        res.setPassword(Md5Util.getEncode(user.getPassword()));
+        userMapper.updateById(res);
         return true;
     }
 
-    @RequestMapping(method = RequestMethod.POST,value = ("/updateUser"))
+    @RequestMapping(method = RequestMethod.POST,value = "/updateUser")
     public Boolean updateUser(@RequestBody User user) {
-        User param = new User();
-        QueryWrapper<User> wrapper = new QueryWrapper<>(param);
-        wrapper.eq("user_id", user.getUserId());
-        List<User> res;
-        res = userMapper.selectList(wrapper);
-        if(res.size()==0){
+        User res = userMapper.selectById(user.getUserId());
+        if(res==null){
             return false;
         }
         userMapper.updateById(user);
