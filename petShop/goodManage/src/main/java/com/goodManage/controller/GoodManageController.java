@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.goodManage.mapper.GoodMapper;
 import com.soft.entity.Good;
+import com.soft.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class GoodManageController {
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam("goodName") String goodName
     ){
-        Page<Good> page = new Page<Good>(pageNum,pageSize);
+        Page<Good> page = new Page<>(pageNum,pageSize);
         Good params = new Good();
         QueryWrapper<Good> wrapper = new QueryWrapper<>(params);
         if(goodName!=null&&!"".equals(goodName)){
@@ -42,8 +43,8 @@ public class GoodManageController {
     ){
         Page<Good> page = new Page<Good>(pageNum,pageSize);
         Good params = new Good();
-        QueryWrapper<Good> wrapper = new QueryWrapper<>(params);
-        wrapper.eq("store_id",storeId);
+        QueryWrapper<Good> wrapper = new QueryWrapper<Good>(params);
+//        wrapper.eq("store_id",storeId);
         Page<Good> res = goodMapper.selectPage(page,wrapper);
         return res.getRecords();
     }

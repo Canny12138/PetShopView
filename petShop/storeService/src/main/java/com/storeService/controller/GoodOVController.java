@@ -44,6 +44,7 @@ public class GoodOVController {
             ){
         Result res = new Result();
         List<Good> records= goodFeignService.page(pageNum,pageSize,goodName);
+        System.out.println(records.size());
         List<GoodOV> resData = new LinkedList<>();
         if(records.size()==0){
             res.fail("未找到商品");
