@@ -36,6 +36,8 @@ public class GoodOVController {
     SurroundingTypeFeignService surroundingTypeFeignService;
     @Autowired
     SurroundingInfoFeignService surroundingInfoFeignService;
+    @Autowired
+    StoreFeignService storeFeignService;
     @RequestMapping(method = RequestMethod.GET,value = "/getGoodOVByPage")
     public Result getGoodOVByPage(
             @RequestParam("pageNum") Integer pageNum,
@@ -51,21 +53,8 @@ public class GoodOVController {
             res.success("success");
             for(Good good:records){
                 GoodOV temp = new GoodOV(good);
-                if(good.getType()==0){
-                    Surrounding surrounding = surroundingFeignService.getSurroundingBySurroundingId(good.getThingId());
-                    temp.setThing(surrounding);
-                    SurroundingType surroundingType = surroundingTypeFeignService.getSurroundingTypeByTypeValue(surrounding.getSurroundingType());
-                    temp.setType(surroundingType);
-                    SurroundingInfo surroundingInfo = surroundingInfoFeignService.getSurroundingInfoById(good.getThingId());
-                    temp.setThingInfo(surroundingInfo);
-                }else {
-                    Pet pet = petFeignService.getPetByPetId(good.getThingId());
-                    temp.setThing(pet);
-                    PetType petType = petTypeFeignService.getPetTypeByTypeValue(pet.getPetType());
-                    temp.setType(petType);
-                    PetInfo petInfo = petInfoFeignService.getPetInfoById(good.getThingId());
-                    temp.setThingInfo(petInfo);
-                }
+                String storeName = storeFeignService.getStoreById(good.getStoreId()).getStoreName();
+                temp.setStoreName(storeName);
                 resData.add(temp);
             }
         }

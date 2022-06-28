@@ -16,6 +16,7 @@ public class GoodOV {
     public  GoodOV(Good good){
         this.goodName = good.getGoodName();
         this.img = good.getImg();
+        this.price = good.getPrice();
     }
 
     public Double getPrice() {

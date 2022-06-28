@@ -16,12 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class StoreManageController {
     @Autowired
     private StoreMapper storeMapper;
-    @RequestMapping(method = RequestMethod.GET,value = "/test")
-    public String test(){
-        String res = "hello world";
-        return res;
-    }
-    @RequestMapping(method = RequestMethod.POST,value = "/getStoreId")
+    @RequestMapping(method = RequestMethod.POST,value = "/getStoreById")
     public Store getStoreById(@RequestParam("storeId") String storeId){
         Store params = new Store();
         QueryWrapper<Store> wrapper = new QueryWrapper<>(params);
@@ -30,7 +25,6 @@ public class StoreManageController {
         return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addStore")
-    @ResponseBody
     public Boolean addStore(@RequestBody Store store){
         Store res;
         res = storeMapper.selectById(store.getStoreId());
@@ -50,7 +44,7 @@ public class StoreManageController {
         storeMapper.deleteById(storeId);
         return true;
     }
-    @RequestMapping(method = RequestMethod.POST,value = "/updateInfo")
+    @RequestMapping(method = RequestMethod.POST,value = "/updateStore")
     public Boolean updatePetInfo(@RequestBody Store store){
         Store res;
         res = storeMapper.selectById(store.getStoreId());
