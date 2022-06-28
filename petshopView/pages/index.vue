@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<view style="height: 25px; background-color: #ffadb1"></view>
 		<component :is="component"></component>
 		<u-tabbar :list="tabbar" v-model="current" @change="changeTb" :placeholder="true" :fixed="true"
 			:safeAreaInsetBottom="true">
@@ -16,16 +17,24 @@
 <script>
 	import Home from './pages/Home.vue'
 	import Shop from './pages/Shop.vue'
+	import Shop2 from './pages/Shop2.vue'
 	export default {
 		components: {
 			Home,
-			Shop
+			Shop,
+			Shop2
 		},
 		data() {
 			return {
 				current: 0,
 				tabbar: [{
 						name: 'Home',
+					},
+					{
+						name: 'Shop',
+					},
+					{
+						name: 'Shop2',
 					},
 					{
 						name: 'Shop',
@@ -36,18 +45,18 @@
 		},
 		mounted() {
 			// uni.request({
-			// 	url: 'http://172.16.193.131:9001/login-server/login/test',
+			// 	url: 'http://172.16.193.151:9001/login-server/login/test',
 			// 	method: 'GET',
 			// 	success: ((res) => {
 			// 		console.log(res)
 			// 	}),
-				// fail: ((err) => {
-				// 	uni.showToast({
-				// 		title: '请求接口失败',
-				// 		duration: 2000
-				// 	})
-				// 	reject(err)
-				// })
+			// 	fail: ((err) => {
+			// 		uni.showToast({
+			// 			title: '请求接口失败',
+			// 			duration: 2000
+			// 		})
+			// 		reject(err)
+			// 	})
 			// })
 		},
 		methods: {

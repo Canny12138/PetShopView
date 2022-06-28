@@ -1,5 +1,6 @@
 <template>
-	<view>
+	<view @tap="btnBClick">
+		<u-search shape="round" style="padding: 15px; padding-top: 5px;background-color: #ffadb1"></u-search>
 		<scroll-view style="height: 1300rpx;" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
 			:refresher-threshold="100" refresher-background="white" @refresherpulling="onPulling"
 			@refresherrefresh="onRefresh" @refresherrestore="onRestore" @refresherabort="onAbort">
@@ -87,7 +88,10 @@
 			},
 			onAbort() {
 				// console.log("onAbort");
-			}
+			},
+			btnBClick() {
+				uni.$u.debounce(500);
+			},
 		}
 	}
 </script>

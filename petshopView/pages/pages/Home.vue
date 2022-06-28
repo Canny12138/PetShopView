@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view @tap="btnBClick">
 		<view style="background-color: #ffadb1">
 			<u-icon name="github-circle-fill" color="#ff5558" size="40" label="PetShop" labelColor="#ff5558"
 				labelSize="19"></u-icon>
@@ -32,25 +32,57 @@
 		            color: '#606266',
 		            transform: 'scale(1)'
 		        }"
-				itemStyle="padding-left: 15px; padding-right: 15px; padding-top: 5px; padding-bottom: 5px; height: 35px; background-color: #fff7fc;">
+				itemStyle="padding-left: 15px; padding-right:15px; padding-top: 5px; padding-bottom: 5px; height: 35px; background-color: #fff7fc;">
 			</u-tabs>
 		</u-sticky>
 		<!-- <view v-if="indexN == 0">page0</view>
 		<view v-if="indexN == 1">page1</view>
 		<view v-if="indexN == 2">page2</view> -->
 		<swiper :current="indexN" @change="sIndexToindexN" class="swiper" style="margin: 0px">
-			<swiper-item>
-				page0
+			<swiper-item style="background-color: #fff7fc;">
+				<u-grid :border="true" @click="click" col="2">
+					<u-grid-item v-for="(baseListItem,baseListIndex) in baseList" :key="baseListIndex">
+						<u-icon :customStyle="{paddingTop:20+'rpx'}" :name="baseListItem.name" :size="22"></u-icon>
+						<text class="grid-text">{{baseListItem.title}}</text>
+					</u-grid-item>
+				</u-grid>
 			</swiper-item>
-			<swiper-item>
-				<view v-show="showBackTop" style="position: fixed; right: 100px; bottom: 100px">aaa</view>
+			<swiper-item style="background-color: #fff7fc;">
+				<scroll-view style="height: 1300rpx;" scroll-y="true" refresher-enabled="true"
+					:refresher-triggered="triggered" :refresher-threshold="100" refresher-background="#fff7fc"
+					@refresherpulling="onPulling" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
+					@refresherabort="onAbort">
+					<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
+						:scrollTop="scrollTop" style="background-color: #fff7fc; margin-top: 5px">
+						<u-list-item v-for="(item, index) in indexList" :key="index">
+							<u-grid :border="false" @click="click" col="2">
+								<u-grid-item v-for="(item, index) in item" :key="index">
+									<uni-card style="width: 85%; height:250px; margin: 5px; background-color: #fff7fc">
+										<image slot='cover' :src="item.url" mode="aspectFill"
+											style="width: 150px; height: 130px">
+										</image>
+										<text>商品-{{index + 1}}口口口口口口口口口口口口口口口口</text>
+										<text
+											style="color: #ffb300;font-weight: bold; font-size: 18px;">\n¥8888\n</text>
+										<text
+											style="background-color: #eee7ec;border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">旺角大学城店 ></text>
+									</uni-card>
+								</u-grid-item>
+							</u-grid>
+						</u-list-item>
+						<u-transition :show="showBackTop" style="position: fixed; right: 50px; bottom: 100px">
+							<u-avatar icon="arrow-up" fontSize="22" @click="backTop"></u-avatar>
+						</u-transition>
+					</u-list>
+				</scroll-view>
 			</swiper-item>
 			<swiper-item style="background-color: #fff7fc;">
 				<scroll-view style="height: 1300px;" scroll-y="true" refresher-enabled="true"
 					:refresher-triggered="triggered" :refresher-threshold="100" refresher-background="#fff7fc"
 					@refresherpulling="onPulling" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
 					@refresherabort="onAbort">
-					<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll" :scrollTop="scrollTop">
+					<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
+						:scrollTop="scrollTop">
 						<u-list-item v-for="(item, index) in indexList" :key="index">
 							<u-cell :title="`商品-${index + 1}`">
 								<u-avatar slot="icon" shape="square" size="80" :src="item.url"
@@ -106,6 +138,35 @@
 					url: 'https://cdn.uviewui.com/uview/swiper/swiper3.png',
 					title: '谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳'
 				}],
+				baseList: [{
+						name: 'photo',
+						title: '图片'
+					},
+					{
+						name: 'lock',
+						title: '锁头'
+					},
+					{
+						name: 'star',
+						title: '星星'
+					},
+					{
+						name: 'star',
+						title: '星星'
+					},
+					{
+						name: 'star',
+						title: '星星'
+					},
+					{
+						name: 'star',
+						title: '星星'
+					},
+					{
+						name: 'star',
+						title: '星星'
+					},
+				],
 				menuArr: [
 					[{
 							name: '附近',
@@ -162,16 +223,18 @@
 				}],
 				indexList: [],
 				urls: [
-					'https://cdn.uviewui.com/uview/album/1.jpg',
-					'https://cdn.uviewui.com/uview/album/2.jpg',
-					'https://cdn.uviewui.com/uview/album/3.jpg',
-					'https://cdn.uviewui.com/uview/album/4.jpg',
-					'https://cdn.uviewui.com/uview/album/5.jpg',
-					'https://cdn.uviewui.com/uview/album/6.jpg',
-					'https://cdn.uviewui.com/uview/album/7.jpg',
-					'https://cdn.uviewui.com/uview/album/8.jpg',
-					'https://cdn.uviewui.com/uview/album/9.jpg',
-					'https://cdn.uviewui.com/uview/album/10.jpg',
+					'http://150.158.85.93:81/pet/1.jpeg',
+					'http://150.158.85.93:81/pet/2.jpeg',
+					'http://150.158.85.93:81/pet/3.jpeg',
+					'http://150.158.85.93:81/pet/4.jpeg',
+					'http://150.158.85.93:81/pet/5.jpeg',
+					'http://150.158.85.93:81/pet/6.jpeg',
+					'http://150.158.85.93:81/pet/7.jpeg',
+					'http://150.158.85.93:81/pet/8.jpeg',
+					'http://150.158.85.93:81/pet/9.jpeg',
+					'http://150.158.85.93:81/pet/10.jpeg',
+					'http://150.158.85.93:81/pet/11.jpeg',
+					'http://150.158.85.93:81/pet/12.jpeg',
 				]
 			}
 		},
@@ -185,6 +248,9 @@
 		methods: {
 			click1(e) {
 				console.log('click1', e);
+			},
+			click(name) {
+				// this.$refs.uToast.success(`点击了第${name}个`)
 			},
 			backTop() {
 				this.scrollTop = 0;
@@ -208,11 +274,22 @@
 				this.showBackTop = true;
 				this.scrollTop = e;
 			},
+			// loadmore() {
+			// 	for (let i = 0; i < 30; i++) {
+			// 		this.indexList.push({
+			// 			url: this.urls[uni.$u.random(0, this.urls.length - 1)]
+			// 		})
+			// 	}
+			// },
 			loadmore() {
 				for (let i = 0; i < 30; i++) {
-					this.indexList.push({
-						url: this.urls[uni.$u.random(0, this.urls.length - 1)]
-					})
+					this.lineTemp = [];
+					for (let j = 0; j < 2; j++) {
+						this.lineTemp.push({
+							url: this.urls[uni.$u.random(0, this.urls.length - 1)]
+						});
+					}
+					this.indexList.push(this.lineTemp);
 				}
 			},
 			onPulling(e) {
@@ -234,7 +311,10 @@
 			},
 			onAbort() {
 				// console.log("onAbort");
-			}
+			},
+			btnBClick() {
+				uni.$u.debounce(500);
+			},
 		}
 	}
 </script>
