@@ -5,10 +5,7 @@ import com.petManage.mapper.PetInfoMapper;
 import com.soft.entity.PetInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Project name:petShop
@@ -29,6 +26,7 @@ public class PetInfoController {
         return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addInfo")
+    @ResponseBody
     public Boolean addPetInfo(@RequestBody PetInfo petInfo){
         PetInfo res;
         res = petInfoMapper.selectById(petInfo.getInfoId());

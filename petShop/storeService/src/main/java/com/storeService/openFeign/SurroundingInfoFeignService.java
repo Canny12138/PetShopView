@@ -1,12 +1,8 @@
 package com.storeService.openFeign;
 
 import com.soft.entity.SurroundingInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Project name:petShop
@@ -16,9 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name="surroundingManage-service",path = "/surroundingInfo")
 public interface SurroundingInfoFeignService {
     @RequestMapping(method = RequestMethod.POST,value = "/getInfoById")
-    SurroundingInfo getPetInfoById(@RequestParam("surroundingId") String surroundingId);
+    SurroundingInfo getSurroundingInfoById(@RequestParam("surroundingId") String surroundingId);
 
     @RequestMapping(method = RequestMethod.POST,value = "/addInfo")
+    @ResponseBody
     Boolean addSurroundingInfo(@RequestBody SurroundingInfo surroundingInfo);
 
     @RequestMapping(method = RequestMethod.POST,value = "/deleteInfo")

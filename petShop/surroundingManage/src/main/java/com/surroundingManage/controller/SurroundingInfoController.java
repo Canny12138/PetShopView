@@ -5,10 +5,7 @@ import com.soft.entity.SurroundingInfo;
 import com.surroundingManage.mapper.SurroundingInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Project name:petShop
@@ -21,7 +18,7 @@ public class SurroundingInfoController {
     @Autowired
     private SurroundingInfoMapper surroundingInfoMapper;
     @RequestMapping(method = RequestMethod.POST,value = "/getInfoById")
-    public SurroundingInfo getPetInfoById(@RequestParam("surroundingId") String surroundingId){
+    public SurroundingInfo getSurroundingInfoById(@RequestParam("surroundingId") String surroundingId){
         SurroundingInfo params = new SurroundingInfo();
         QueryWrapper<SurroundingInfo> wrapper = new QueryWrapper<>(params);
         wrapper.eq("surrounding_id",surroundingId);
@@ -29,6 +26,7 @@ public class SurroundingInfoController {
         return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addInfo")
+    @ResponseBody
     public Boolean addSurroundingInfo(@RequestBody SurroundingInfo surroundingInfo){
         SurroundingInfo res;
         res = surroundingInfoMapper.selectById(surroundingInfo.getInfoId());
