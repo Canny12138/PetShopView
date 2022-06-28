@@ -106,7 +106,6 @@ public class GoodOVController {
                 good.setThingId(surrounding.getSurroundingId());
                 surroundingFeignService.addSurrounding(surrounding);
                 surroundingInfoFeignService.addSurroundingInfo(surroundingInfo);
-                goodFeignService.addGood(good);
             }else {
                 Pet pet = new Pet();
                 pet.setPetId(UUID.randomUUID().toString());
@@ -119,8 +118,8 @@ public class GoodOVController {
                 good.setThingId(pet.getPetId());
                 petFeignService.addPet(pet);
                 petInfoFeignService.addPetInfo(petInfo);
-                goodFeignService.addGood(good);
             }
+            goodFeignService.addGood(good);
             result.success("添加成功");
         }catch (Exception e){
             result.fail("添加失败");
