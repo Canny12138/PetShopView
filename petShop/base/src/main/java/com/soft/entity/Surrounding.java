@@ -7,14 +7,13 @@ import lombok.Data;
 /**
  * Project name:petShop
  * Author: NoFat
- * Create time:2022/6/23 14:42
+ * Create time:2022/6/23 17:07
  **/
 @Data
-@TableName("pet")
-public class Pet {
+@TableName("surrounding")
+public class Surrounding {
     @TableId
-    private String petId;
-    private String petName;
-    private Integer petType;
-
+    private String surroundingId;
+    private String surroundingName;
+    private Integer surroundingType;
 }

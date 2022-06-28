@@ -33,3 +33,9 @@ spring:
             # http://localhost:8001/login/test
 
         # -id: ****
+        - id: store_service_route
+          uri: lb://store-service
+          predicates:
+            - Path=/store-server/**
+          filters:
+            - StripPrefix=1

@@ -1,5 +1,5 @@
 <template>
-	<view class="content">
+	<view>
 		<component :is="component"></component>
 		<u-tabbar :list="tabbar" v-model="current" @change="changeTb" :placeholder="true" :fixed="true"
 			:safeAreaInsetBottom="true">
@@ -21,7 +21,6 @@
 		},
 		data() {
 			return {
-				title: "Hello",
 				current: 0,
 				tabbar: [{
 						name: 'Home',
@@ -34,12 +33,12 @@
 			}
 		},
 		mounted() {
-			uni.request({
-				url: 'http://172.16.193.131:9001/login-server/login/test',
-				method: 'GET',
-				success: ((res) => {
-					console.log(res)
-				}),
+			// uni.request({
+			// 	url: 'http://172.16.193.131:9001/login-server/login/test',
+			// 	method: 'GET',
+			// 	success: ((res) => {
+			// 		console.log(res)
+			// 	}),
 				// fail: ((err) => {
 				// 	uni.showToast({
 				// 		title: '请求接口失败',
@@ -47,7 +46,7 @@
 				// 	})
 				// 	reject(err)
 				// })
-			})
+			// })
 		},
 		methods: {
 			changeTb(index) {

@@ -1,4 +1,4 @@
-package com.petManage;
+package com.goodManage;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,11 +6,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * Project name:petShop
  * Author: NoFat
- * Create time:2022/6/20 21:32
+ * Create time:2022/6/27 10:44
  **/
 @SpringBootApplication
-public class PetManageApplication {
-    public static void main(String[] args){
-        SpringApplication.run(PetManageApplication.class);
+public class GoodManageApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(GoodManageApplication.class);
     }
 }
