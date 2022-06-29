@@ -17,7 +17,7 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("/good")
-public class GoodManageController {
+public class GoodController {
     @Autowired
     private GoodMapper goodMapper;
     @RequestMapping(method = RequestMethod.GET,value = "/page")
