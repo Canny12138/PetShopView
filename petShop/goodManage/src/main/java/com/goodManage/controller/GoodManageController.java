@@ -21,7 +21,7 @@ public class GoodManageController {
     @Autowired
     private GoodMapper goodMapper;
     @RequestMapping(method = RequestMethod.GET,value = "/page")
-    public List<Good> page(
+    public Page<Good> page(
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam("goodName") String goodName
@@ -33,7 +33,7 @@ public class GoodManageController {
             wrapper.like("good_name",goodName);
         }
         Page<Good> res = goodMapper.selectPage(page,wrapper);
-        return res.getRecords();
+        return res;
     }
     @RequestMapping(method = RequestMethod.GET,value = "/pageByStoreId")
     public List<Good> pageByStoreId(
