@@ -1,5 +1,6 @@
 package com.storeService.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.soft.entity.*;
 import com.soft.ov.GoodOV;
 import com.soft.util.Result;
@@ -45,7 +46,8 @@ public class GoodOVController {
             @RequestParam("goodName") String goodName
             ){
         Result res = new Result();
-        List<Good> records= goodFeignService.page(pageNum,pageSize,goodName);
+        Page<Good> page= goodFeignService.page(pageNum,pageSize,goodName);
+        List<Good> records = page.getRecords();
         List<GoodOV> resData = new LinkedList<>();
         if(records.size()==0){
             res.fail("未找到商品");
@@ -59,6 +61,7 @@ public class GoodOVController {
             }
         }
         res.setData(resData);
+        res.setEtc(page.getPages());
         return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addGoodOV")

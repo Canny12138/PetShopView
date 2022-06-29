@@ -11,6 +11,7 @@ public class Result<T> implements Serializable {
     private String statusCode = ResultType.SUCCESS.getCode();
     private String message = ResultType.SUCCESS.getName();
     private T data = null;
+    private T etc = null;
     private Boolean isSuccess = true;
     /*
         获取状态编码
@@ -48,9 +49,18 @@ public class Result<T> implements Serializable {
     public void setData(T data) {
         this.data = data;
     }
+
+    public T getEtc(){
+        return etc;
+    }
+
+    public void setEtc(T etc) {
+        this.etc = etc;
+    }
+
     /*
-        请求是否成功
-     */
+            请求是否成功
+         */
     public Boolean getIsSuccess(){
         return isSuccess;
     }
@@ -58,6 +68,7 @@ public class Result<T> implements Serializable {
         成功请求
      */
     public void success(String message){
+        this.message = message;
         this.isSuccess = true;
     }
     /*
