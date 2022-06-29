@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  **/
 @RestController
 @RequestMapping("/store")
-public class StoreManageController {
+public class StoreController {
     @Autowired
     private StoreMapper storeMapper;
     @RequestMapping(method = RequestMethod.POST,value = "/getStoreById")

@@ -25,9 +25,7 @@ public class JwtUtils {
                 .setHeaderParam("typ","JWT")
                 .setHeaderParam("alg","HS256")
                 //payload
-                .claim("id",user.getUserId())
-                .claim("nickname",user.getNickname())
-                .setSubject("Login")
+                .claim("username",user.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis()+TIME))
                 .setId(UUID.randomUUID().toString())
                 //signature
@@ -45,13 +43,12 @@ public class JwtUtils {
                         .setSigningKey(SECRET)
                         .parseClaimsJws(token)
                         .getBody();
-                String userId = (String)(body.get("id"));
-                String nickname = (String)(body.get("nickname"));
-                if(userId==null||userId.isEmpty()){
-                    result.fail("未找到该id");
+                String username = (String)(body.get("username"));
+                if(username==null||username.isEmpty()){
+                    result.fail("未找到用户名");
                 }else {
-                    result.setData(nickname);
-                    result.success("欢迎！"+nickname);
+                    result.setData(username);
+                    result.success("ok");
                 }
             }else {
                 result.fail("未找到Token");
@@ -61,12 +58,12 @@ public class JwtUtils {
         }
         return result;
     }
-    //获取nickname
-    public static String getNicknameByToken(String token){
-        Map<String, Object> body = Jwts.parser()
-                .setSigningKey(SECRET)
-                .parseClaimsJws(token)
-                .getBody();
-        return (String) (body.get("nickname"));
-    }
+//    //获取nickname
+//    public static String getNicknameByToken(String token){
+//        Map<String, Object> body = Jwts.parser()
+//                .setSigningKey(SECRET)
+//                .parseClaimsJws(token)
+//                .getBody();
+//        return (String) (body.get("nickname"));
+//    }
 }
