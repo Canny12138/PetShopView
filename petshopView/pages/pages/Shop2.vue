@@ -1,5 +1,5 @@
 <template>
-	<view @tap="btnBClick">
+	<view style="background-color: #fff7fc;">
 		<u-search shape="round" style="padding: 15px; padding-top: 5px;background-color: #ffadb1"></u-search>
 		<scroll-view style="height: 1300rpx;" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
 			:refresher-threshold="100" refresher-background="#fff7fc" @refresherpulling="onPulling"
@@ -7,21 +7,18 @@
 			<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
 				:scrollTop="scrollTop" style="background-color: #fff7fc; margin-top: 5px">
 				<u-list-item v-for="(item, index) in indexList" :key="index">
-					<!-- <u-cell :title="`商品-${index + 1}`">
-						<u-avatar slot="icon" shape="square" size="80" :src="item.url"
-							customStyle="margin: -3px 5px -3px 0"></u-avatar>
-					</u-cell> -->
 					<u-grid :border="false" @click="click" col="2">
 						<u-grid-item v-for="(item, index) in item" :key="index">
-							<uni-card style="width: 85%; height:250px; margin: 5px; background-color: #fff7fc">
-								<!-- <image slot='cover' :src="item.url" mode="aspectFill"
-									style="width: 150px; height: 130px">
-								</image> -->
-								<!-- <text>商品-{{index + 1}}口口口口口口口口口口口口口口口口</text> -->
-								<text>{{item.goodName}}</text>
-								<text style="color: #ffb300;font-weight: bold; font-size: 18px;">\n¥8888\n</text>
+							<uni-card @click="clickGood(item.goodId)"
+								style="width: 85%; height:250px; margin: 5px; background-color: #fff7fc">
+								<image slot='cover' :src="item.img" mode="aspectFill"
+									style="width: 100%; height: 130px">
+								</image>
+								<text style="font-weight: bold; font-size: 15px;">{{item.goodName}}</text>
 								<text
-									style="background-color: #eee7ec;border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">旺角大学城店 ></text>
+									style="color: #ffb300;font-weight: bold; font-size: 18px;">\n\n¥{{item.price}}\n</text>
+								<text
+									style="background-color: #eee7ec; border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">{{item.storeName}}&nbsp></text>
 							</uni-card>
 						</u-grid-item>
 					</u-grid>
@@ -44,6 +41,9 @@
 				currentPage: 1,
 				indexList: [],
 				lineTemp: [],
+				etc: 1,
+				isLoad: true,
+				imgUrl: "http://150.158.85.93:88",
 				urls: [
 					'http://150.158.85.93:81/pet/1.jpeg',
 					'http://150.158.85.93:81/pet/2.jpeg',
@@ -61,7 +61,7 @@
 			}
 		},
 		mounted() {
-			this.loadmore();
+			this.firstLoad();
 			this._freshing = false;
 			// setTimeout(() => {
 			// this.triggered = true;
@@ -75,9 +75,8 @@
 		},
 		methods: {
 			getGood() {
-				console.log("a")
 				uni.request({
-					url: 'http://172.16.193.151:9001/store-server/goodOV/getGoodOVByPage',
+					url: 'http://172.16.193.81:9001/store-server/goodOV/getGoodOVByPage',
 					method: 'GET',
 					data: {
 						pageNum: this.currentPage,
@@ -85,30 +84,31 @@
 						goodName: "",
 					},
 					success: ((res) => {
-						// console.log(res.data.data);
-						this.lineTemp = res.data.data;
-						console.log(this.lineTemp);
+						// console.log(res);
+						// this.lineTemp = res.data.data;
+						// console.log(this.lineTemp);
 						// console.log(this.lineTemp[0].good.goodName);
+						this.lineTemp = [];
 						for (let j = 0; j < 2; j++) {
 							this.lineTemp.push({
-								goodName: this.lineTemp[j].goodName,
-								img: this.lineTemp[j].img,
-								price: this.lineTemp[j].price,
-								storeName: this.lineTemp[j].storeName,
-								// url: this.urls[uni.$u.random(0, this.urls.length - 1)]
+								goodId: res.data.data[j].goodId,
+								goodName: res.data.data[j].goodName,
+								img: this.imgUrl + res.data.data[j].img,
+								price: res.data.data[j].price,
+								storeName: res.data.data[j].storeName,
 							});
 						}
 						this.indexList.push(this.lineTemp);
 					}),
-					// fail: ((err) => {
-					// 	uni.showToast({
-					// 		title: '请求接口失败',
-					// 		duration: 2000
-					// 	})
-					// 	reject(err)
-					// })
 				});
-				this.currentPage ++ ;
+				this.currentPage++;
+				if (this.currentPage > this.etc) this.isLoad = false;
+			},
+			clickGood(id) {
+				console.log(id);
+				uni.navigateTo({
+					url: 'pages/Good?id=' + id
+				});
 			},
 			click(name) {
 				// this.$refs.uToast.success(`点击了第${name}个`)
@@ -127,13 +127,30 @@
 				this.showBackTop = true;
 				this.scrollTop = e;
 			},
+			firstLoad() {
+				uni.request({
+					url: 'http://172.16.193.81:9001/store-server/goodOV/getGoodOVByPage',
+					method: 'GET',
+					data: {
+						pageNum: 1,
+						pageSize: 2,
+						goodName: "",
+					},
+					success: ((res) => {
+						this.etc = res.data.etc;
+						this.loadmore();
+					}),
+				});
+			},
 			loadmore() {
-				for (let i = 0; i < 7; i++) {
-					this.lineTemp = [];
-					this.getGood();
-
+				if (this.isLoad) {
+					for (let i = 0; this.isLoad && i < 10; i++) {
+						this.getGood();
+					}
+					console.log(this.indexList);
+				} else {
+					console.log("到底了");
 				}
-				console.log(this.indexList);
 			},
 			onPulling(e) {
 				// console.log("onpulling", e);
@@ -145,6 +162,8 @@
 					this.triggered = false;
 					this._freshing = false;
 					this.indexList = [];
+					this.currentPage = 1;
+					this.isLoad = true;
 					this.loadmore();
 				}, 1000)
 			},
@@ -155,9 +174,9 @@
 			onAbort() {
 				// console.log("onAbort");
 			},
-			btnBClick() {
-				uni.$u.debounce(500);
-			},
+			// btnBClick() {
+			// 	uni.$u.debounce(500);
+			// },
 		}
 	}
 </script>
