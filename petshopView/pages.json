@@ -29,7 +29,16 @@
 				"enablePullDownRefresh": false
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/pages/Good",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	// "tabBar": {
 	// 	"list": [{
 	// 			"pagePath": "pages/index",

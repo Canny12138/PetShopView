@@ -3,7 +3,7 @@
 		<view style="height: 25px; background-color: #ffadb1"></view>
 		<component :is="component"></component>
 		<u-tabbar :list="tabbar" v-model="current" @change="changeTb" :placeholder="true" :fixed="true"
-			:safeAreaInsetBottom="true">
+			:safeAreaInsetBottom="true" activeColor="#fff7fc" inactiveColor="#ff5558" style="background-color: #ffadb1;">
 			<u-tabbar-item text="HOME" icon="home" dot></u-tabbar-item>
 			<u-tabbar-item text="商店" icon="photo" badge="3"></u-tabbar-item>
 			<u-tabbar-item text="商店" icon="photo" badge="3"></u-tabbar-item>
@@ -72,11 +72,15 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.content {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+	}
+
+	uni-view.u-tabbar-item {
+		background-color: #ffadb1;
 	}
 </style>
