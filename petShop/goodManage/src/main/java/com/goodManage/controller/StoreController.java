@@ -35,7 +35,7 @@ public class StoreController {
         return true;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/deleteStore")
-    public Boolean deletePetInfo(@RequestParam("storeId") String storeId){
+    public Boolean deleteStore(@RequestParam("storeId") String storeId){
         Store res;
         res = storeMapper.selectById(storeId);
         if(res==null){
@@ -45,7 +45,7 @@ public class StoreController {
         return true;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/updateStore")
-    public Boolean updatePetInfo(@RequestBody Store store){
+    public Boolean updateStore(@RequestBody Store store){
         Store res;
         res = storeMapper.selectById(store.getStoreId());
         if(res==null){
