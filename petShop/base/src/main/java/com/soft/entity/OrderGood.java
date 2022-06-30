@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.springframework.stereotype.Repository;
 
+import java.io.Serializable;
+
 /**
  * Project name:petShop
  * Author: NoFat
