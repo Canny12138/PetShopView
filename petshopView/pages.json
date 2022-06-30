@@ -9,23 +9,27 @@
 			"style": {
 				// "navigationBarTitleText": "uni-app"
 			}
-		}, {
+		},
+		{
 			"name": "shop",
 			"path": "pages/pages/Shop",
 			"style": {}
 
-		}
-	    ,{
-            "path" : "pages/pages/Home",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+		},
+		{
+			"name": "shop2",
+			"path": "pages/pages/Shop2",
+			"style": {}
 
+		},
+		{
+			"path": "pages/pages/Home",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}
+	],
 	// "tabBar": {
 	// 	"list": [{
 	// 			"pagePath": "pages/index",
@@ -38,7 +42,7 @@
 	// },
 
 	"globalStyle": {
-		"navigationStyle":"custom",
+		"navigationStyle": "custom",
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",

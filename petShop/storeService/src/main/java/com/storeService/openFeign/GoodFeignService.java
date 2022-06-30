@@ -18,7 +18,7 @@ import java.util.List;
 @FeignClient(name="goodManage-service",path = "/good")
 public interface GoodFeignService {
     @RequestMapping(method = RequestMethod.GET,value = "/page")
-    List<Good> page(
+    Page<Good> page(
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam("goodName") String goodName

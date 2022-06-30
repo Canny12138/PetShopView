@@ -12,11 +12,16 @@ import org.springframework.web.bind.annotation.*;
  * Author: NoFat
  * Create time:2022/6/27 15:14
  **/
-@Repository
+@RestController
 @RequestMapping("/petInfo")
 public class PetInfoController {
     @Autowired
     private PetInfoMapper petInfoMapper;
+    @RequestMapping(method = RequestMethod.GET,value = "/test")
+    public String test(){
+        String res = "hello world";
+        return res;
+    }
     @RequestMapping(method = RequestMethod.POST,value = "/getInfoById")
     public PetInfo getPetInfoById(@RequestParam("petId") String petId){
         PetInfo params = new PetInfo();

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
  * Author: NoFat
  * Create time:2022/6/27 14:43
  **/
-@Repository
+@RestController
 @RequestMapping("/surroundingInfo")
 public class SurroundingInfoController {
     @Autowired

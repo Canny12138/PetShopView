@@ -1,6 +1,7 @@
 package com.soft.ov;
 
 import com.soft.entity.Good;
+import com.soft.entity.Store;
 
 /**
  * Project name:petShop
@@ -8,43 +9,45 @@ import com.soft.entity.Good;
  * Create time:2022/6/26 18:36
  **/
 public class GoodOV {
-    private Good good;
-    private Object thing;
-    private Object thingInfo;
-    private Object type;
+    private String goodName;
+    private String img;
+    private String storeName;
+    private Double price;
     public  GoodOV(Good good){
-        this.good = good;
+        this.goodName = good.getGoodName();
+        this.img = good.getImg();
+        this.price = good.getPrice();
     }
 
-    public Good getGood() {
-        return good;
-    };
-
-    public void setGood(Good good) {
-        this.good = good;
+    public Double getPrice() {
+        return price;
     }
 
-    public Object getThing() {
-        return thing;
+    public String getGoodName() {
+        return goodName;
     }
 
-    public Object getThingInfo() {
-        return thingInfo;
+    public String getImg() {
+        return img;
     }
 
-    public void setThing(Object thing) {
-        this.thing = thing;
+    public String getStoreName() {
+        return storeName;
     }
 
-    public void setThingInfo(Object thingInfo) {
-        this.thingInfo = thingInfo;
+    public void setGoodName(String goodName) {
+        this.goodName = goodName;
     }
 
-    public void setType(Object type) {
-        this.type = type;
+    public void setImg(String img) {
+        this.img = img;
     }
 
-    public Object getType() {
-        return type;
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 }

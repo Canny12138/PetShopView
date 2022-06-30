@@ -1,5 +1,6 @@
 package com.storeService.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.soft.entity.*;
 import com.soft.ov.GoodOV;
 import com.soft.util.Result;
@@ -36,6 +37,8 @@ public class GoodOVController {
     SurroundingTypeFeignService surroundingTypeFeignService;
     @Autowired
     SurroundingInfoFeignService surroundingInfoFeignService;
+    @Autowired
+    StoreFeignService storeFeignService;
     @RequestMapping(method = RequestMethod.GET,value = "/getGoodOVByPage")
     public Result getGoodOVByPage(
             @RequestParam("pageNum") Integer pageNum,
@@ -43,7 +46,8 @@ public class GoodOVController {
             @RequestParam("goodName") String goodName
             ){
         Result res = new Result();
-        List<Good> records= goodFeignService.page(pageNum,pageSize,goodName);
+        Page<Good> page= goodFeignService.page(pageNum,pageSize,goodName);
+        List<Good> records = page.getRecords();
         List<GoodOV> resData = new LinkedList<>();
         if(records.size()==0){
             res.fail("未找到商品");
@@ -51,25 +55,13 @@ public class GoodOVController {
             res.success("success");
             for(Good good:records){
                 GoodOV temp = new GoodOV(good);
-                if(good.getType()==0){
-                    Surrounding surrounding = surroundingFeignService.getSurroundingBySurroundingId(good.getThingId());
-                    temp.setThing(surrounding);
-                    SurroundingType surroundingType = surroundingTypeFeignService.getSurroundingTypeByTypeValue(surrounding.getSurroundingType());
-                    temp.setType(surroundingType);
-                    SurroundingInfo surroundingInfo = surroundingInfoFeignService.getSurroundingInfoById(good.getThingId());
-                    temp.setThingInfo(surroundingInfo);
-                }else {
-                    Pet pet = petFeignService.getPetByPetId(good.getThingId());
-                    temp.setThing(pet);
-                    PetType petType = petTypeFeignService.getPetTypeByTypeValue(pet.getPetType());
-                    temp.setType(petType);
-                    PetInfo petInfo = petInfoFeignService.getPetInfoById(good.getThingId());
-                    temp.setThingInfo(petInfo);
-                }
+                String storeName = storeFeignService.getStoreById(good.getStoreId()).getStoreName();
+                temp.setStoreName(storeName);
                 resData.add(temp);
             }
         }
         res.setData(resData);
+        res.setEtc(page.getPages());
         return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addGoodOV")
@@ -106,7 +98,6 @@ public class GoodOVController {
                 good.setThingId(surrounding.getSurroundingId());
                 surroundingFeignService.addSurrounding(surrounding);
                 surroundingInfoFeignService.addSurroundingInfo(surroundingInfo);
-                goodFeignService.addGood(good);
             }else {
                 Pet pet = new Pet();
                 pet.setPetId(UUID.randomUUID().toString());
@@ -119,8 +110,8 @@ public class GoodOVController {
                 good.setThingId(pet.getPetId());
                 petFeignService.addPet(pet);
                 petInfoFeignService.addPetInfo(petInfo);
-                goodFeignService.addGood(good);
             }
+            goodFeignService.addGood(good);
             result.success("添加成功");
         }catch (Exception e){
             result.fail("添加失败");

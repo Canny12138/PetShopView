@@ -17,5 +17,3 @@ public class LoginApplication {
     }
 }
 
-//canny test
-//nofat test
