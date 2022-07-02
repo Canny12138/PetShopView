@@ -35,6 +35,10 @@ public class GoodController {
         Page<Good> res = goodMapper.selectPage(page,wrapper);
         return res;
     }
+    @RequestMapping(method = RequestMethod.GET,value = "/getGoodById")
+    public Good getGoodById(@RequestParam("goodId") String goodId){
+        return goodMapper.selectById(goodId);
+    }
     @RequestMapping(method = RequestMethod.GET,value = "/pageByStoreId")
     public List<Good> pageByStoreId(
             @RequestParam("pageNum") Integer pageNum,

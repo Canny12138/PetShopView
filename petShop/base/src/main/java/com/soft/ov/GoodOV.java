@@ -9,14 +9,24 @@ import com.soft.entity.Store;
  * Create time:2022/6/26 18:36
  **/
 public class GoodOV {
+    private String goodId;
     private String goodName;
     private String img;
     private String storeName;
     private Double price;
-    public  GoodOV(Good good){
+    public GoodOV(Good good){
+        this.goodId = good.getGoodId();
         this.goodName = good.getGoodName();
         this.img = good.getImg();
         this.price = good.getPrice();
+    }
+
+    public String getGoodId() {
+        return goodId;
+    }
+
+    public void setGoodId(String goodId) {
+        this.goodId = goodId;
     }
 
     public Double getPrice() {

@@ -11,6 +11,7 @@
         <module>goodManage</module>
         <module>surroundingManage</module>
         <module>storeService</module>
+        <module>example</module>
     </modules>
 <!--    <parent>-->
 <!--        <groupId>org.springframework.boot</groupId>-->
