@@ -6,6 +6,8 @@ import com.soft.entity.Collect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Project name:petShop
  * Author: NoFat
@@ -21,19 +23,18 @@ public class CollectController {
         String res = "hello world";
         return res;
     }
-    @RequestMapping(method = RequestMethod.POST,value = "/getCollectById")
-    public Collect getCollectById(@RequestParam("collectId") String collectId){
+    @RequestMapping(method = RequestMethod.POST,value = "/getCollectByUserId")
+    public List<Collect> getCollectByUserId(@RequestParam("userId") String userId){
         Collect params = new Collect();
         QueryWrapper<Collect> wrapper = new QueryWrapper<>(params);
-        wrapper.eq("collect_id",collectId);
-        Collect res = collectMapper.selectOne(wrapper);
+        wrapper.eq("user_id",userId);
+        List<Collect> res = collectMapper.selectList(wrapper);
         return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addCollect")
-    @ResponseBody
     public Boolean addCollect(@RequestBody Collect collect){
         Collect res;
-        res = collectMapper.selectById(collect.getCollecId());
+        res = collectMapper.selectById(collect.getCollectId());
         if(res!=null){
             return false;
         }
@@ -53,7 +54,7 @@ public class CollectController {
     @RequestMapping(method = RequestMethod.POST,value = "/updateCollect")
     public Boolean updateCollect(@RequestBody Collect collect){
         Collect res;
-        res = collectMapper.selectById(collect.getCollecId());
+        res = collectMapper.selectById(collect.getCollectId());
         if(res==null){
             return false;
         }

@@ -10,10 +10,11 @@ import lombok.Data;
  * Create time:2022/6/29 11:33
  **/
 @Data
-@TableName("order")
-public class Order {
+@TableName("orders")
+public class Orders {
     @TableId
-    private String orderId;
-    private String create_time;
-    private Integer order_status;
+    private String ordersId;
+    private String createTime;
+    private Integer ordersStatus;
+    private String userId;
 }
