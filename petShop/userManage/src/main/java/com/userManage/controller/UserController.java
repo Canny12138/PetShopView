@@ -26,6 +26,7 @@ public class UserController {
     public List<User> all(){
         return userMapper.selectList(null);
     }
+
     @RequestMapping(method = RequestMethod.POST,value = "/getUserByUsername")
     public User getUserByUsername(@RequestParam("username") String username){
         User param = new User();
