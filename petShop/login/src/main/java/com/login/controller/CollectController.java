@@ -7,6 +7,7 @@ import com.login.openFeign.StoreFeignService;
 import com.soft.entity.Collect;
 import com.soft.entity.Good;
 import com.soft.ov.CollectOV;
+import com.soft.util.DateUtil;
 import com.soft.util.JwtUtils;
 import com.soft.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Project name:petShop
@@ -78,7 +80,7 @@ public class CollectController {
         String token = request.getHeader("token");
         Result tokenRes = JwtUtils.validateToken(token);
         if(!tokenRes.getIsSuccess()){
-            res.fail("未登录");
+            res.againLogin("未登录");
             return res;
         }
         Collect collect = collectFeignService.getCollectByUserIdGoodId(JwtUtils.getUserIdByToken(token),goodId);
@@ -87,6 +89,27 @@ public class CollectController {
             return res;
         }
         res.fail("删除失败");
+        return res;
+    }
+    @RequestMapping(method = RequestMethod.POST,value = "/addCollect")
+    public Result addCollect(@RequestParam String goodId){
+        Result res = new Result();
+        String token = request.getHeader("token");
+        Result tokenRes = JwtUtils.validateToken(token);
+        if(!tokenRes.getIsSuccess()){
+            res.againLogin("未登录");
+            return res;
+        }
+        Collect collect = new Collect();
+        collect.setGoodId(goodId);
+        collect.setUserId(JwtUtils.getUserIdByToken(token));
+        collect.setCollectId(UUID.randomUUID().toString());
+        collect.setAddTime(DateUtil.getLocalDateStr());
+        if(collectFeignService.addCollect(collect)){
+            res.success("添加成功");
+        }else {
+            res.fail("添加失败");
+        }
         return res;
     }
 
