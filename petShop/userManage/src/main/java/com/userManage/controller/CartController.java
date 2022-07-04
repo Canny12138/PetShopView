@@ -2,13 +2,12 @@ package com.userManage.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.soft.entity.*;
-import com.soft.entity.Cart;
-import com.soft.entity.Cart;
 import com.soft.entity.Cart;
 import com.userManage.mapper.CartMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Project name:petShop
@@ -31,6 +30,13 @@ public class CartController {
         QueryWrapper<Cart> wrapper = new QueryWrapper<>(params);
         wrapper.eq("user_id",userId);
         return cartMapper.selectPage(page,wrapper);
+    }
+    @RequestMapping(method = RequestMethod.POST,value = "/getCartByUserId")
+    public List<Cart> getCartByUserId(@RequestParam("userId") String userId){
+        Cart params = new Cart();
+        QueryWrapper<Cart> wrapper = new QueryWrapper<>(params);
+        wrapper.eq("user_id",userId);
+        return cartMapper.selectList(wrapper);
     }
     @RequestMapping(method = RequestMethod.POST,value = "/getCartByUserIdGoodId")
     public Cart getCartByUserIdGoodId(
