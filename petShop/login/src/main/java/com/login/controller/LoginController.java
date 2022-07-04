@@ -21,7 +21,7 @@ import java.util.UUID;
  **/
 @RestController
 @RequestMapping("/login")
-public class loginController {
+public class LoginController {
     @Value("${server.port}")
     String port;
 
