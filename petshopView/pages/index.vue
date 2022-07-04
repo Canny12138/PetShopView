@@ -3,11 +3,12 @@
 		<view style="height: 25px; background-color: #ffadb1"></view>
 		<component :is="component"></component>
 		<u-tabbar :list="tabbar" v-model="current" @change="changeTb" :placeholder="true" :fixed="true"
-			:safeAreaInsetBottom="true" activeColor="#fff7fc" inactiveColor="#ff5558" style="background-color: #ffadb1;">
+			:safeAreaInsetBottom="true" activeColor="#fff7fc" inactiveColor="#ff5558"
+			style="background-color: #ffadb1;">
 			<u-tabbar-item text="HOME" icon="home" dot></u-tabbar-item>
 			<u-tabbar-item text="商店" icon="photo" badge="3"></u-tabbar-item>
 			<u-tabbar-item text="商店" icon="photo" badge="3"></u-tabbar-item>
-			<u-tabbar-item text="商店" icon="photo" badge="3"></u-tabbar-item>
+			<u-tabbar-item text="我的" icon="photo" badge="3"></u-tabbar-item>
 			<!-- 		<u-tabbar-item text="直播" icon="play-right"></u-tabbar-item>
 			<u-tabbar-item text="我的" icon="account"></u-tabbar-item> -->
 		</u-tabbar>
@@ -18,11 +19,13 @@
 	import Home from './pages/Home.vue'
 	import Shop from './pages/Shop.vue'
 	import Shop2 from './pages/Shop2.vue'
+	import Mine from './pages/Mine.vue'
 	export default {
 		components: {
 			Home,
 			Shop,
-			Shop2
+			Shop2,
+			Mine
 		},
 		data() {
 			return {
@@ -37,7 +40,7 @@
 						name: 'Shop2',
 					},
 					{
-						name: 'Shop',
+						name: 'Mine',
 					}
 				],
 				// value2: 1,
@@ -62,7 +65,18 @@
 		methods: {
 			changeTb(index) {
 				this.current = index
-			}
+			},
+			// removeStorage() {
+			// 	let self = this;
+			// 	uni.removeStorage({
+			// 		key: "user",
+			// 		success() {
+			// 			console.log('删除成功');
+			// 			self.nickname = "未登录";
+			// 			self.isLogin = false;
+			// 		}
+			// 	})
+			// },
 		},
 		computed: {
 			component: function() {

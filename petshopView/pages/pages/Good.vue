@@ -72,7 +72,7 @@
 		methods: {
 			getGood() {
 				uni.request({
-					url: 'http://172.16.193.81:9001/store-server/goodInfoOV/getInfo',
+					url: 'http://localhost:9001/store-server/goodInfoOV/getInfo',
 					method: 'GET',
 					data: {
 						goodId: this.GoodId,

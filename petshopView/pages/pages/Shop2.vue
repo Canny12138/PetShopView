@@ -76,7 +76,7 @@
 		methods: {
 			getGood() {
 				uni.request({
-					url: 'http://172.16.193.81:9001/store-server/goodOV/getGoodOVByPage',
+					url: 'http://localhost:9001/store-server/goodOV/getGoodOVByPage',
 					method: 'GET',
 					data: {
 						pageNum: this.currentPage,
@@ -129,7 +129,7 @@
 			},
 			firstLoad() {
 				uni.request({
-					url: 'http://172.16.193.81:9001/store-server/goodOV/getGoodOVByPage',
+					url: 'http://localhost:9001/store-server/goodOV/getGoodOVByPage',
 					method: 'GET',
 					data: {
 						pageNum: 1,
