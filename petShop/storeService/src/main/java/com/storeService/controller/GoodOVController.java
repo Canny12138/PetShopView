@@ -3,6 +3,7 @@ package com.storeService.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.soft.entity.*;
 import com.soft.ov.GoodOV;
+import com.soft.util.JwtUtils;
 import com.soft.util.Result;
 import com.storeService.openFeign.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -39,6 +41,10 @@ public class GoodOVController {
     SurroundingInfoFeignService surroundingInfoFeignService;
     @Autowired
     StoreFeignService storeFeignService;
+    @Autowired
+    CollectFeignService collectFeignService;
+    @Autowired
+    private HttpServletRequest request;
     @RequestMapping(method = RequestMethod.GET,value = "/getGoodOVByPage")
     public Result getGoodOVByPage(
             @RequestParam("pageNum") Integer pageNum,
@@ -46,6 +52,7 @@ public class GoodOVController {
             @RequestParam("goodName") String goodName
             ){
         Result res = new Result();
+        String token = request.getHeader("token");
         Page<Good> page= goodFeignService.page(pageNum,pageSize,goodName);
         List<Good> records = page.getRecords();
         List<GoodOV> resData = new LinkedList<>();
@@ -57,6 +64,16 @@ public class GoodOVController {
                 GoodOV temp = new GoodOV(good);
                 String storeName = storeFeignService.getStoreById(good.getStoreId()).getStoreName();
                 temp.setStoreName(storeName);
+                Result tokenRes = JwtUtils.validateToken(token);
+                if(tokenRes.getIsSuccess()){
+                    if(collectFeignService.getIsCollect(JwtUtils.getUserIdByToken(token),good.getGoodId())){
+                        temp.setIsCollect(1);
+                    }else {
+                        temp.setIsCollect(0);
+                    }
+                }else {
+                    temp.setIsCollect(0);
+                }
                 resData.add(temp);
             }
         }
@@ -119,5 +136,4 @@ public class GoodOVController {
         }
         return result;
     }
-
 }

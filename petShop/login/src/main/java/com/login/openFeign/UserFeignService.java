@@ -1,4 +1,4 @@
-package com.login.feign;
+package com.login.openFeign;
 
 import com.soft.entity.User;
 import org.springframework.cloud.openfeign.FeignClient;

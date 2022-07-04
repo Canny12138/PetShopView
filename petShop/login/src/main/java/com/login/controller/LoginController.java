@@ -1,7 +1,6 @@
 package com.login.controller;
 
-import com.baomidou.mybatisplus.extension.api.R;
-import com.login.feign.UserFeignService;
+import com.login.openFeign.UserFeignService;
 import com.soft.entity.User;
 import com.soft.ov.TokenOV;
 import com.soft.util.JwtUtils;

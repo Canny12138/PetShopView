@@ -26,6 +26,7 @@ public class JwtUtils {
                 .setHeaderParam("alg","HS256")
                 //payload
                 .claim("username",user.getUsername())
+                .claim("userId",user.getUserId())
                 .setExpiration(new Date(System.currentTimeMillis()+TIME))
                 .setId(UUID.randomUUID().toString())
                 //signature
@@ -58,12 +59,12 @@ public class JwtUtils {
         }
         return result;
     }
-//    //获取nickname
-//    public static String getNicknameByToken(String token){
-//        Map<String, Object> body = Jwts.parser()
-//                .setSigningKey(SECRET)
-//                .parseClaimsJws(token)
-//                .getBody();
-//        return (String) (body.get("nickname"));
-//    }
+    //获取userId
+    public static String getUserIdByToken(String token){
+        Map<String, Object> body = Jwts.parser()
+                .setSigningKey(SECRET)
+                .parseClaimsJws(token)
+                .getBody();
+        return (String) (body.get("userId"));
+    }
 }
