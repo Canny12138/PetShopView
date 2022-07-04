@@ -16,8 +16,8 @@ public class SyncProducer {
     public static void main(String[] args) throws Exception{
         DefaultMQProducer producer = new DefaultMQProducer("group_test");
 
-        producer.setNamesrvAddr("localhost:9876");
-        producer.setSendMsgTimeout(1000000);
+        producer.setNamesrvAddr("150.158.85.93:9876");
+        producer.setSendMsgTimeout(1000000000);
         producer.start();
         for(int i=0;i<10;i++){
             Message msg = new Message("TopicTest","TagA",("hello rocketmq"+i).getBytes(StandardCharsets.UTF_8));

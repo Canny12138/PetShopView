@@ -44,7 +44,7 @@ public class CollectController {
         String token = request.getHeader("token");
         Result tokenRes = JwtUtils.validateToken(token);
         if(!tokenRes.getIsSuccess()){
-            res.fail("未登录");
+            res.againLogin("未登录");
             return res;
         }
         String userId = JwtUtils.getUserIdByToken(token);
