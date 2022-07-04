@@ -6,7 +6,7 @@ import com.userManage.mapper.CollectMapper;
 import com.soft.entity.Collect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.checkerframework.checker.units.qual.C;
+
 
 import java.util.List;
 

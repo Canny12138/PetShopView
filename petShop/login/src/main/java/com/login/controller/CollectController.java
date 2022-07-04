@@ -75,7 +75,7 @@ public class CollectController {
         return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/deleteCollect")
-    public Result deleteCollect(@RequestParam String goodId){
+    public Result deleteCollect(@RequestParam("goodId") String goodId){
         Result res = new Result();
         String token = request.getHeader("token");
         Result tokenRes = JwtUtils.validateToken(token);
@@ -92,7 +92,7 @@ public class CollectController {
         return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addCollect")
-    public Result addCollect(@RequestParam String goodId){
+    public Result addCollect(@RequestParam("goodId") String goodId){
         Result res = new Result();
         String token = request.getHeader("token");
         Result tokenRes = JwtUtils.validateToken(token);
@@ -104,7 +104,7 @@ public class CollectController {
         collect.setGoodId(goodId);
         collect.setUserId(JwtUtils.getUserIdByToken(token));
         collect.setCollectId(UUID.randomUUID().toString());
-        collect.setAddTime(DateUtil.getLocalDateStr());
+        collect.setAddTime(DateUtil.getLocalDateTimeStr());
         if(collectFeignService.addCollect(collect)){
             res.success("添加成功");
         }else {
