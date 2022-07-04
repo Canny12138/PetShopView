@@ -15,7 +15,7 @@ import java.util.List;
  * Create time:2022/7/4 15:49
  **/
 @RestController
-@RequestMapping("/Cart")
+@RequestMapping("/cart")
 public class CartController {
     @Autowired
     private CartMapper cartMapper;

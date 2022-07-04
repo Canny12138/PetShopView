@@ -15,8 +15,8 @@ import java.util.UUID;
  * Create time:2022/6/22 21:46
  **/
 public class JwtUtils {
-//    private  final static long TIME = 1000*60*60*24;
-    private  final static long TIME = 1000*60;
+    private  final static long TIME = 1000*60*60*24;
+//    private  final static long TIME = 1000*60;
     private  final static String SECRET = "test";//签名(解密信息)
     //获取Token
     public static String getToken(User user){
@@ -67,5 +67,16 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody();
         return (String) (body.get("userId"));
+    }
+
+    public static void main(String[] args) {
+        User user = new User();
+        user.setUserId("0b8ff0e5-fb75-4c73-812a-1a677e6d1a84");
+        user.setUsername("canny");
+        user.setPassword("14e1b600b1fd579f47433b88e8d85291");
+        user.setNickname("lmc");
+        user.setUserVip(0);
+        String token = JwtUtils.getToken(user);
+        System.out.println(token);
     }
 }
