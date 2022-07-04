@@ -112,5 +112,4 @@ public class CollectController {
         }
         return res;
     }
-
 }
