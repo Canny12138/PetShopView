@@ -3,6 +3,7 @@ package com.login.controller;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.login.feign.UserFeignService;
 import com.soft.entity.User;
+import com.soft.ov.TokenOV;
 import com.soft.util.JwtUtils;
 import com.soft.util.Md5Util;
 import com.soft.util.Result;
@@ -49,7 +50,8 @@ public class loginController {
             return result;
         }
         String token = JwtUtils.getToken(user);
-        result.setData(token);
+        TokenOV tokenOV = new TokenOV(user,token);
+        result.setData(tokenOV);
         result.success("登录成功");
         return result;
     }

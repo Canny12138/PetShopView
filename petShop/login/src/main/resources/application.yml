@@ -17,3 +17,10 @@ spring:
     password: Admin12138
     url: jdbc:mysql://150.158.85.93:3308/user?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+feign:
+  client:
+    config:
+      store-service:
+        connectTimeout: 5000
+        readTimeout: 10000
