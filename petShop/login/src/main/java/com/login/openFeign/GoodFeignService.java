@@ -15,7 +15,7 @@ import java.util.List;
  * Author: NoFat
  * Create time:2022/6/27 10:34
  **/
-@FeignClient(name="goodManage-service",path = "/good")
+@FeignClient(name="goodManage-service",path = "/good",contextId = "login-good")
 public interface GoodFeignService {
     @RequestMapping(method = RequestMethod.GET,value = "/page")
     Page<Good> page(

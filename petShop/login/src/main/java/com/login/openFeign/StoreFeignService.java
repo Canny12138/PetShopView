@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name="goodManage-service",path = "/store")
+@FeignClient(name="goodManage-service",path = "/store",contextId = "login-store")
 public interface StoreFeignService {
     @RequestMapping(method = RequestMethod.POST,value = "/getStoreById")
     Store getStoreById(@RequestParam("storeId") String storeId);

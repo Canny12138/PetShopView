@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name="userManage-service",path = "/collect")
+@FeignClient(name="userManage-service",path = "/collect",contextId = "login-collect")
 public interface CollectFeignService {
     @RequestMapping(method = RequestMethod.POST,value = "/getCollectPageByUserId")
     Page<Collect> page(

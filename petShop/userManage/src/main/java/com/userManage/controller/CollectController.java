@@ -2,12 +2,11 @@ package com.userManage.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.soft.entity.Good;
 import com.userManage.mapper.CollectMapper;
 import com.soft.entity.Collect;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.List;
 
