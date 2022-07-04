@@ -33,7 +33,7 @@ public class CollectController {
     @ResponseBody
     public Boolean addCollect(@RequestBody Collect collect){
         Collect res;
-        res = collectMapper.selectById(collect.getCollect_id());
+        res = collectMapper.selectById(collect.getCollecId());
         if(res!=null){
             return false;
         }
@@ -53,7 +53,7 @@ public class CollectController {
     @RequestMapping(method = RequestMethod.POST,value = "/updateCollect")
     public Boolean updateCollect(@RequestBody Collect collect){
         Collect res;
-        res = collectMapper.selectById(collect.getCollect_id());
+        res = collectMapper.selectById(collect.getCollecId());
         if(res==null){
             return false;
         }

@@ -13,8 +13,8 @@ import lombok.Data;
 @TableName("collect")
 public class Collect {
     @TableId
-    private String collect_id;
-    private String user_id;
-    private String good_id;
-    private String add_time;
+    private String collecId;
+    private String userId;
+    private String goodId;
+    private String addTime;
 }
