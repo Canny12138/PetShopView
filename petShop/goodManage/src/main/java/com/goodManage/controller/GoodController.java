@@ -25,8 +25,7 @@ public class GoodController {
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam("goodName") String goodName,
-            @RequestParam("type") Integer type,
-            @RequestParam("storeName") String storeName
+            @RequestParam("type") String type
     ){
         Page<Good> page = new Page<>(pageNum,pageSize);
         Good params = new Good();
@@ -34,11 +33,9 @@ public class GoodController {
         if(goodName!=null&&!"".equals(goodName)){
             wrapper.like("good_name",goodName);
         }
-        if(storeName!=null&&!"".equals(storeName)){
-            wrapper.like("store_name",storeName);
-        }
-        if(type==1||type==0){
-            wrapper.eq("type",type);
+        int typeInt = Integer.parseInt(type);
+        if(typeInt==1||typeInt==0){
+            wrapper.eq("type",Integer.parseInt(type));
         }
         Page<Good> res = goodMapper.selectPage(page,wrapper);
         return res;

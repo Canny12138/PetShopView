@@ -49,11 +49,12 @@ public class GoodOVController {
     public Result getGoodOVByPage(
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
-            @RequestParam("goodName") String goodName
+            @RequestParam("goodName") String goodName,
+            @RequestParam("type") String type
             ){
         Result res = new Result();
         String token = request.getHeader("token");
-        Page<Good> page= goodFeignService.page(pageNum,pageSize,goodName);
+        Page<Good> page= goodFeignService.page(pageNum,pageSize,goodName,type);
         List<Good> records = page.getRecords();
         List<GoodOV> resData = new LinkedList<>();
         if(records.size()==0){
@@ -62,8 +63,8 @@ public class GoodOVController {
             res.success("success");
             for(Good good:records){
                 GoodOV temp = new GoodOV(good);
-                String storeName = storeFeignService.getStoreById(good.getStoreId()).getStoreName();
-                temp.setStoreName(storeName);
+                String store = storeFeignService.getStoreById(good.getStoreId()).getStoreName();
+                temp.setStoreName(store);
                 Result tokenRes = JwtUtils.validateToken(token);
                 if(tokenRes.getIsSuccess()){
                     if(collectFeignService.getIsCollect(JwtUtils.getUserIdByToken(token),good.getGoodId())){

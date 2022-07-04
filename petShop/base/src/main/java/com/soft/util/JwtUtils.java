@@ -15,7 +15,8 @@ import java.util.UUID;
  * Create time:2022/6/22 21:46
  **/
 public class JwtUtils {
-    private  final static long TIME = 1000*60*60*24;
+//    private  final static long TIME = 1000*60*60*24;
+    private  final static long TIME = 1000*60;
     private  final static String SECRET = "test";//签名(解密信息)
     //获取Token
     public static String getToken(User user){
