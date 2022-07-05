@@ -14,11 +14,13 @@ public class CartOV {
     private String storeName;
     private Double price;
     private Integer isCollect;
+    private Integer stock;
     public CartOV(Good good){
         this.goodId = good.getGoodId();
         this.goodName = good.getGoodName();
         this.img = good.getImg();
         this.price = good.getPrice();
+        this.stock = good.getStock();
     }
 
     public Integer getIsCollect() {
@@ -67,5 +69,13 @@ public class CartOV {
 
     public void setStoreName(String storeName) {
         this.storeName = storeName;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 }

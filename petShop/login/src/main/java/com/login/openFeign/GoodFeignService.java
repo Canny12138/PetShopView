@@ -38,4 +38,6 @@ public interface GoodFeignService {
 
     @RequestMapping(method = RequestMethod.POST,value = "/deleteGood")
     Boolean deleteGood(@RequestParam("goodId") String goodId);
+    @RequestMapping(method = RequestMethod.POST,value = "/updateGood")
+    Boolean updateGood(@RequestBody Good good);
 }

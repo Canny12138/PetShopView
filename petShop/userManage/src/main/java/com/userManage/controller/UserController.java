@@ -34,6 +34,10 @@ public class UserController {
         res = userMapper.selectOne(wrapper);
         return res;
     }
+    @RequestMapping(method = RequestMethod.POST,value = "/getUserByUserId")
+    public User getUserByUserId(@RequestParam("userId") String userId){
+        return userMapper.selectById(userId);
+    }
     @RequestMapping(method = RequestMethod.POST,value = "/addUser")
     public Boolean addUser(@RequestBody User user) throws Exception{
         User param = new User();

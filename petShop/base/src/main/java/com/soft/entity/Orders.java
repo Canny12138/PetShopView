@@ -17,4 +17,6 @@ public class Orders {
     private String createTime;
     private Integer ordersStatus;
     private String userId;
+    private String addressId;
+    private Double price;
 }

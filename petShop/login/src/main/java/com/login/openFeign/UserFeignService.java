@@ -13,7 +13,7 @@ import java.util.List;
     name 调用接口的服务名
     path 调用接口指定的@RequestMapping
  */
-@FeignClient(name="userManage-service",path = "/user")
+@FeignClient(name="userManage-service",path = "/user",contextId = "login-user")
 public interface UserFeignService {
     @RequestMapping(method = RequestMethod.POST,value = "/getUserByUsername")
     User getUserByUsername(@RequestParam("username") String username);
@@ -23,4 +23,7 @@ public interface UserFeignService {
 
     @RequestMapping(method = RequestMethod.POST,value = ("/addUser"))
     Boolean addUser(@RequestBody User user);
+
+    @RequestMapping(method = RequestMethod.POST,value = "/getUserByUserId")
+    User getUserByUserId(@RequestParam("userId") String userId);
 }
