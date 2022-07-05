@@ -1,10 +1,14 @@
 package com.userManage.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.userManage.mapper.CollectMapper;
 import com.soft.entity.Collect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+
+import java.util.List;
 
 /**
  * Project name:petShop
@@ -16,24 +20,46 @@ import org.springframework.web.bind.annotation.*;
 public class CollectController {
     @Autowired
     private CollectMapper collectMapper;
-    @RequestMapping(method = RequestMethod.GET,value = "/test")
-    public String test(){
-        String res = "hello world";
-        return res;
-    }
-    @RequestMapping(method = RequestMethod.POST,value = "/getCollectById")
-    public Collect getCollectById(@RequestParam("collectId") String collectId){
+    @RequestMapping(method = RequestMethod.POST,value = "/getCollectPageByUserId")
+    public Page<Collect> page(
+            @RequestParam("pageNum") Integer pageNum,
+            @RequestParam("pageSize") Integer pageSize,
+            @RequestParam("userId") String userId
+    ){
+        Page<Collect> page = new Page<>(pageNum,pageSize);
         Collect params = new Collect();
         QueryWrapper<Collect> wrapper = new QueryWrapper<>(params);
-        wrapper.eq("collect_id",collectId);
-        Collect res = collectMapper.selectOne(wrapper);
-        return res;
+        wrapper.eq("user_id",userId);
+        return collectMapper.selectPage(page,wrapper);
+    }
+    @RequestMapping(method = RequestMethod.POST,value = "/getCollectByUserIdGoodId")
+    public Collect getCollectByUserIdGoodId(
+            @RequestParam("userId") String userId,
+            @RequestParam("goodId") String goodId
+    ){
+        Collect params = new Collect();
+        QueryWrapper<Collect> wrapper = new QueryWrapper<>(params);
+        wrapper.eq("user_id",userId).eq("good_id",goodId);
+        return collectMapper.selectOne(wrapper);
+    }
+    @RequestMapping(method = RequestMethod.POST,value = "/getCollectByUserId")
+    public List<Collect> getCollectByUserId(@RequestParam("userId") String userId){
+        Collect params = new Collect();
+        QueryWrapper<Collect> wrapper = new QueryWrapper<>(params);
+        wrapper.eq("user_id",userId);
+        return collectMapper.selectList(wrapper);
+    }
+    @RequestMapping(method = RequestMethod.POST,value = "getIsCollect")
+    public Boolean getIsCollect(@RequestParam("userId") String userId,@RequestParam("goodId") String goodId){
+        Collect params = new Collect();
+        QueryWrapper<Collect> wrapper = new QueryWrapper<>(params);
+        wrapper.eq("user_id",userId).eq("good_id",goodId);
+        return collectMapper.selectOne(wrapper) != null;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addCollect")
-    @ResponseBody
     public Boolean addCollect(@RequestBody Collect collect){
         Collect res;
-        res = collectMapper.selectById(collect.getCollecId());
+        res = collectMapper.selectById(collect.getCollectId());
         if(res!=null){
             return false;
         }
@@ -53,7 +79,7 @@ public class CollectController {
     @RequestMapping(method = RequestMethod.POST,value = "/updateCollect")
     public Boolean updateCollect(@RequestBody Collect collect){
         Collect res;
-        res = collectMapper.selectById(collect.getCollecId());
+        res = collectMapper.selectById(collect.getCollectId());
         if(res==null){
             return false;
         }

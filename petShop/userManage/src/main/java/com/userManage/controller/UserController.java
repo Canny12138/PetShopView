@@ -7,9 +7,7 @@ import com.userManage.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Project name:petShop
@@ -35,6 +33,10 @@ public class UserController {
         User res;
         res = userMapper.selectOne(wrapper);
         return res;
+    }
+    @RequestMapping(method = RequestMethod.POST,value = "/getUserByUserId")
+    public User getUserByUserId(@RequestParam("userId") String userId){
+        return userMapper.selectById(userId);
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addUser")
     public Boolean addUser(@RequestBody User user) throws Exception{

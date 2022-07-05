@@ -1,25 +1,26 @@
 package com.soft.ov;
 
 import com.soft.entity.Good;
-import com.soft.entity.Store;
 
 /**
  * Project name:petShop
  * Author: NoFat
- * Create time:2022/6/26 18:36
+ * Create time:2022/7/4 16:47
  **/
-public class GoodOV {
+public class CartOV {
     private String goodId;
     private String goodName;
     private String img;
     private String storeName;
     private Double price;
     private Integer isCollect;
-    public GoodOV(Good good){
+    private Integer stock;
+    public CartOV(Good good){
         this.goodId = good.getGoodId();
         this.goodName = good.getGoodName();
         this.img = good.getImg();
         this.price = good.getPrice();
+        this.stock = good.getStock();
     }
 
     public Integer getIsCollect() {
@@ -68,5 +69,13 @@ public class GoodOV {
 
     public void setStoreName(String storeName) {
         this.storeName = storeName;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 }

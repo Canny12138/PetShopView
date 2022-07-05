@@ -3,6 +3,7 @@ package com.storeService.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.soft.entity.*;
 import com.soft.ov.GoodOV;
+import com.soft.util.JwtUtils;
 import com.soft.util.Result;
 import com.storeService.openFeign.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -39,14 +41,20 @@ public class GoodOVController {
     SurroundingInfoFeignService surroundingInfoFeignService;
     @Autowired
     StoreFeignService storeFeignService;
+    @Autowired
+    CollectFeignService collectFeignService;
+    @Autowired
+    private HttpServletRequest request;
     @RequestMapping(method = RequestMethod.GET,value = "/getGoodOVByPage")
     public Result getGoodOVByPage(
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
-            @RequestParam("goodName") String goodName
+            @RequestParam("goodName") String goodName,
+            @RequestParam("type") String type
             ){
         Result res = new Result();
-        Page<Good> page= goodFeignService.page(pageNum,pageSize,goodName);
+        String token = request.getHeader("token");
+        Page<Good> page= goodFeignService.page(pageNum,pageSize,goodName,type);
         List<Good> records = page.getRecords();
         List<GoodOV> resData = new LinkedList<>();
         if(records.size()==0){
@@ -55,8 +63,18 @@ public class GoodOVController {
             res.success("success");
             for(Good good:records){
                 GoodOV temp = new GoodOV(good);
-                String storeName = storeFeignService.getStoreById(good.getStoreId()).getStoreName();
-                temp.setStoreName(storeName);
+                String store = storeFeignService.getStoreById(good.getStoreId()).getStoreName();
+                temp.setStoreName(store);
+                Result tokenRes = JwtUtils.validateToken(token);
+                if(tokenRes.getIsSuccess()){
+                    if(collectFeignService.getIsCollect(JwtUtils.getUserIdByToken(token),good.getGoodId())){
+                        temp.setIsCollect(1);
+                    }else {
+                        temp.setIsCollect(0);
+                    }
+                }else {
+                    temp.setIsCollect(0);
+                }
                 resData.add(temp);
             }
         }
@@ -119,5 +137,4 @@ public class GoodOVController {
         }
         return result;
     }
-
 }

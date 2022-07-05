@@ -7,13 +7,14 @@ import lombok.Data;
 /**
  * Project name:petShop
  * Author: NoFat
- * Create time:2022/6/29 11:33
+ * Create time:2022/7/4 15:04
  **/
 @Data
-@TableName("order")
-public class Order {
+@TableName("cart")
+public class Cart {
     @TableId
-    private String orderId;
-    private String create_time;
-    private Integer order_status;
+    private String cartId;
+    private String userId;
+    private String goodId;
+    private String addTime;
 }

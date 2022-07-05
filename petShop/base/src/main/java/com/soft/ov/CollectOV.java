@@ -1,21 +1,20 @@
 package com.soft.ov;
 
 import com.soft.entity.Good;
-import com.soft.entity.Store;
 
 /**
  * Project name:petShop
  * Author: NoFat
- * Create time:2022/6/26 18:36
+ * Create time:2022/7/4 9:50
  **/
-public class GoodOV {
+public class CollectOV {
     private String goodId;
     private String goodName;
     private String img;
     private String storeName;
     private Double price;
     private Integer isCollect;
-    public GoodOV(Good good){
+    public CollectOV(Good good){
         this.goodId = good.getGoodId();
         this.goodName = good.getGoodName();
         this.img = good.getImg();

@@ -24,13 +24,18 @@ public class GoodController {
     public Page<Good> page(
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
-            @RequestParam("goodName") String goodName
+            @RequestParam("goodName") String goodName,
+            @RequestParam("type") String type
     ){
         Page<Good> page = new Page<>(pageNum,pageSize);
         Good params = new Good();
         QueryWrapper<Good> wrapper = new QueryWrapper<>(params);
         if(goodName!=null&&!"".equals(goodName)){
             wrapper.like("good_name",goodName);
+        }
+        int typeInt = Integer.parseInt(type);
+        if(typeInt==1||typeInt==0){
+            wrapper.eq("type",Integer.parseInt(type));
         }
         Page<Good> res = goodMapper.selectPage(page,wrapper);
         return res;
@@ -43,7 +48,8 @@ public class GoodController {
     public List<Good> pageByStoreId(
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
-            @RequestParam("storeId") String storeId
+            @RequestParam("storeId") String storeId,
+            @RequestParam("goodName") String goodName
     ){
         Page<Good> page = new Page<Good>(pageNum,pageSize);
         Good params = new Good();

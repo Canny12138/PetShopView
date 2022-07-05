@@ -6,6 +6,8 @@ import com.soft.entity.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Project name:petShop
  * Author: NoFat
@@ -23,6 +25,10 @@ public class StoreController {
         wrapper.eq("store_id",storeId);
         Store res = storeMapper.selectOne(wrapper);
         return res;
+    }
+    @RequestMapping(method = RequestMethod.POST,value = "/getAllStore")
+    public List<Store> getAllStore(){
+        return storeMapper.selectList(null);
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addStore")
     public Boolean addStore(@RequestBody Store store){
