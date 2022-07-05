@@ -21,4 +21,6 @@ public interface OrdersGoodFeign {
     Boolean deleteOrdersGood(@RequestParam("id") String id);
     @RequestMapping(method = RequestMethod.POST,value = "/updateOrdersGood")
     Boolean updateOrdersGood(@RequestBody OrdersGood ordersGood);
+    @RequestMapping(method = RequestMethod.POST,value = "/deleteOrdersGoodByOrdersId")
+    Boolean deleteOrdersGoodByOrdersId(@RequestParam("OrdersId") String ordersId);
 }

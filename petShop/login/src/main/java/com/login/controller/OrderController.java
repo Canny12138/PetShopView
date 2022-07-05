@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Project name:petShop
@@ -49,38 +48,49 @@ public class OrderController {
             return res;
         }
         List<Cart> cartList = cartFeignService.getCartByUserId(JwtUtils.getUserIdByToken(token));
-        Orders orders = new Orders();
-        orders.setOrdersId(UUID.randomUUID().toString());
-        orders.setOrdersStatus(0);
-        orders.setCreateTime(DateUtil.getLocalDateTimeStr());
-        orders.setUserId(JwtUtils.getUserIdByToken(token));
-        orders.setAddressId(addressId);
-        orders.setPrice(0.0);
+        List<Good> goodList = new LinkedList<>();
+        String ordersId = UUID.randomUUID().toString();
         for(Cart cart:cartList){
-            Good good = goodFeignService.getGoodById(cart.getGoodId());
-            if(good.getStock()<=0){
-                continue;
-            }
-            good.setStock(good.getStock()-1);
-            orders.setPrice(orders.getPrice()+good.getPrice());
-            OrdersGood ordersGood = new OrdersGood();
-            ordersGood.setOrdersId(orders.getOrdersId());
-            ordersGood.setGoodId(cart.getGoodId());
-            ordersGood.setId(UUID.randomUUID().toString());
-            if(!ordersGoodFeign.addOrdersGood(ordersGood)){
-                res.fail("添加失败");
-                return res;
-            }
-            if(!goodFeignService.updateGood(good)){
-                res.fail("添加失败");
-                return res;
-            }
+            goodList.add(goodFeignService.getGoodById(cart.getGoodId()));
         }
-        if(!ordersFeign.addOrders(orders)){
-            res.fail("添加失败");
+        try {
+            Orders orders = new Orders();
+            orders.setOrdersId(ordersId);
+            orders.setOrdersStatus(0);
+            orders.setCreateTime(DateUtil.getLocalDateTimeStr());
+            orders.setUserId(JwtUtils.getUserIdByToken(token));
+            orders.setAddressId(addressId);
+            orders.setPrice(0.0);
+            for(Cart cart:cartList){
+                Good good = goodFeignService.getGoodById(cart.getGoodId());
+                if(good.getStock()<=0){
+                    throw new Exception();
+                }
+                good.setStock(good.getStock()-1);
+                orders.setPrice(orders.getPrice()+good.getPrice());
+                OrdersGood ordersGood = new OrdersGood();
+                ordersGood.setOrdersId(orders.getOrdersId());
+                ordersGood.setGoodId(cart.getGoodId());
+                ordersGood.setId(UUID.randomUUID().toString());
+                if(!ordersGoodFeign.addOrdersGood(ordersGood)){
+                    throw new Exception();
+                }
+                if(!goodFeignService.updateGood(good)){
+                    throw new Exception();
+                }
+            }
+            if(!ordersFeign.addOrders(orders)){
+                throw new Exception();
+            }
+        }catch (Exception e){
+            for(Good good:goodList){
+                goodFeignService.updateGood(good);
+            }
+            ordersFeign.deleteOrders(ordersId);
+            ordersGoodFeign.deleteOrdersGoodByOrdersId(ordersId);
+            res.fail("下单失败");
             return res;
         }
-
         res.success("下单成功");
         return res;
     }
@@ -94,31 +104,39 @@ public class OrderController {
             return res;
         }
         Good good = goodFeignService.getGoodById(goodId);
-        good.setStock(good.getStock()-1);
-        if(good.getStock()<=0){
-            res.fail("库存不足");
-        }
-        Orders orders = new Orders();
-        orders.setOrdersId(UUID.randomUUID().toString());
-        orders.setOrdersStatus(0);
-        orders.setCreateTime(DateUtil.getLocalDateTimeStr());
-        orders.setUserId(JwtUtils.getUserIdByToken(token));
-        orders.setAddressId(addressId);
-        orders.setPrice(good.getPrice());
-        OrdersGood ordersGood = new OrdersGood();
-        ordersGood.setOrdersId(orders.getOrdersId());
-        ordersGood.setGoodId(goodId);
-        ordersGood.setId(UUID.randomUUID().toString());
-        if(!goodFeignService.updateGood(good)){
-            res.fail("添加失败");
-            return res;
-        }
-        if(!ordersGoodFeign.addOrdersGood(ordersGood)){
-            res.fail("添加失败");
-            return res;
-        }
-        if(!ordersFeign.addOrders(orders)){
-            res.fail("添加失败");
+        String ordersId = UUID.randomUUID().toString();
+        try {
+            Good temp = goodFeignService.getGoodById(goodId);
+            if(good.getStock()<=0){
+                throw new Exception();
+            }
+            temp.setStock(temp.getStock()-1);
+            Orders orders = new Orders();
+            orders.setOrdersId(ordersId);
+            orders.setOrdersStatus(0);
+            orders.setCreateTime(DateUtil.getLocalDateTimeStr());
+            orders.setUserId(JwtUtils.getUserIdByToken(token));
+            orders.setAddressId(addressId);
+            orders.setPrice(temp.getPrice());
+            OrdersGood ordersGood = new OrdersGood();
+            ordersGood.setOrdersId(orders.getOrdersId());
+            ordersGood.setGoodId(goodId);
+            ordersGood.setId(UUID.randomUUID().toString());
+            if(!goodFeignService.updateGood(temp)){
+                throw new Exception();
+            }
+            if(!ordersGoodFeign.addOrdersGood(ordersGood)){
+                throw new Exception();
+            }
+            if(!ordersFeign.addOrders(orders)){
+                throw new Exception();
+            }
+
+        }catch (Exception e){
+            goodFeignService.updateGood(good);
+            ordersFeign.deleteOrders(ordersId);
+            ordersGoodFeign.deleteOrdersGoodByOrdersId(ordersId);
+            res.fail("下单失败");
             return res;
         }
         res.success("下单成功");

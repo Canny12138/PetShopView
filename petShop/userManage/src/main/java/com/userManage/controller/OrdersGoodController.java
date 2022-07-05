@@ -52,6 +52,18 @@ public class OrdersGoodController {
         ordersGoodMapper.deleteById(id);
         return true;
     }
+    @RequestMapping(method = RequestMethod.POST,value = "/deleteOrdersGoodByOrdersId")
+    public Boolean deleteOrdersGoodByOrdersId(@RequestParam("OrdersId") String ordersId){
+        OrdersGood params = new OrdersGood();
+        QueryWrapper<OrdersGood> wrapper = new QueryWrapper<>(params);
+        wrapper.eq("orders_id",ordersId);
+        List<OrdersGood> ordersGoodList = ordersGoodMapper.selectList(wrapper);
+        if(ordersGoodList.size()==0){
+            return false;
+        }
+        ordersGoodMapper.delete(wrapper);
+        return true;
+    }
     @RequestMapping(method = RequestMethod.POST,value = "/updateOrdersGood")
     public Boolean updateOrdersGood(@RequestBody OrdersGood ordersGood){
         OrdersGood res;
