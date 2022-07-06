@@ -95,7 +95,7 @@ public class CartController {
         return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addCart")
-    public Result addCart(@RequestParam("goodId") String goodId){
+    public Result addCart(@RequestParam("goodId") String goodId,@RequestParam("number") Integer number){
         Result res = new Result();
         String token = request.getHeader("token");
         Result tokenRes = JwtUtils.validateToken(token);
@@ -106,7 +106,7 @@ public class CartController {
         }
         Cart cart = cartFeignService.getCartByUserIdGoodId(userId,goodId);
         if(cart!=null){
-            cart.setNumber(cart.getNumber()+1);
+            cart.setNumber(number);
             cartFeignService.updateCart(cart);
             res.success("增加成功");
             return res;
