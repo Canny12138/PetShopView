@@ -106,6 +106,10 @@ public class CartController {
         }
         Cart cart = cartFeignService.getCartByUserIdGoodId(userId,goodId);
         if(cart!=null){
+            if(cart.getNumber()+number>goodFeignService.getGoodById(goodId).getStock()){
+                res.fail("库存不足");
+                return res;
+            }
             cart.setNumber(cart.getNumber()+number);
             cartFeignService.updateCart(cart);
             res.success("增加成功");
