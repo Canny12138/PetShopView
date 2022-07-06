@@ -41,6 +41,7 @@ public class StoreInfoOVController {
                 StoreInfoOV storeInfoOV = new StoreInfoOV(store, address);
                 resData.add(storeInfoOV);
             }
+            res.setData(resData);
         } catch (Exception e) {
             res.fail("获取失败");
         }
