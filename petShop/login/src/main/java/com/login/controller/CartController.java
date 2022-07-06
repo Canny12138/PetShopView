@@ -62,6 +62,7 @@ public class CartController {
             CartOV temp = new CartOV(good);
             String storeName = storeFeignService.getStoreById(good.getStoreId()).getStoreName();
             temp.setStoreName(storeName);
+            temp.setNumber(cart.getNumber());
             if(collectFeignService.getIsCollect(JwtUtils.getUserIdByToken(token),good.getGoodId())){
                 temp.setIsCollect(1);
             }else {
@@ -77,16 +78,25 @@ public class CartController {
         Result res = new Result();
         String token = request.getHeader("token");
         Result tokenRes = JwtUtils.validateToken(token);
+        String userId = JwtUtils.getUserIdByToken(token);
         if(!tokenRes.getIsSuccess()){
             res.againLogin("未登录");
             return res;
         }
-        Cart cart = new Cart();
-        cart.setGoodId(goodId);
-        cart.setUserId(JwtUtils.getUserIdByToken(token));
-        cart.setCartId(UUID.randomUUID().toString());
-        cart.setAddTime(DateUtil.getLocalDateTimeStr());
-        if(cartFeignService.addCart(cart)){
+        Cart cart = cartFeignService.getCartByUserIdGoodId(userId,goodId);
+        if(cart!=null){
+            cart.setNumber(cart.getNumber()+1);
+            cartFeignService.updateCart(cart);
+            res.success("增加成功");
+            return res;
+        }
+        Cart temp = new Cart();
+        temp.setGoodId(goodId);
+        temp.setUserId(userId);
+        temp.setCartId(UUID.randomUUID().toString());
+        temp.setAddTime(DateUtil.getLocalDateTimeStr());
+        temp.setNumber(1);
+        if(cartFeignService.addCart(temp)){
             res.success("添加成功");
         }else {
             res.fail("添加失败");

@@ -25,7 +25,7 @@ public interface CartFeignService {
             @RequestParam("userId") String userId,
             @RequestParam("goodId") String goodId
     );
-    @RequestMapping(method = RequestMethod.POST,value = "getIsCart")
+    @RequestMapping(method = RequestMethod.POST,value = "/getIsCart")
     Boolean getIsCart(@RequestParam("userId") String userId,@RequestParam("goodId") String goodId);
     @RequestMapping(method = RequestMethod.POST,value = "/addCart")
     Boolean addCart(@RequestBody Cart Cart);
@@ -33,4 +33,6 @@ public interface CartFeignService {
     Boolean deleteCart(@RequestParam("CartId") String CartId);
     @RequestMapping(method = RequestMethod.POST,value = "/updateCart")
     Boolean updateCart(@RequestBody Cart Cart);
+    @RequestMapping(method = RequestMethod.POST,value = "/deleteCartNumber")
+    Boolean deleteCartNumber(@RequestParam("CartId") String cartId);
 }

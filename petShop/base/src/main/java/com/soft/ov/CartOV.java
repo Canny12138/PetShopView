@@ -15,12 +15,21 @@ public class CartOV {
     private Double price;
     private Integer isCollect;
     private Integer stock;
+    private Integer number;
     public CartOV(Good good){
         this.goodId = good.getGoodId();
         this.goodName = good.getGoodName();
         this.img = good.getImg();
         this.price = good.getPrice();
         this.stock = good.getStock();
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 
     public Integer getIsCollect() {

@@ -48,7 +48,7 @@ public class CartController {
         wrapper.eq("user_id",userId).eq("good_id",goodId);
         return cartMapper.selectOne(wrapper);
     }
-    @RequestMapping(method = RequestMethod.POST,value = "getIsCart")
+    @RequestMapping(method = RequestMethod.POST,value = "/getIsCart")
     public Boolean getIsCart(@RequestParam("userId") String userId,@RequestParam("goodId") String goodId){
         Cart params = new Cart();
         QueryWrapper<Cart> wrapper = new QueryWrapper<>(params);
@@ -56,23 +56,44 @@ public class CartController {
         return cartMapper.selectOne(wrapper) != null;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addCart")
-    public Boolean addCart(@RequestBody Cart Cart){
-        Cart res;
-        res = cartMapper.selectById(Cart.getCartId());
-        if(res!=null){
+    public Boolean addCart(@RequestBody Cart cart){
+        try {
+            Cart res;
+            res = cartMapper.selectById(cart.getCartId());
+            if(res!=null){
+                cart.setNumber(cart.getNumber()+1);
+                cartMapper.updateById(cart);
+            }else {
+                cartMapper.insert(cart);
+            }
+        }catch (Exception e){
             return false;
         }
-        cartMapper.insert(Cart);
         return true;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/deleteCart")
-    public Boolean deleteCart(@RequestParam("CartId") String CartId){
+    public Boolean deleteCart(@RequestParam("CartId") String cartId){
         Cart res;
-        res = cartMapper.selectById(CartId);
+        res = cartMapper.selectById(cartId);
         if(res==null){
             return false;
         }
-        cartMapper.deleteById(CartId);
+        cartMapper.deleteById(cartId);
+        return true;
+    }
+    @RequestMapping(method = RequestMethod.POST,value = "/deleteCartNumber")
+    public Boolean deleteCartNumber(@RequestParam("CartId") String cartId){
+        Cart res;
+        try {
+            res = cartMapper.selectById(cartId);
+            if(res==null||res.getNumber()<2){
+                throw new Exception();
+            }
+            res.setNumber(res.getNumber()-1);
+            cartMapper.updateById(res);
+        }catch (Exception e){
+            return false;
+        }
         return true;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/updateCart")
