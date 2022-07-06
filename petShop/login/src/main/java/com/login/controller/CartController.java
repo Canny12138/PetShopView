@@ -103,6 +103,26 @@ public class CartController {
         }
         return res;
     }
+    @RequestMapping(method = RequestMethod.POST,value = "/deleteCartNumber")
+    public Result deleteCartNumber(@RequestParam("goodId") String goodId){
+        Result res = new Result();
+        String token = request.getHeader("token");
+        Result tokenRes = JwtUtils.validateToken(token);
+        String userId = JwtUtils.getUserIdByToken(token);
+        if(!tokenRes.getIsSuccess()){
+            res.againLogin("未登录");
+            return res;
+        }
+        Cart cart = cartFeignService.getCartByUserIdGoodId(userId,goodId);
+        if(cart==null){
+            res.fail("未找到该物品");
+            return res;
+        }
+        cart.setNumber(cart.getNumber()-1);
+        cartFeignService.updateCart(cart);
+        res.success("减少成功");
+        return res;
+    }
     @RequestMapping(method = RequestMethod.POST,value = "/deleteCart")
     public Result deleteCart(@RequestParam("goodId") String goodId){
         Result res = new Result();
