@@ -21,6 +21,10 @@ spring:
     password: Admin12138
     url: jdbc:mysql://150.158.85.93:3308/surrounding?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 3
+      maximum-pool-size: 15
+      max-lifetime: 30000
 
 
 
