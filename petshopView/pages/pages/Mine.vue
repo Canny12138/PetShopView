@@ -4,6 +4,7 @@
 		<text>Welcome {{nickname}}</text>
 		<u-button @click="login" text="登录" v-show="!isLogin"></u-button>
 		<u-button @click="removeStorage" text="退出登录" v-show="isLogin"></u-button>
+		<u-button @click="toCollect" text="我的收藏"></u-button>
 	</view>
 </template>
 
@@ -26,6 +27,11 @@
 				console.log("to login page");
 				uni.navigateTo({
 					url: 'pages/Login'
+				});
+			},
+			toCollect() {
+				uni.navigateTo({
+					url: 'pages/Collect'
 				});
 			},
 			set() {

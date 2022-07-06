@@ -23,13 +23,22 @@
 			<text>商品类型：{{goodTemp.type}}</text>
 			<u-tabbar :fixed="true" :placeholder="true" :safeAreaInsetBottom="true">
 				<view style="width: 12%; padding-top: 5px; background-color: #fff7fc;">
-					<u-button color="#fff7fc"><u-icon label="店铺" labelSize="1" labelPos="bottom" size="25" name="bag"></u-icon></u-button>
+					<u-button color="#fff7fc">
+						<u-icon label="店铺" labelSize="1" labelPos="bottom" size="25" name="bag"></u-icon>
+					</u-button>
 				</view>
 				<view style="width: 12%; padding-top: 5px; background-color: #fff7fc;">
-					<u-button color="#fff7fc"><u-icon label="客服" labelSize="1" labelPos="bottom" size="25" name="kefu-ermai"></u-icon></u-button>
+					<u-button color="#fff7fc">
+						<u-icon label="客服" labelSize="1" labelPos="bottom" size="25" name="kefu-ermai"></u-icon>
+					</u-button>
 				</view>
 				<view style="width: 12%; padding-top: 5px; background-color: #fff7fc;">
-					<u-button color="#fff7fc"><u-icon label="收藏" labelSize="1" labelPos="bottom" size="25" name="star"></u-icon></u-button>
+					<u-button v-show="isCollect == 0" @click="toCollect" color="#fff7fc">
+						<u-icon label="收藏" labelSize="1" labelPos="bottom" size="25" name="star"></u-icon>
+					</u-button>
+					<u-button v-show="isCollect == 1" @click="delCollect" color="#fff7fc">
+						<u-icon label="已收藏" labelSize="1" labelPos="bottom" size="25" name="star-fill"></u-icon>
+					</u-button>
 				</view>
 				<view style="width: 32%; padding-top: 5px; background-color: #fff7fc;">
 					<u-button text="加入购物车" color="linear-gradient(to right, #ffd7d8, #ffadb1)"
@@ -43,6 +52,7 @@
 				</view>
 			</u-tabbar>
 		</uni-card>
+		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
 
@@ -59,23 +69,34 @@
 					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
 				],
 				goodTemp: [],
+				token: "",
+				isCollect: 0,
+				toastParams: {
+					type: 'error',
+					message: "",
+				},
 			}
 		},
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
 			console.log(option.id); //打印出上个页面传递的参数。
 			// console.log(option.name); //打印出上个页面传递的参数。
+			this.getStorage();
 			this.GoodId = option.id;
+			this.getGood();
 		},
 		mounted() {
-			this.getGood();
+
 		},
 		methods: {
 			getGood() {
 				uni.request({
-					url: 'http://localhost:9001/store-server/goodInfoOV/getInfo',
+					url: '/api/store-server/goodInfoOV/getInfo',
 					method: 'GET',
 					data: {
 						goodId: this.GoodId,
+					},
+					header: {
+						token: this.token,
 					},
 					success: ((res) => {
 						this.goodTemp = {
@@ -90,8 +111,79 @@
 						};
 						this.list1[0] = this.goodTemp.img;
 						console.log(this.goodTemp);
+						this.isCollect = this.goodTemp.isCollect;
 					}),
 				});
+			},
+			toCollect() {
+				this.toastParams.message = "";
+				this.toastParams.type = "error";
+				uni.request({
+					url: '/api/login-server/collect/addCollect',
+					method: 'POST',
+					data: {
+						goodId: this.GoodId,
+					},
+					header: {
+						"Content-Type": "application/x-www-form-urlencoded",
+						token: this.token,
+					},
+					success: ((res) => {
+						this.toastParams.message = res.data.message;
+						if (res.data.statusCode == "200") {
+							console.log("收藏成功!");
+							console.log(res);
+							this.toastParams.type = "success";
+							this.isCollect = 1;
+						}
+						this.showToast(this.toastParams);
+					}),
+				});
+			},
+			delCollect() {
+				this.toastParams.message = "";
+				this.toastParams.type = "error";
+				uni.request({
+					url: '/api/login-server/collect/deleteCollect',
+					method: 'POST',
+					data: {
+						goodId: this.GoodId,
+					},
+					header: {
+						"Content-Type": "application/x-www-form-urlencoded",
+						token: this.token,
+					},
+					success: ((res) => {
+						this.toastParams.message = res.data.message;
+						if (res.data.statusCode == "200") {
+							console.log("取消收藏");
+							console.log(res);
+							this.toastParams.type = "success";
+							this.isCollect = 0;
+						}
+						this.showToast(this.toastParams);
+					}),
+				});
+			},
+			getStorage() {
+				let self = this;
+				uni.getStorage({
+					key: "user",
+					success(res) {
+						self.token = res.data.token;
+						console.log('获取成功', res);
+					}
+				})
+			},
+			showToast(params) {
+				this.$refs.uToast.show({
+					...params,
+					complete() {
+						params.url && uni.reLaunch({
+							url: params.url
+						})
+					}
+				})
 			},
 		}
 	}

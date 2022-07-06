@@ -1,6 +1,7 @@
 <template>
 	<view style="background-color: #fff7fc;">
-		<u-search shape="round" style="padding: 15px; padding-top: 5px;background-color: #ffadb1"></u-search>
+		<u-search shape="round" style="padding: 15px; padding-top: 5px;background-color: #ffadb1" @custom="collect">
+		</u-search>
 		<scroll-view style="height: 1300rpx;" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
 			:refresher-threshold="100" refresher-background="#fff7fc" @refresherpulling="onPulling"
 			@refresherrefresh="onRefresh" @refresherrestore="onRestore" @refresherabort="onAbort">
@@ -19,6 +20,8 @@
 									style="color: #ffb300;font-weight: bold; font-size: 18px;">\n\n¥{{item.price}}\n</text>
 								<text
 									style="background-color: #eee7ec; border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">{{item.storeName}}&nbsp></text>
+								<u-icon name="bookmark-fill" size="40" color="#ffb300" v-show="item.isCollect == 1"
+									style="position: absolute; right: 15px; bottom: 218px"></u-icon>
 							</uni-card>
 						</u-grid-item>
 					</u-grid>
@@ -43,24 +46,13 @@
 				lineTemp: [],
 				etc: 1,
 				isLoad: true,
+				token: "",
+				isCollect: true,
 				imgUrl: "http://150.158.85.93:88",
-				urls: [
-					'http://150.158.85.93:81/pet/1.jpeg',
-					'http://150.158.85.93:81/pet/2.jpeg',
-					'http://150.158.85.93:81/pet/3.jpeg',
-					'http://150.158.85.93:81/pet/4.jpeg',
-					'http://150.158.85.93:81/pet/5.jpeg',
-					'http://150.158.85.93:81/pet/6.jpeg',
-					'http://150.158.85.93:81/pet/7.jpeg',
-					'http://150.158.85.93:81/pet/8.jpeg',
-					'http://150.158.85.93:81/pet/9.jpeg',
-					'http://150.158.85.93:81/pet/10.jpeg',
-					'http://150.158.85.93:81/pet/11.jpeg',
-					'http://150.158.85.93:81/pet/12.jpeg',
-				]
 			}
 		},
 		mounted() {
+			this.getStorage();
 			this.firstLoad();
 			this._freshing = false;
 			// setTimeout(() => {
@@ -76,12 +68,16 @@
 		methods: {
 			getGood() {
 				uni.request({
-					url: 'http://localhost:9001/store-server/goodOV/getGoodOVByPage',
+					url: '/api/store-server/goodOV/getGoodOVByPage',
 					method: 'GET',
 					data: {
 						pageNum: this.currentPage,
 						pageSize: 2,
 						goodName: "",
+						type: "3",
+					},
+					header:{
+						token: this.token,
 					},
 					success: ((res) => {
 						// console.log(res);
@@ -89,13 +85,14 @@
 						// console.log(this.lineTemp);
 						// console.log(this.lineTemp[0].good.goodName);
 						this.lineTemp = [];
-						for (let j = 0; j < 2; j++) {
+						for (let j = 0; j < res.data.data.length; j++) {
 							this.lineTemp.push({
 								goodId: res.data.data[j].goodId,
 								goodName: res.data.data[j].goodName,
 								img: this.imgUrl + res.data.data[j].img,
 								price: res.data.data[j].price,
 								storeName: res.data.data[j].storeName,
+								isCollect: res.data.data[j].isCollect,
 							});
 						}
 						this.indexList.push(this.lineTemp);
@@ -109,6 +106,21 @@
 				uni.navigateTo({
 					url: 'pages/Good?id=' + id
 				});
+			},
+			collect() {
+				if (this.isCollect) this.isCollect = false;
+				else this.isCollect = true;
+				console.log("666");
+			},
+			getStorage() {
+				let self = this;
+				uni.getStorage({
+					key: "user",
+					success(res) {
+						self.token = res.data.token;
+						console.log('获取成功', res);
+					}
+				})
 			},
 			click(name) {
 				// this.$refs.uToast.success(`点击了第${name}个`)
@@ -129,12 +141,16 @@
 			},
 			firstLoad() {
 				uni.request({
-					url: 'http://localhost:9001/store-server/goodOV/getGoodOVByPage',
+					url: '/api/store-server/goodOV/getGoodOVByPage',
 					method: 'GET',
 					data: {
 						pageNum: 1,
 						pageSize: 2,
 						goodName: "",
+						type: "3",
+					},
+					header:{
+						token: this.token,
 					},
 					success: ((res) => {
 						this.etc = res.data.etc;

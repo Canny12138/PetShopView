@@ -11,7 +11,8 @@
 			<u-scroll-list>
 				<view class="scroll-list" style="text-align: center;">
 					<view class="scroll-list__line" v-for="(item, index) in menuArr" :key="index">
-						<view class="scroll-list__line__item" v-for="(item1, index1) in item" :key="index1"
+						<view @click="toPage(item1.url)" class="scroll-list__line__item" v-for="(item1, index1) in item"
+							:key="index1"
 							:class="[(index1 === item.length - 1) && 'scroll-list__line__item--no-margin-right']">
 							<image class="scroll-list__line__item__image" :src="menuBaseUrl + item1.icon" mode="">
 							</image>
@@ -65,7 +66,8 @@
 										<text
 											style="color: #ffb300;font-weight: bold; font-size: 18px;">\n¥8888\n</text>
 										<text
-											style="background-color: #eee7ec;border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">旺角大学城店 ></text>
+											style="background-color: #eee7ec;border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">旺角大学城店
+											></text>
 									</uni-card>
 								</u-grid-item>
 							</u-grid>
@@ -128,7 +130,7 @@
 				menuBaseUrl: 'https://cdn.uviewui.com/uview/menu/',
 				text1: 'uView UI众多组件覆盖开发过程的各个需求，组件功能丰富，多端兼容。让您快速集成，开箱即用',
 				list3: [{
-					url: 'https://upos-sz-mirrorcos.bilivideo.com/upgcxcode/82/46/451864682/451864682-1-208.mp4?e=ig8euxZM2rNcNbNghWdVhwdlhbN1hwdVhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1655980896&gen=playurlv2&os=bcache&oi=1866715013&trid=00009e12adf5228f4579962f7e594634834eT&mid=0&platform=html5&upsig=2010d8dc0beb5eb41af3be116e120d81&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform&cdnid=3283&bvc=vod&nettype=0&bw=221407&orderid=0,1&logo=80000000',
+					url: 'https://upos-sz-mirrorcos.bilivideo.com/upgcxcode/82/46/451864682/451864682-1-208.mp4?e=ig8euxZM2rNcNbNghWdVhwdlhbN1hwdVhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1657011704&gen=playurlv2&os=ali02bv&oi=1866715013&trid=ab29843e88f84dd9aba38c42b0d62110T&mid=0&platform=html5&upsig=d37dbe8373e8b58ade99025aab7095db&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform&bvc=vod&nettype=0&bw=221407&orderid=0,1&logo=80000000',
 					title: '昨夜星辰昨夜风，画楼西畔桂堂东',
 					poster: 'http://150.158.85.93:81/cat.jpg'
 				}, {
@@ -170,7 +172,8 @@
 				menuArr: [
 					[{
 							name: '附近',
-							icon: '17.png'
+							icon: '17.png',
+							url: 'Map'
 						},
 						{
 							name: '猫咪',
@@ -251,6 +254,12 @@
 			},
 			click(name) {
 				// this.$refs.uToast.success(`点击了第${name}个`)
+			},
+			toPage(url) {
+				console.log(url);
+				uni.navigateTo({
+					url: "pages/" + url,
+				});
 			},
 			backTop() {
 				this.scrollTop = 0;

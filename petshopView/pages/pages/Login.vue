@@ -31,7 +31,7 @@
 			login() {
 				console.log("ok");
 				uni.request({
-					url: 'http://localhost:9001/login-server/login/useLogin',
+					url: '/api/login-server/login/useLogin',
 					method: 'POST',
 					data: {
 						username: this.username,
