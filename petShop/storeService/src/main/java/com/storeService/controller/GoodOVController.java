@@ -50,11 +50,12 @@ public class GoodOVController {
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam("goodName") String goodName,
-            @RequestParam("type") String type
+            @RequestParam("type") String type,
+            @RequestParam("storeId") String storeId
             ){
         Result res = new Result();
         String token = request.getHeader("token");
-        Page<Good> page= goodFeignService.page(pageNum,pageSize,goodName,type);
+        Page<Good> page= goodFeignService.page(pageNum,pageSize,goodName,type,storeId);
         List<Good> records = page.getRecords();
         List<GoodOV> resData = new LinkedList<>();
         if(records.size()==0){

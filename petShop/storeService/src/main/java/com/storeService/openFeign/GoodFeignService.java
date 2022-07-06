@@ -22,7 +22,8 @@ public interface GoodFeignService {
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam("goodName") String goodName,
-            @RequestParam("type") String type
+            @RequestParam("type") String type,
+            @RequestParam("storeId") String storeId
     );
     @RequestMapping(method = RequestMethod.GET,value = "/getGoodById")
     Good getGoodById(@RequestParam("goodId") String goodId);
