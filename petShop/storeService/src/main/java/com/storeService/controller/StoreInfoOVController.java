@@ -1,5 +1,6 @@
 package com.storeService.controller;
 
+import com.baomidou.mybatisplus.extension.api.R;
 import com.soft.entity.Address;
 import com.soft.entity.Store;
 import com.soft.ov.StoreInfoOV;
@@ -10,6 +11,7 @@ import com.storeService.openFeign.StoreFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.LinkedList;
@@ -46,6 +48,20 @@ public class StoreInfoOVController {
             res.fail("获取失败");
         }
         res.success("获取成功");
+        return res;
+    }
+    @RequestMapping(method = RequestMethod.POST,value = "/getStoreInfoOVById")
+    public Result getStoreInfoOVById(@RequestParam("storeId") String storeId){
+        Result res = new Result();
+        try {
+            Store store = storeFeignService.getStoreById(storeId);
+            Address address = addressFeign.getAddressById(store.getAddressId());
+            StoreInfoOV storeInfoOV = new StoreInfoOV(store,address);
+            res.setData(storeInfoOV);
+            res.success("获取成功");
+        }catch (Exception e){
+            res.fail("获取失败");
+        }
         return res;
     }
 }

@@ -21,6 +21,7 @@ public class StoreInfoOV {
         this.longitude = address.getLongitude();
         this.latitude = address.getLatitude();
         this.address = address.getAddress();
+        this.info = store.getInfo();
     }
     public String getStoreId() {
         return storeId;
