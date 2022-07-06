@@ -1,7 +1,16 @@
 <template>
 	<view style="background-color: #fff7fc;">
-		<u-search shape="round" style="padding: 15px; padding-top: 5px; background-color: #ffadb1" @custom="toSearch">
-		</u-search>
+		<u-navbar title="店铺详情" :autoBack="true" bgColor="#ffadb1" style="margin-top: 44px;">
+		</u-navbar>
+		<uni-card style="margin:0px; padding: 10px; background-color: #fff7fc">
+			<image slot='cover' :src="storeImg" mode="aspectFill" style="width: 30%; height: 100px; float: left">
+			</image>
+			<view style="width: 65%; float: left; padding-left: 5%;">
+				<text style="font-weight: bold; font-size: 14px;">{{store.storeName}}</text>
+				<text style="text-decoration: underline;">\n\n地址：{{store.address}}\n\n</text>
+				<text>{{store.info}}</text>
+			</view>
+		</uni-card>
 		<u-subsection :list="['精品宠物馆', '宠物用品馆']" mode="subsection" :current="curNow" activeColor="#ffadb1"
 			@change="sectionChange"></u-subsection>
 		<scroll-view style="height: 1350rpx;" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
@@ -41,6 +50,12 @@
 	export default {
 		data() {
 			return {
+				storeId: "f2627c21-3148-4db7-8064-6e7944efa76d",
+				store: {
+					storeName: "",
+					address: "",
+					info: "",
+				},
 				triggered: true,
 				showBackTop: false,
 				scrollTop: 0,
@@ -55,14 +70,54 @@
 				token: "",
 				isCollect: true,
 				imgUrl: "http://150.158.85.93:88",
+				storeImg: "http://150.158.85.93:88/img/Pet Store.png",
 			}
 		},
-		mounted() {
+		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
+			console.log(option.id); //打印出上个页面传递的参数。
+			// console.log(option.name); //打印出上个页面传递的参数。
 			this.getStorage();
+			this.storeId = option.id;
+			this.getStore();
 			this.firstLoad();
+		},
+		mounted() {
+			// this.getStorage();
+			// this.getStore();
+			// this.firstLoad();
 			this._freshing = false;
 		},
 		methods: {
+			getStore() {
+				uni.request({
+					url: '/api/store-server/storeInfoOV/getStoreInfoOVById',
+					method: 'POST',
+					data: {
+						storeId: this.storeId,
+					},
+					header: {
+						token: this.token,
+						"Content-Type": "application/x-www-form-urlencoded",
+					},
+					success: ((res) => {
+						console.log(res);
+						// this.storeTemp = {
+						// 	goodId: res.data.data.goodId,
+						// 	goodName: res.data.data.goodName,
+						// 	goodInfo: res.data.data.goodInfo,
+						// 	img: this.imgUrl + res.data.data.img,
+						// 	isCollect: res.data.data.isCollect,
+						// 	price: res.data.data.price,
+						// 	storeName: res.data.data.storeName,
+						// 	type: res.data.data.type,
+						// };
+						// console.log(this.goodTemp);
+						this.store.storeName = res.data.data.storeName;
+						this.store.address = res.data.data.address;
+						this.store.info = res.data.data.info;
+					}),
+				});
+			},
 			getGood() {
 				this.status = "loading";
 				uni.request({
@@ -73,7 +128,7 @@
 						pageSize: 2,
 						goodName: this.searchValue,
 						type: -1 * this.curNow + 1,
-						storeId: "",
+						storeId: this.storeId,
 					},
 					header: {
 						token: this.token,
@@ -166,7 +221,7 @@
 						pageSize: 2,
 						goodName: "",
 						type: this.curNow,
-						storeId: "",
+						storeId: this.storeId,
 					},
 					header: {
 						token: this.token,

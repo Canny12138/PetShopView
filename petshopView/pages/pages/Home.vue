@@ -14,7 +14,7 @@
 						<view @click="toPage(item1.url)" class="scroll-list__line__item" v-for="(item1, index1) in item"
 							:key="index1"
 							:class="[(index1 === item.length - 1) && 'scroll-list__line__item--no-margin-right']">
-							<image class="scroll-list__line__item__image" :src="menuBaseUrl + item1.icon" mode="">
+							<image class="scroll-list__line__item__image" :src="item1.icon" mode="">
 							</image>
 							<text class="scroll-list__line__item__text">{{ item1.name }}</text>
 						</view>
@@ -128,9 +128,9 @@
 				showBackTop: false,
 				scrollTop: 0,
 				menuBaseUrl: 'https://cdn.uviewui.com/uview/menu/',
-				text1: 'uView UI众多组件覆盖开发过程的各个需求，组件功能丰富，多端兼容。让您快速集成，开箱即用',
+				text1: '欢迎来到PetShop！',
 				list3: [{
-					url: 'https://upos-sz-mirrorcos.bilivideo.com/upgcxcode/82/46/451864682/451864682-1-208.mp4?e=ig8euxZM2rNcNbNghWdVhwdlhbN1hwdVhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1657011704&gen=playurlv2&os=ali02bv&oi=1866715013&trid=ab29843e88f84dd9aba38c42b0d62110T&mid=0&platform=html5&upsig=d37dbe8373e8b58ade99025aab7095db&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform&bvc=vod&nettype=0&bw=221407&orderid=0,1&logo=80000000',
+					url: 'http://150.158.85.93:88/video/default.mp4',
 					title: '昨夜星辰昨夜风，画楼西畔桂堂东',
 					poster: 'http://150.158.85.93:81/cat.jpg'
 				}, {
@@ -172,33 +172,34 @@
 				menuArr: [
 					[{
 							name: '附近',
-							icon: '17.png',
+							icon: 'https://cdn.uviewui.com/uview/menu/17.png',
 							url: 'Map'
 						},
 						{
-							name: '猫咪',
-							icon: '11.png'
+							name: '店铺',
+							icon: 'http://150.158.85.93:88/img/Pet Store wide.png',
+							url: 'Store'
 						}, {
 							name: '狗狗',
-							icon: '11.png'
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
 						}, {
 							name: '宠物零食',
-							icon: '11.png'
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
 						}, {
 							name: '宠物用品',
-							icon: '11.png'
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
 						}, {
 							name: '分类',
-							icon: '11.png'
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
 						}, {
 							name: '天猫美食',
-							icon: '11.png'
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
 						}, {
 							name: '阿里健康',
-							icon: '11.png'
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
 						}, {
 							name: '口碑生活',
-							icon: '11.png'
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
 						}
 					],
 				],

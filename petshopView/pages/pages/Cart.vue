@@ -1,15 +1,14 @@
 <template>
 	<view style="background-color: #fff7fc;">
-		<u-navbar title="购物车" :autoBack="true" bgColor="#ffadb1"></u-navbar>
-		<u-empty v-show="isEmpty" mode="car" icon="http://cdn.uviewui.com/uview/empty/car.png"
-			style="height: 1300rpx; margin-top:45px">
+		<u-navbar title="购物车" bgColor="#ffadb1" leftIcon=""></u-navbar>
+		<u-gap height="19" bgColor="#bbb"></u-gap>
+		<u-empty v-show="isEmpty" mode="car" icon="http://cdn.uviewui.com/uview/empty/car.png" style="height: 1300rpx;">
 		</u-empty>
-		<scroll-view style="height: 1300rpx; margin-top:45px" scroll-y="true" refresher-enabled="true"
-			:refresher-triggered="triggered" :refresher-threshold="100" refresher-background="#fff7fc"
-			@refresherpulling="onPulling" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
-			@refresherabort="onAbort">
+		<scroll-view style="height: 1050rpx;" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
+			:refresher-threshold="100" refresher-background="#fff7fc" @refresherpulling="onPulling"
+			@refresherrefresh="onRefresh" @refresherrestore="onRestore" @refresherabort="onAbort">
 			<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
-				:scrollTop="scrollTop" style="background-color: #fff7fc; margin-top: 5px">
+				:scrollTop="scrollTop" style="background-color: #fff7fc; margin-top: 5px;">
 				<u-list-item v-for="(item, index) in lineTemp" :key="index">
 					<u-swipe-action>
 						<u-swipe-action-item @click="delCar(index)" :options="options1">
@@ -31,23 +30,23 @@
 						</u-swipe-action-item>
 					</u-swipe-action>
 				</u-list-item>
-				<u-transition :show="showBackTop" style="position: fixed; right: 30px; bottom: 60px; z-index: 100;">
+				<u-transition :show="showBackTop" style="position: fixed; right: 30px; bottom: 110px; z-index: 100;">
 					<u-avatar icon="arrow-up" fontSize="22" @click="backTop"></u-avatar>
 				</u-transition>
 			</u-list>
 		</scroll-view>
-		<u-tabbar :fixed="true" :placeholder="true" :safeAreaInsetBottom="true" z-index="10">
+		<view style="position: fixed; bottom:50px; width:100%; height: 50px; z-index: 20; background-color: #ffeefb">
 			<view
-				style="width: 5%; padding-left: 35%; padding-top: 2px; color: #606266; font-size: 30px; background-color: #ffeefb;">
+				style="width: 5%; padding-left: 35%; padding-top: 2px; color: #606266; font-size: 30px; background-color: #ffeefb; float: left;">
 				¥</view>
 			<u-count-to :startVal="prePrice" :endVal="curPrice" :decimals="2" separator=","
-				style="width: 30%; padding-top: 10px; background-color: #ffeefb;">
+				style="width: 30%; padding-top: 10px; background-color: #ffeefb; float: left;">
 			</u-count-to>
-			<view style="width: 30%; padding-top: 5px; background-color: #ffeefb;">
+			<view style="width: 30%; padding-top: 5px; background-color: #ffeefb; float: left;">
 				<u-button text="立即购买" shape="circle" color="linear-gradient(to right, #ffb300, #ffd320)">
 				</u-button>
 			</view>
-		</u-tabbar>
+		</view>
 		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>

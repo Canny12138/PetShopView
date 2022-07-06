@@ -3,11 +3,15 @@
 		<u-navbar title="登录" :autoBack="true" bgColor="#ffadb1"></u-navbar>
 		<view style="margin-top: 200px; margin-left: 80px; margin-right: 80px;">
 			<u--input placeholder="请输入用户名" border="surround" v-model="username"></u--input>
+			<u-gap height="15"></u-gap>
 			<u--input placeholder="请输入密码" border="surround" type="password" v-model="password"></u--input>
+			<u-gap height="10"></u-gap>
 			<u-button @click="login" text="登录" color="#ffadb1"></u-button>
-			<u-button @click="setStorage" text="setStorage" color="#ffadb1"></u-button>
+			<u-gap height="5"></u-gap>
+			<u-button text="注册" color="#ffc4c5"></u-button>
+<!-- 			<u-button @click="setStorage" text="setStorage" color="#ffadb1"></u-button>
 			<u-button @click="getStorage" text="getStorage" color="#ffadb1"></u-button>
-			<u-button @click="removeStorage" text="removeStorage" color="#ffadb1"></u-button>
+			<u-button @click="removeStorage" text="removeStorage" color="#ffadb1"></u-button> -->
 		</view>
 		<u-toast ref="uToast"></u-toast>
 	</view>
