@@ -73,6 +73,27 @@ public class CartController {
         res.setData(resData);
         return res;
     }
+    @RequestMapping(method = RequestMethod.POST,value = "/updateCart")
+    public Result updateCart(@RequestParam("goodId") String goodId,@RequestParam("number") Integer number){
+        Result res = new Result();
+        String token = request.getHeader("token");
+        Result tokenRes = JwtUtils.validateToken(token);
+        String userId = JwtUtils.getUserIdByToken(token);
+        if(!tokenRes.getIsSuccess()){
+            res.againLogin("未登录");
+            return res;
+        }
+        Cart cart = cartFeignService.getCartByUserIdGoodId(userId,goodId);
+        if(cart!=null){
+            cart.setNumber(number);
+            cartFeignService.updateCart(cart);
+            res.success("修改成功");
+
+        }else {
+            res.fail("未找到商品");
+        }
+        return res;
+    }
     @RequestMapping(method = RequestMethod.POST,value = "/addCart")
     public Result addCart(@RequestParam("goodId") String goodId){
         Result res = new Result();
