@@ -11,12 +11,10 @@ import com.soft.util.JwtUtils;
 import com.soft.util.Md5Util;
 import com.soft.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 /**
  * Project name:petShop
@@ -47,12 +45,17 @@ public class UserInfoController {
         try {
             User user = userFeignService.getUserByUserId(userId);
             UserInfo userInfo = userInfoFeignService.getUserInfoByUserId(userId);
-            String defAddressId = userInfo.getDefAddress();
-            UserAddress userAddress = addressFeignService.getAddressByAddressId(defAddressId);
-            UserInfoOV userInfoOV = new UserInfoOV(user,userInfo);
-            userInfoOV.setDefAddress(userAddress.getAddress());
-            res.setData(userInfoOV);
-            res.success("获取成功");
+            if(userInfo==null){
+                UserInfoOV emptyOV = new UserInfoOV(user);
+                res.setData(emptyOV);
+            }else {
+                String defAddressId = userInfo.getDefAddress();
+                UserAddress userAddress = addressFeignService.getAddressByAddressId(defAddressId);
+                UserInfoOV userInfoOV = new UserInfoOV(user,userInfo);
+                userInfoOV.setDefAddress(userAddress.getAddress());
+                res.setData(userInfoOV);
+                res.success("获取成功");
+            }
         }catch (Exception e){
             res.fail("获取失败");
         }
@@ -78,27 +81,58 @@ public class UserInfoController {
         }
         return res;
     }
-//    @RequestMapping(method = RequestMethod.POST,value = "/updateUserPassword")
-//    public Result updateUserPassword(
-//            @RequestParam("oldPassword") String oldPassword,
-//            @RequestParam("newPassword") String newPassword
-//    ){
-//        Result res = new Result();
-//        String token = request.getHeader("token");
-//        Result tokenRes = JwtUtils.validateToken(token);
-//        String userId = JwtUtils.getUserIdByToken(token);
-//        User user = userFeignService.getUserByUserId(userId);
-//        if(!tokenRes.getIsSuccess()||user==null){
-//            res.againLogin("未登录");
-//            return res;
-//        }
-//        try {
-//
-//            user.setPassword(Md5Util.getEncode(newPassword));
-//            res.success("更新成功");
-//        }catch (Exception e){
-//            res.fail("更新失败");
-//        }
-//        return res;
-//    }
+    @RequestMapping(method = RequestMethod.POST,value = "/updateUserPassword")
+    public Result updateUserPassword(
+            @RequestParam("oldPassword") String oldPassword,
+            @RequestParam("newPassword") String newPassword
+    ){
+        Result res = new Result();
+        String token = request.getHeader("token");
+        Result tokenRes = JwtUtils.validateToken(token);
+        String userId = JwtUtils.getUserIdByToken(token);
+        User user = userFeignService.getUserByUserId(userId);
+        if(!tokenRes.getIsSuccess()||user==null){
+            res.againLogin("未登录");
+            return res;
+        }
+        try {
+            if(!Md5Util.getEncode(oldPassword).equals(user.getPassword())){
+                res.fail("密码错误");
+                throw new Exception();
+            }
+            user.setPassword(Md5Util.getEncode(newPassword));
+            userFeignService.updateUser(user);
+            res.success("更新成功");
+        }catch (Exception e){
+            res.fail("更新失败");
+        }
+        return res;
+    }
+    @RequestMapping(method = RequestMethod.POST,value = "/updateUserInfo")
+    public Result updateUserInfo(@RequestBody UserInfoOV userInfoOV){
+        Result res = new Result();
+        try {
+            User user = userFeignService.getUserByUserId(userInfoOV.getUserId());
+            UserInfo userInfo = userInfoFeignService.getUserInfoByUserId(userInfoOV.getUserId());
+            if (userInfo==null){
+                userInfo = new UserInfo();
+                userInfo.setInfoId(UUID.randomUUID().toString());
+                userInfo.setUserId(user.getUserId());
+                userInfo.setUserImg("/");
+                userInfo.setDefAddress("");
+                userInfo.setMail(userInfoOV.getMail());
+                userInfo.setTel(userInfoOV.getTel());
+                userInfoFeignService.addUserInfo(userInfo);
+            }
+            userInfo.setMail(userInfoOV.getMail());
+            userInfo.setTel(userInfoOV.getTel());
+            user.setNickname(userInfoOV.getNickname());
+            userInfoFeignService.updateUserInfo(userInfo);
+            userFeignService.updateUser(user);
+            res.success("更改成功");
+        }catch (Exception e){
+            res.fail("更改失败");
+        }
+        return res;
+    }
 }

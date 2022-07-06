@@ -23,6 +23,10 @@ public class UserInfoOV {
         this.mail = userInfo.getMail();
         this.tel = userInfo.getTel();
     }
+    public UserInfoOV(User user){
+        this.userId = user.getUserId();
+        this.nickname = user.getNickname();
+    }
     public String getUserId() {
         return userId;
     }

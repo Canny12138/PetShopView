@@ -26,4 +26,7 @@ public interface UserFeignService {
 
     @RequestMapping(method = RequestMethod.POST,value = "/getUserByUserId")
     User getUserByUserId(@RequestParam("userId") String userId);
+
+    @RequestMapping(method = RequestMethod.POST,value = "/updateUser")
+    Boolean updateUser(@RequestBody User user);
 }
