@@ -100,13 +100,14 @@ public class CartController {
         String token = request.getHeader("token");
         Result tokenRes = JwtUtils.validateToken(token);
         String userId = JwtUtils.getUserIdByToken(token);
+        Integer stock = goodFeignService.getGoodById(goodId).getStock();
         if(!tokenRes.getIsSuccess()){
             res.againLogin("未登录");
             return res;
         }
         Cart cart = cartFeignService.getCartByUserIdGoodId(userId,goodId);
         if(cart!=null){
-            if(cart.getNumber()+number>goodFeignService.getGoodById(goodId).getStock()){
+            if(cart.getNumber()+number>stock){
                 res.fail("库存不足");
                 return res;
             }
@@ -120,7 +121,11 @@ public class CartController {
         temp.setUserId(userId);
         temp.setCartId(UUID.randomUUID().toString());
         temp.setAddTime(DateUtil.getLocalDateTimeStr());
-        temp.setNumber(1);
+        if(number>stock){
+            res.fail("库存不足");
+            return res;
+        }
+        temp.setNumber(number);
         if(cartFeignService.addCart(temp)){
             res.success("添加成功");
         }else {
