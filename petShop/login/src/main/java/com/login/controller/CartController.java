@@ -106,7 +106,7 @@ public class CartController {
         }
         Cart cart = cartFeignService.getCartByUserIdGoodId(userId,goodId);
         if(cart!=null){
-            cart.setNumber(number);
+            cart.setNumber(cart.getNumber()+number);
             cartFeignService.updateCart(cart);
             res.success("增加成功");
             return res;
