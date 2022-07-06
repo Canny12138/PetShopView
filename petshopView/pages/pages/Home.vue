@@ -41,7 +41,7 @@
 		<view v-if="indexN == 2">page2</view> -->
 		<swiper :current="indexN" @change="sIndexToindexN" class="swiper" style="margin: 0px">
 			<swiper-item style="background-color: #fff7fc;">
-				<u-grid :border="true" @click="click" col="2">
+				<u-grid :border="true" col="2">
 					<u-grid-item v-for="(baseListItem,baseListIndex) in baseList" :key="baseListIndex">
 						<u-icon :customStyle="{paddingTop:20+'rpx'}" :name="baseListItem.name" :size="22"></u-icon>
 						<text class="grid-text">{{baseListItem.title}}</text>

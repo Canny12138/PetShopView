@@ -41,7 +41,7 @@
 					</u-button>
 				</view>
 				<view style="width: 32%; padding-top: 5px; background-color: #fff7fc;">
-					<u-button text="加入购物车" color="linear-gradient(to right, #ffd7d8, #ffadb1)"
+					<u-button text="加入购物车" color="linear-gradient(to right, #ffd7d8, #ffadb1)" @click="show = true"
 						style=" border-top-left-radius: 18px; border-bottom-left-radius: 18px;">
 					</u-button>
 				</view>
@@ -52,6 +52,31 @@
 				</view>
 			</u-tabbar>
 		</uni-card>
+		<view>
+			<u-popup :show="show" @close="close" @open="open">
+				<view style="height: 200px;">
+					<uni-card style="margin:0px; padding: 10px; background-color: #fff7fc">
+						<image slot='cover' :src="goodTemp.img" mode="aspectFill"
+							style="width: 30%; height: 100px; float: left">
+						</image>
+						<view style="width: 35%; float: left; padding-left: 5%;">
+							<text style="font-weight: bold; font-size: 13px;">{{goodTemp.goodName}}</text>
+							<text
+								style="color: #ffb300; font-weight: bold; font-size: 15px;">\n¥{{goodTemp.price}}\n</text>
+							<text
+								style="background-color: #eee7ec; font-size: 10px; border-radius: 8px; padding: 1px 10px 1px 10px; position: relative;">{{goodTemp.storeName}}&nbsp></text>
+						</view>
+						<u-number-box :min="1" :max="goodTemp.stock" v-model="carNum"
+							style="width: 30%; margin-top: 10px; float:left"></u-number-box>
+					</uni-card>
+					<view style="width: 32%; padding-top: 5px; background-color: #fff7fc;">
+						<u-button text="加入购物车" color="linear-gradient(to right, #ffd7d8, #ffadb1)" @click="addCar"
+							style=" border-top-left-radius: 18px; border-bottom-left-radius: 18px;">
+						</u-button>
+					</view>
+				</view>
+			</u-popup>
+		</view>
 		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
@@ -69,8 +94,10 @@
 					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
 				],
 				goodTemp: [],
+				carNum: 1,
 				token: "",
 				isCollect: 0,
+				show: false,
 				toastParams: {
 					type: 'error',
 					message: "",
@@ -165,6 +192,29 @@
 					}),
 				});
 			},
+			addCar() {
+				uni.request({
+					url: '/api/login-server/cart/addCart',
+					method: 'POST',
+					data: {
+						goodId: this.goodTemp.goodId,
+						number: this.carNum,
+					},
+					header: {
+						token: this.token,
+						"Content-Type": "application/x-www-form-urlencoded",
+					},
+					success: ((res) => {
+						console.log(res);
+						this.show = false;
+						this.toastParams.message = res.data.message;
+						if (res.data.statusCode == "200") {
+							this.toastParams.type = "success";
+						} else this.toastParams.type = "error";
+						this.showToast(this.toastParams);
+					}),
+				});
+			},
 			getStorage() {
 				let self = this;
 				uni.getStorage({
@@ -174,6 +224,13 @@
 						console.log('获取成功', res);
 					}
 				})
+			},
+			open() {
+				console.log('open');
+			},
+			close() {
+				this.show = false
+				console.log('close');
 			},
 			showToast(params) {
 				this.$refs.uToast.show({

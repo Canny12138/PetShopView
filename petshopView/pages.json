@@ -74,6 +74,24 @@
             }
             
         }
+        ,{
+            "path" : "pages/pages/Cart",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/pages/Store",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	// "tabBar": {
 	// 	"list": [{

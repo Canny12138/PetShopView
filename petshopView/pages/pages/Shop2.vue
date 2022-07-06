@@ -1,14 +1,16 @@
 <template>
 	<view style="background-color: #fff7fc;">
-		<u-search shape="round" style="padding: 15px; padding-top: 5px;background-color: #ffadb1" @custom="collect">
+		<u-search shape="round" style="padding: 15px; padding-top: 5px; background-color: #ffadb1" @custom="">
 		</u-search>
-		<scroll-view style="height: 1300rpx;" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
+		<u-subsection :list="['精品宠物馆', '宠物用品馆']" mode="subsection" :current="curNow" activeColor="#ffadb1"
+			@change="sectionChange"></u-subsection>
+		<scroll-view style="height: 1350rpx;" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
 			:refresher-threshold="100" refresher-background="#fff7fc" @refresherpulling="onPulling"
 			@refresherrefresh="onRefresh" @refresherrestore="onRestore" @refresherabort="onAbort">
 			<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
 				:scrollTop="scrollTop" style="background-color: #fff7fc; margin-top: 5px">
 				<u-list-item v-for="(item, index) in indexList" :key="index">
-					<u-grid :border="false" @click="click" col="2">
+					<u-grid :border="false" col="2">
 						<u-grid-item v-for="(item, index) in item" :key="index">
 							<uni-card @click="clickGood(item.goodId)"
 								style="width: 85%; height:250px; margin: 5px; background-color: #fff7fc">
@@ -41,6 +43,7 @@
 				triggered: true,
 				showBackTop: false,
 				scrollTop: 0,
+				curNow: 0,
 				currentPage: 1,
 				indexList: [],
 				lineTemp: [],
@@ -76,7 +79,7 @@
 						goodName: "",
 						type: "3",
 					},
-					header:{
+					header: {
 						token: this.token,
 					},
 					success: ((res) => {
@@ -111,6 +114,9 @@
 				if (this.isCollect) this.isCollect = false;
 				else this.isCollect = true;
 				console.log("666");
+			},
+			sectionChange(index) {
+				this.curNow = index;
 			},
 			getStorage() {
 				let self = this;
@@ -149,7 +155,7 @@
 						goodName: "",
 						type: "3",
 					},
-					header:{
+					header: {
 						token: this.token,
 					},
 					success: ((res) => {

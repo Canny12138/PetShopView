@@ -1,9 +1,13 @@
 <template>
 	<view style="background-color: #fff7fc;">
 		<u-navbar title="我的收藏" :autoBack="true" bgColor="#ffadb1"></u-navbar>
-		<scroll-view style="height: 1300rpx; margin-top:45px" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
-			:refresher-threshold="100" refresher-background="#fff7fc" @refresherpulling="onPulling"
-			@refresherrefresh="onRefresh" @refresherrestore="onRestore" @refresherabort="onAbort">
+		<u-empty v-show="isEmpty" mode="favor" icon="http://cdn.uviewui.com/uview/empty/data.png"
+			style="height: 1300rpx; margin-top:45px">
+		</u-empty>
+		<scroll-view style="height: 1300rpx; margin-top:45px" scroll-y="true" refresher-enabled="true"
+			:refresher-triggered="triggered" :refresher-threshold="100" refresher-background="#fff7fc"
+			@refresherpulling="onPulling" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
+			@refresherabort="onAbort">
 			<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
 				:scrollTop="scrollTop" style="background-color: #fff7fc; margin-top: 5px">
 				<u-list-item v-for="(item, index) in indexList" :key="index">
@@ -47,6 +51,7 @@
 				isLoad: true,
 				token: "",
 				isCollect: true,
+				isEmpty: true,
 				imgUrl: "http://150.158.85.93:88",
 			}
 		},
@@ -93,7 +98,7 @@
 								isCollect: res.data.data[j].isCollect,
 							});
 						}
-						if(res.data.data.length == 1) {
+						if (res.data.data.length == 1) {
 							this.lineTemp.push({
 								goodName: "广告位出租",
 								img: 'http://150.158.85.93:81/pet/1.jpeg',
@@ -159,9 +164,15 @@
 						"Content-Type": "application/x-www-form-urlencoded",
 					},
 					success: ((res) => {
-						// console.log(res);
-						this.etc = res.data.etc;
-						this.loadmore();
+						console.log(res);
+						if (res.data.statusCode == "400") {
+							this.isLoad = false;
+							this.isEmpty = true;
+						} else {
+							this.etc = res.data.etc;
+							this.isEmpty = false;
+							this.loadmore();
+						}
 					}),
 				});
 			},
@@ -175,8 +186,7 @@
 					console.log("到底了");
 				}
 			},
-			onPulling(e) {
-			},
+			onPulling(e) {},
 			onRefresh() {
 				if (this._freshing) return;
 				this._freshing = true;
@@ -192,8 +202,7 @@
 			onRestore() {
 				this.triggered = 'restore'; // 需要重置
 			},
-			onAbort() {
-			},
+			onAbort() {},
 		}
 	}
 </script>
