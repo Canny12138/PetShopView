@@ -87,13 +87,18 @@ public class UserInfoController {
 //        String token = request.getHeader("token");
 //        Result tokenRes = JwtUtils.validateToken(token);
 //        String userId = JwtUtils.getUserIdByToken(token);
-//        if(!tokenRes.getIsSuccess()||userFeignService.getUserByUserId(userId)==null){
+//        User user = userFeignService.getUserByUserId(userId);
+//        if(!tokenRes.getIsSuccess()||user==null){
 //            res.againLogin("未登录");
 //            return res;
 //        }
 //        try {
-//            User user = userFeignService.getUserByUserId(userId);
+//
 //            user.setPassword(Md5Util.getEncode(newPassword));
 //            res.success("更新成功");
+//        }catch (Exception e){
+//            res.fail("更新失败");
+//        }
+//        return res;
 //    }
 }

@@ -13,6 +13,7 @@ public class GoodOV {
     private String goodName;
     private String img;
     private String storeName;
+    private String storeId;
     private Double price;
     private Integer isCollect;
     public GoodOV(Good good){
@@ -20,6 +21,15 @@ public class GoodOV {
         this.goodName = good.getGoodName();
         this.img = good.getImg();
         this.price = good.getPrice();
+        this.storeId = good.getStoreId();
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 
     public Integer getIsCollect() {

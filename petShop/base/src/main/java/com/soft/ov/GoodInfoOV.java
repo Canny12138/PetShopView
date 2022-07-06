@@ -15,12 +15,14 @@ public class GoodInfoOV {
     private String type;
     private Double price;
     private String storeName;
+    private String storeId;
     private Integer isCollect;
     public GoodInfoOV(Good good){
         this.goodId = good.getGoodId();
         this.goodName = good.getGoodName();
         this.img = good.getImg();
         this.price = good.getPrice();
+        this.storeId = good.getStoreId();
     }
 
     public Object getType() {
