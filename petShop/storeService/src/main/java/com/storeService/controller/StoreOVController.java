@@ -40,6 +40,7 @@ public class StoreOVController {
                 StoreOV storeOV = new StoreOV(store,address);
                 resData.add(storeOV);
             }
+            res.setData(resData);
         }catch (Exception e){
             res.fail("获取失败");
         }
