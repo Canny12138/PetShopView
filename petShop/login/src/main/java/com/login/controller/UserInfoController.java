@@ -38,12 +38,13 @@ public class UserInfoController {
         String token = request.getHeader("token");
         Result tokenRes = JwtUtils.validateToken(token);
         String userId = JwtUtils.getUserIdByToken(token);
-        if(!tokenRes.getIsSuccess()||userFeignService.getUserByUserId(userId)==null){
+        User user = userFeignService.getUserByUserId(userId);
+        if(!tokenRes.getIsSuccess()||user==null){
             res.againLogin("未登录");
             return res;
         }
         try {
-            User user = userFeignService.getUserByUserId(userId);
+//            User user = userFeignService.getUserByUserId(userId);
             UserInfo userInfo = userInfoFeignService.getUserInfoByUserId(userId);
             if(userInfo==null){
                 UserInfoOV emptyOV = new UserInfoOV(user);
@@ -73,6 +74,9 @@ public class UserInfoController {
         }
         try {
             UserInfo userInfo = userInfoFeignService.getUserInfoByUserId(userId);
+            if(userInfo==null){
+                throw new Exception();
+            }
             userInfo.setUserImg(userImg);
             userInfoFeignService.updateUserInfo(userInfo);
             res.success("更新成功");
