@@ -113,7 +113,10 @@ public class UserInfoController {
         return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/updateUserInfo")
-    public Result updateUserInfo(@RequestBody UserInfoOV userInfoOV){
+    public Result updateUserInfo(@RequestParam("mail") String mail,
+                                 @RequestParam("tel") String tel,
+                                 @RequestParam("nickName")String nickname
+    ){
         Result res = new Result();
         String token = request.getHeader("token");
         Result tokenRes = JwtUtils.validateToken(token);
@@ -124,21 +127,23 @@ public class UserInfoController {
             return res;
         }
         try {
-            UserInfo userInfo = userInfoFeignService.getUserInfoByUserId(userInfoOV.getUserId());
+            UserInfo userInfo = userInfoFeignService.getUserInfoByUserId(userId);
             if (userInfo==null){
                 userInfo = new UserInfo();
                 userInfo.setInfoId(UUID.randomUUID().toString());
                 userInfo.setUserId(user.getUserId());
                 userInfo.setUserImg("/");
                 userInfo.setDefAddress("");
-                userInfo.setMail(userInfoOV.getMail());
-                userInfo.setTel(userInfoOV.getTel());
+                userInfo.setMail(mail);
+                userInfo.setTel(tel);
                 userInfoFeignService.addUserInfo(userInfo);
+
+            }else {
+                userInfo.setMail(mail);
+                userInfo.setTel(tel);
+                userInfoFeignService.updateUserInfo(userInfo);
             }
-            userInfo.setMail(userInfoOV.getMail());
-            userInfo.setTel(userInfoOV.getTel());
-            user.setNickname(userInfoOV.getNickname());
-            userInfoFeignService.updateUserInfo(userInfo);
+            user.setNickname(nickname);
             userFeignService.updateUser(user);
             res.success("更改成功");
         }catch (Exception e){
