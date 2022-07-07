@@ -32,7 +32,7 @@ public class StoreInfoOV {
         this.latitude = address.getLatitude();
         this.address = address.getAddress();
         this.info = store.getInfo();
-        this.rank = store.getRank();
+        this.rank = store.getStoreRank();
     }
     public String getStoreId() {
         return storeId;

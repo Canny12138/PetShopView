@@ -19,7 +19,7 @@ public class StoreOV {
     public StoreOV(Store store,Address address){
         this.storeId = store.getStoreId();
         this.storeName = store.getStoreName();
-        this.rank = store.getRank();
+        this.rank = store.getStoreRank();
         this.longitude = address.getLongitude();
         this.latitude = address.getLatitude();
         this.address = address.getAddress();

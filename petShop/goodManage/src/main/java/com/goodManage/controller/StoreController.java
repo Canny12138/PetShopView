@@ -20,10 +20,8 @@ public class StoreController {
     private StoreMapper storeMapper;
     @RequestMapping(method = RequestMethod.POST,value = "/getStoreById")
     public Store getStoreById(@RequestParam("storeId") String storeId){
-        Store params = new Store();
-        QueryWrapper<Store> wrapper = new QueryWrapper<>(params);
-        wrapper.eq("store_id",storeId);
-        Store res = storeMapper.selectOne(wrapper);
+        Store res;
+        res = storeMapper.selectById(storeId);
         return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/getAllStore")
