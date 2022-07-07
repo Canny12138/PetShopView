@@ -11,9 +11,10 @@
 			<u-scroll-list>
 				<view class="scroll-list" style="text-align: center;">
 					<view class="scroll-list__line" v-for="(item, index) in menuArr" :key="index">
-						<view class="scroll-list__line__item" v-for="(item1, index1) in item" :key="index1"
+						<view @click="toPage(item1.url)" class="scroll-list__line__item" v-for="(item1, index1) in item"
+							:key="index1"
 							:class="[(index1 === item.length - 1) && 'scroll-list__line__item--no-margin-right']">
-							<image class="scroll-list__line__item__image" :src="menuBaseUrl + item1.icon" mode="">
+							<image class="scroll-list__line__item__image" :src="item1.icon" mode="">
 							</image>
 							<text class="scroll-list__line__item__text">{{ item1.name }}</text>
 						</view>
@@ -40,7 +41,7 @@
 		<view v-if="indexN == 2">page2</view> -->
 		<swiper :current="indexN" @change="sIndexToindexN" class="swiper" style="margin: 0px">
 			<swiper-item style="background-color: #fff7fc;">
-				<u-grid :border="true" @click="click" col="2">
+				<u-grid :border="true" col="2">
 					<u-grid-item v-for="(baseListItem,baseListIndex) in baseList" :key="baseListIndex">
 						<u-icon :customStyle="{paddingTop:20+'rpx'}" :name="baseListItem.name" :size="22"></u-icon>
 						<text class="grid-text">{{baseListItem.title}}</text>
@@ -48,24 +49,26 @@
 				</u-grid>
 			</swiper-item>
 			<swiper-item style="background-color: #fff7fc;">
-				<scroll-view style="height: 1300rpx;" scroll-y="true" refresher-enabled="true"
-					:refresher-triggered="triggered" :refresher-threshold="100" refresher-background="#fff7fc"
-					@refresherpulling="onPulling" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
-					@refresherabort="onAbort">
+				<scroll-view style="height: 1300rpx;" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
+					:refresher-threshold="100" refresher-background="#fff7fc" @refresherpulling="onPulling"
+					@refresherrefresh="onRefresh" @refresherrestore="onRestore" @refresherabort="onAbort">
 					<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
 						:scrollTop="scrollTop" style="background-color: #fff7fc; margin-top: 5px">
 						<u-list-item v-for="(item, index) in indexList" :key="index">
-							<u-grid :border="false" @click="click" col="2">
+							<u-grid :border="false" col="2">
 								<u-grid-item v-for="(item, index) in item" :key="index">
-									<uni-card style="width: 85%; height:250px; margin: 5px; background-color: #fff7fc">
-										<image slot='cover' :src="item.url" mode="aspectFill"
-											style="width: 150px; height: 130px">
+									<uni-card @click="clickGood(item.goodId)"
+										style="width: 85%; height:250px; margin: 5px; background-color: #fff7fc">
+										<image slot='cover' :src="item.img" mode="aspectFill"
+											style="width: 100%; height: 130px">
 										</image>
-										<text>商品-{{index + 1}}口口口口口口口口口口口口口口口口</text>
+										<text style="font-weight: bold; font-size: 15px;">{{item.goodName}}</text>
 										<text
-											style="color: #ffb300;font-weight: bold; font-size: 18px;">\n¥8888\n</text>
+											style="color: #ffb300;font-weight: bold; font-size: 18px;">\n\n¥{{item.price}}\n</text>
 										<text
-											style="background-color: #eee7ec;border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">旺角大学城店 ></text>
+											style="background-color: #eee7ec; border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">{{item.storeName}}&nbsp></text>
+										<u-icon name="bookmark-fill" size="40" color="#ffb300" v-show="item.isCollect == 1"
+											style="position: absolute; right: 15px; bottom: 218px"></u-icon>
 									</uni-card>
 								</u-grid-item>
 							</u-grid>
@@ -73,6 +76,7 @@
 						<u-transition :show="showBackTop" style="position: fixed; right: 50px; bottom: 100px">
 							<u-avatar icon="arrow-up" fontSize="22" @click="backTop"></u-avatar>
 						</u-transition>
+						<u-loadmore :status="status" />
 					</u-list>
 				</scroll-view>
 			</swiper-item>
@@ -125,10 +129,20 @@
 				triggered: true,
 				showBackTop: false,
 				scrollTop: 0,
+				curNow: 0,
+				currentPage: 1,
+				indexList: [],
+				lineTemp: [],
+				etc: 1,
+				isLoad: true,
+				status: 'loading',
+				token: "",
+				isCollect: true,
+				imgUrl: "http://150.158.85.93:88",
 				menuBaseUrl: 'https://cdn.uviewui.com/uview/menu/',
-				text1: 'uView UI众多组件覆盖开发过程的各个需求，组件功能丰富，多端兼容。让您快速集成，开箱即用',
+				text1: '欢迎来到PetShop！',
 				list3: [{
-					url: 'https://upos-sz-mirrorcos.bilivideo.com/upgcxcode/82/46/451864682/451864682-1-208.mp4?e=ig8euxZM2rNcNbNghWdVhwdlhbN1hwdVhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1655980896&gen=playurlv2&os=bcache&oi=1866715013&trid=00009e12adf5228f4579962f7e594634834eT&mid=0&platform=html5&upsig=2010d8dc0beb5eb41af3be116e120d81&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform&cdnid=3283&bvc=vod&nettype=0&bw=221407&orderid=0,1&logo=80000000',
+					url: 'http://150.158.85.93:88/video/default.mp4',
 					title: '昨夜星辰昨夜风，画楼西畔桂堂东',
 					poster: 'http://150.158.85.93:81/cat.jpg'
 				}, {
@@ -170,32 +184,35 @@
 				menuArr: [
 					[{
 							name: '附近',
-							icon: '17.png'
+							icon: 'https://cdn.uviewui.com/uview/menu/17.png',
+							url: 'Map'
 						},
 						{
-							name: '猫咪',
-							icon: '11.png'
+							name: '店铺',
+							icon: 'http://150.158.85.93:88/img/Pet Store wide.png',
+							url: 'Store'
 						}, {
-							name: '狗狗',
-							icon: '11.png'
+							name: '推荐',
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png',
+							url: 'Recommend'
 						}, {
 							name: '宠物零食',
-							icon: '11.png'
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
 						}, {
 							name: '宠物用品',
-							icon: '11.png'
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
 						}, {
 							name: '分类',
-							icon: '11.png'
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
 						}, {
 							name: '天猫美食',
-							icon: '11.png'
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
 						}, {
 							name: '阿里健康',
-							icon: '11.png'
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
 						}, {
 							name: '口碑生活',
-							icon: '11.png'
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
 						}
 					],
 				],
@@ -239,18 +256,88 @@
 			}
 		},
 		mounted() {
-			this.loadmore();
+			this.getStorage();
+			this.firstLoad();
 			this._freshing = false;
 			// setTimeout(() => {
 			// this.triggered = true;
 			// }, 1000)
 		},
 		methods: {
+			getGood() {
+				this.status = "loading";
+				uni.request({
+					url: this.$baseUrl + '/store-server/goodOV/getGoodOVByPage',
+					method: 'GET',
+					data: {
+						pageNum: this.currentPage,
+						pageSize: 2,
+						goodName: this.searchValue,
+						type: 3,
+						storeId: "",
+					},
+					header: {
+						token: this.token,
+					},
+					success: ((res) => {
+						// console.log(res);
+						// this.lineTemp = res.data.data;
+						// console.log(this.lineTemp);
+						// console.log(this.lineTemp[0].good.goodName);
+						this.lineTemp = [];
+						for (let j = 0; j < res.data.data.length; j++) {
+							this.lineTemp.push({
+								goodId: res.data.data[j].goodId,
+								goodName: res.data.data[j].goodName,
+								img: this.imgUrl + res.data.data[j].img,
+								price: res.data.data[j].price,
+								storeName: res.data.data[j].storeName,
+								isCollect: res.data.data[j].isCollect,
+							});
+						}
+						if (res.data.data.length == 1) {
+							this.lineTemp.push({
+								goodName: "广告位出租",
+								img: 'http://150.158.85.93:81/pet/1.jpeg',
+								price: 8888,
+								storeName: "广告店",
+								isCollect: 1,
+							});
+						}
+						this.indexList.push(this.lineTemp);
+						this.status = "nomore";
+					}),
+				});
+				this.currentPage++;
+				if (this.currentPage > this.etc) this.isLoad = false;
+			},
+			clickGood(id) {
+				console.log(id);
+				uni.navigateTo({
+					url: 'pages/Good?id=' + id
+				});
+			},
+			getStorage() {
+				let self = this;
+				uni.getStorage({
+					key: "user",
+					success(res) {
+						self.token = res.data.token;
+						console.log('获取成功', res);
+					}
+				})
+			},
 			click1(e) {
 				console.log('click1', e);
 			},
 			click(name) {
 				// this.$refs.uToast.success(`点击了第${name}个`)
+			},
+			toPage(url) {
+				console.log(url);
+				uni.navigateTo({
+					url: "pages/" + url,
+				});
 			},
 			backTop() {
 				this.scrollTop = 0;
@@ -274,22 +361,34 @@
 				this.showBackTop = true;
 				this.scrollTop = e;
 			},
-			// loadmore() {
-			// 	for (let i = 0; i < 30; i++) {
-			// 		this.indexList.push({
-			// 			url: this.urls[uni.$u.random(0, this.urls.length - 1)]
-			// 		})
-			// 	}
-			// },
+			firstLoad() {
+				uni.request({
+					url: this.$baseUrl + '/store-server/goodOV/getGoodOVByPage',
+					method: 'GET',
+					data: {
+						pageNum: 1,
+						pageSize: 2,
+						goodName: "",
+						type: 3,
+						storeId: "",
+					},
+					header: {
+						token: this.token,
+					},
+					success: ((res) => {
+						this.etc = res.data.etc;
+						this.loadmore();
+					}),
+				});
+			},
 			loadmore() {
-				for (let i = 0; i < 30; i++) {
-					this.lineTemp = [];
-					for (let j = 0; j < 2; j++) {
-						this.lineTemp.push({
-							url: this.urls[uni.$u.random(0, this.urls.length - 1)]
-						});
+				if (this.isLoad) {
+					for (let i = 0; this.isLoad && i < 10; i++) {
+						this.getGood();
 					}
-					this.indexList.push(this.lineTemp);
+					console.log(this.indexList);
+				} else {
+					console.log("到底了");
 				}
 			},
 			onPulling(e) {

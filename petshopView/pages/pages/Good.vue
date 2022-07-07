@@ -23,16 +23,25 @@
 			<text>商品类型：{{goodTemp.type}}</text>
 			<u-tabbar :fixed="true" :placeholder="true" :safeAreaInsetBottom="true">
 				<view style="width: 12%; padding-top: 5px; background-color: #fff7fc;">
-					<u-button color="#fff7fc"><u-icon label="店铺" labelSize="1" labelPos="bottom" size="25" name="bag"></u-icon></u-button>
+					<u-button color="#fff7fc">
+						<u-icon label="店铺" labelSize="1" labelPos="bottom" size="25" name="bag"></u-icon>
+					</u-button>
 				</view>
 				<view style="width: 12%; padding-top: 5px; background-color: #fff7fc;">
-					<u-button color="#fff7fc"><u-icon label="客服" labelSize="1" labelPos="bottom" size="25" name="kefu-ermai"></u-icon></u-button>
+					<u-button color="#fff7fc">
+						<u-icon label="客服" labelSize="1" labelPos="bottom" size="25" name="kefu-ermai"></u-icon>
+					</u-button>
 				</view>
 				<view style="width: 12%; padding-top: 5px; background-color: #fff7fc;">
-					<u-button color="#fff7fc"><u-icon label="收藏" labelSize="1" labelPos="bottom" size="25" name="star"></u-icon></u-button>
+					<u-button v-show="isCollect == 0" @click="toCollect" color="#fff7fc">
+						<u-icon label="收藏" labelSize="1" labelPos="bottom" size="25" name="star"></u-icon>
+					</u-button>
+					<u-button v-show="isCollect == 1" @click="delCollect" color="#fff7fc">
+						<u-icon label="已收藏" labelSize="1" labelPos="bottom" size="25" name="star-fill"></u-icon>
+					</u-button>
 				</view>
 				<view style="width: 32%; padding-top: 5px; background-color: #fff7fc;">
-					<u-button text="加入购物车" color="linear-gradient(to right, #ffd7d8, #ffadb1)"
+					<u-button text="加入购物车" color="linear-gradient(to right, #ffd7d8, #ffadb1)" @click="show = true"
 						style=" border-top-left-radius: 18px; border-bottom-left-radius: 18px;">
 					</u-button>
 				</view>
@@ -43,6 +52,34 @@
 				</view>
 			</u-tabbar>
 		</uni-card>
+		<view>
+			<u-popup :show="show" @close="close" @open="open">
+				<view style="height: 200px;background-color: #fff7fc;">
+					<uni-card style="margin:0px; padding: 10px; background-color: #fff7fc">
+						<image slot='cover' :src="goodTemp.img" mode="aspectFill"
+							style="width: 30%; height: 100px; float: left">
+						</image>
+						<view style="width: 35%; float: left; padding-left: 5%;">
+							<text style="font-weight: bold; font-size: 13px;">{{goodTemp.goodName}}</text>
+							<text
+								style="color: #ffb300; font-weight: bold; font-size: 15px;">\n¥{{goodTemp.price}}\n</text>
+							<text
+								style="background-color: #eee7ec; font-size: 10px; border-radius: 8px; padding: 1px 10px 1px 10px; position: relative;">{{goodTemp.storeName}}&nbsp></text>
+						</view>
+						<u-number-box :min="1" :max="goodTemp.stock" v-model="carNum"
+							style="width: 30%; margin-top: 10px; float:left"></u-number-box>
+					</uni-card>
+					<view style="padding-top: 5px; background-color: #fff7fc;">
+						<view style="width: 40%; margin-right: 20px;float: right">
+							<u-button text="加入购物车" shape="circle" color="linear-gradient(to right, #ffd7d8, #ffadb1)"
+								@click="addCar">
+							</u-button>
+						</view>
+					</view>
+				</view>
+			</u-popup>
+		</view>
+		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
 
@@ -59,23 +96,36 @@
 					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
 				],
 				goodTemp: [],
+				carNum: 1,
+				token: "",
+				isCollect: 0,
+				show: false,
+				toastParams: {
+					type: 'error',
+					message: "",
+				},
 			}
 		},
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
 			console.log(option.id); //打印出上个页面传递的参数。
 			// console.log(option.name); //打印出上个页面传递的参数。
+			this.getStorage();
 			this.GoodId = option.id;
+			this.getGood();
 		},
 		mounted() {
-			this.getGood();
+
 		},
 		methods: {
 			getGood() {
 				uni.request({
-					url: 'http://172.16.193.81:9001/store-server/goodInfoOV/getInfo',
+					url: this.$baseUrl + '/store-server/goodInfoOV/getInfo',
 					method: 'GET',
 					data: {
 						goodId: this.GoodId,
+					},
+					header: {
+						token: this.token,
 					},
 					success: ((res) => {
 						this.goodTemp = {
@@ -90,8 +140,109 @@
 						};
 						this.list1[0] = this.goodTemp.img;
 						console.log(this.goodTemp);
+						this.isCollect = this.goodTemp.isCollect;
 					}),
 				});
+			},
+			toCollect() {
+				this.toastParams.message = "";
+				this.toastParams.type = "error";
+				uni.request({
+					url: this.$baseUrl + '/login-server/collect/addCollect',
+					method: 'POST',
+					data: {
+						goodId: this.GoodId,
+					},
+					header: {
+						"Content-Type": "application/x-www-form-urlencoded",
+						token: this.token,
+					},
+					success: ((res) => {
+						this.toastParams.message = res.data.message;
+						if (res.data.statusCode == "200") {
+							console.log("收藏成功!");
+							console.log(res);
+							this.toastParams.type = "success";
+							this.isCollect = 1;
+						}
+						this.showToast(this.toastParams);
+					}),
+				});
+			},
+			delCollect() {
+				this.toastParams.message = "";
+				this.toastParams.type = "error";
+				uni.request({
+					url: this.$baseUrl + '/login-server/collect/deleteCollect',
+					method: 'POST',
+					data: {
+						goodId: this.GoodId,
+					},
+					header: {
+						"Content-Type": "application/x-www-form-urlencoded",
+						token: this.token,
+					},
+					success: ((res) => {
+						this.toastParams.message = res.data.message;
+						if (res.data.statusCode == "200") {
+							console.log("取消收藏");
+							console.log(res);
+							this.toastParams.type = "success";
+							this.isCollect = 0;
+						}
+						this.showToast(this.toastParams);
+					}),
+				});
+			},
+			addCar() {
+				uni.request({
+					url: this.$baseUrl + '/login-server/cart/addCart',
+					method: 'POST',
+					data: {
+						goodId: this.goodTemp.goodId,
+						number: this.carNum,
+					},
+					header: {
+						token: this.token,
+						"Content-Type": "application/x-www-form-urlencoded",
+					},
+					success: ((res) => {
+						console.log(res);
+						this.show = false;
+						this.toastParams.message = res.data.message;
+						if (res.data.statusCode == "200") {
+							this.toastParams.type = "success";
+						} else this.toastParams.type = "error";
+						this.showToast(this.toastParams);
+					}),
+				});
+			},
+			getStorage() {
+				let self = this;
+				uni.getStorage({
+					key: "user",
+					success(res) {
+						self.token = res.data.token;
+						console.log('获取成功', res);
+					}
+				})
+			},
+			open() {
+				console.log('open');
+			},
+			close() {
+				this.show = false
+				console.log('close');
+			},
+			showToast(params) {
+				this.$refs.uToast.show({
+					...params,
+					complete() {
+						params.url && uni.reLaunch({
+							url: params.url
+						})
+					}
+				})
 			},
 		}
 	}
