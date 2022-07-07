@@ -1,26 +1,24 @@
-<template class="wrap">
-	<view>
-		<u-navbar title="附近商店" :autoBack="true" bgColor="#ffadb1"></u-navbar>
-		<view class="page-body" style="margin-top: 44px;">
-			<view class="page-section page-section-gap">
-				<map style="width: 100%; height: 500px;" :latitude="latitude" :longitude="longitude" :markers="covers">
-				</map>
-			</view>
-		</view>
-		<scroll-view style="height: 800rpx;" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
+<template>
+	<view style="background-color: #fff7fc;">
+		<u-navbar title="商品推荐" :autoBack="true" bgColor="#ffadb1" style="margin-top: 44px;">
+		</u-navbar>
+		<u-search shape="round" style="padding: 15px; padding-top: 5px; background-color: #ffadb1" @custom="toSearch">
+		</u-search>
+		<scroll-view style="height: 1350rpx;" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
 			:refresher-threshold="100" refresher-background="#fff7fc" @refresherpulling="onPulling"
 			@refresherrefresh="onRefresh" @refresherrestore="onRestore" @refresherabort="onAbort">
 			<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
 				:scrollTop="scrollTop" style="background-color: #fff7fc; margin-top: 5px">
 				<u-list-item v-for="(item, index) in lineTemp" :key="index">
 					<uni-card style="margin:0px; padding: 10px; background-color: #fff7fc">
-						<image slot='cover' @click="clickStore(item.storeId)" :src="imgUrl" mode="aspectFill"
+						<image slot='cover' @click="clickGood(item.goodId)" :src="imgUrl + item.img" mode="aspectFill"
 							style="width: 30%; height: 100px; float: left">
 						</image>
-						<view style="width: 65%; float: left; padding-left: 5%;">
-							<text style="font-weight: bold; font-size: 14px;">{{item.storeName}}</text>
-							<text>\n\n</text>
-							<text>{{item.address}}</text>
+						<view style="width: 60%; float: left; padding-left: 10%;">
+							<text style="font-weight: bold; font-size: 13px;">{{item.goodName}}</text>
+							<text style="color: #ffb300; font-weight: bold; font-size: 15px;">\n¥{{item.price}}\n</text>
+							<text
+								style="background-color: #eee7ec; font-size: 10px; border-radius: 8px; padding: 1px 10px 1px 10px; position: relative;">{{item.storeName}}&nbsp></text>
 						</view>
 					</uni-card>
 				</u-list-item>
@@ -37,11 +35,6 @@
 	export default {
 		data() {
 			return {
-				id: 0, // 使用 marker点击事件 需要填写id
-				title: 'map',
-				latitude: 24.6284512,
-				longitude: 118.0919487,
-				covers: [],
 				triggered: true,
 				showBackTop: false,
 				scrollTop: 0,
@@ -54,42 +47,23 @@
 				status: 'loading',
 				token: "",
 				isCollect: true,
-				imgUrl: "http://150.158.85.93:88/img/Pet Store.png",
+				imgUrl: "http://150.158.85.93:88",
 			}
 		},
 		mounted() {
-			this.getMap();
 			this.getStorage();
 			this.firstLoad();
 			this._freshing = false;
 		},
 		methods: {
-			getMap() {
-				uni.request({
-					url: '/api/store-server/storeMap/getAllStoreInMap',
-					method: 'POST',
-					success: ((res) => {
-						console.log(res);
-						// this.lineTemp = res.data.data;
-						// console.log(this.lineTemp);
-						// console.log(this.lineTemp[0].good.goodName);
-						for (let i = 0; i < res.data.data.length; i++) {
-							this.covers.push({
-								latitude: res.data.data[i].latitude,
-								longitude: res.data.data[i].longitude,
-								title: res.data.data[i].storeName,
-								iconPath: 'http://150.158.85.93:88/img/pet store.png',
-							});
-						}
-					}),
-				});
-			},
 			getGood() {
 				this.status = "loading";
 				uni.request({
-					url: '/api/store-server/storeOV/getAllStoreOV',
+					url: '/api/store-server/goodOV/getRecommend',
 					method: 'POST',
-					data: {},
+					data: {
+						number: 5,
+					},
 					header: {
 						token: this.token,
 						"Content-Type": "application/x-www-form-urlencoded",
@@ -99,9 +73,11 @@
 						this.lineTemp = [];
 						for (let j = 0; j < res.data.data.length; j++) {
 							this.lineTemp.push({
+								goodId: res.data.data[j].goodId,
+								goodName: res.data.data[j].goodName,
 								storeName: res.data.data[j].storeName,
-								address: res.data.data[j].address,
-								storeId: res.data.data[j].storeId,
+								price: res.data.data[j].price,
+								img: res.data.data[j].img,
 							});
 						}
 						this.status = "nomore";
@@ -109,11 +85,21 @@
 					}),
 				});
 			},
-			clickStore(id) {
+			clickGood(id) {
 				console.log(id);
 				uni.navigateTo({
-					url: 'StorePage?id=' + id
+					url: 'Good?id=' + id
 				});
+			},
+			collect() {
+				if (this.isCollect) this.isCollect = false;
+				else this.isCollect = true;
+				console.log("666");
+			},
+			toSearch(value) {
+				console.log(value);
+				this.searchValue = value;
+				this.onRefresh();
 			},
 			sectionChange(index) {
 				this.curNow = index;
@@ -178,16 +164,14 @@
 			onAbort() {
 				// console.log("onAbort");
 			},
+			// btnBClick() {
+			// 	uni.$u.debounce(500);
+			// },
 		}
 	}
 </script>
 
 <style lang="scss">
-	.wrap {
-		background-color: #fff7fc;
-		min-height: 100vh;
-	}
-
 	.scroll-list {
 		@include flex(column);
 
@@ -218,7 +202,7 @@
 	}
 
 	.swiper {
-		height: 800rpx;
+		height: 1300rpx;
 		margin-left: 20px;
 		margin-right: 20px;
 	}

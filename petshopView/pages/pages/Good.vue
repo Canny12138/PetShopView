@@ -108,7 +108,7 @@
 			console.log(option.id); //打印出上个页面传递的参数。
 			// console.log(option.name); //打印出上个页面传递的参数。
 			this.getStorage();
-			// this.GoodId = option.id;
+			this.GoodId = option.id;
 			this.getGood();
 		},
 		mounted() {

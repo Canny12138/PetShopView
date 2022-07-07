@@ -180,8 +180,9 @@
 							icon: 'http://150.158.85.93:88/img/Pet Store wide.png',
 							url: 'Store'
 						}, {
-							name: '狗狗',
-							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
+							name: '推荐',
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png',
+							url: 'Recommend'
 						}, {
 							name: '宠物零食',
 							icon: 'https://cdn.uviewui.com/uview/menu/11.png'

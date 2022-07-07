@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="wrap">
 		<u-navbar title="编辑地址" bgColor="#ffadb1" :autoBack="true"></u-navbar>
 		<u-gap height="44" bgColor="#bbb"></u-gap>
 		<u--form labelPosition="left" :model="addressInfo" style="margin: 25px">
@@ -15,7 +15,7 @@
 			<u-form-item label="设为默认收货地址" leftIcon="map" borderBottom labelWidth="200px">
 				<u-switch v-model="value" activeColor="#f56c6c" slot="right"></u-switch>
 			</u-form-item>
-			<u-button type="error" text="保存" customStyle="margin-top: 50px" @click="addAddress"></u-button>
+			<u-button type="error" text="保存" customStyle="margin-top: 50px" @click="sumbit"></u-button>
 		</u--form>
 
 	</view>
@@ -25,49 +25,111 @@
 	export default {
 		data() {
 			return {
-				value: true,
+				value: false,
+				addressId: null,
 				addressInfo: {
-					name: 'default',
-					tel: '+86 12345678901',
-					address: 'aaaaaaaaaa',
+					name: '',
+					tel: '',
+					address: '',
+					isDef: 0,
 				}
 			}
 		},
-		onLoad() {
+		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
+			console.log(option.id);
+			this.addressId = option.id;
 			this.getStorage();
+			if (this.addressId != null) {
+				this.getAddress();
+			}
 		},
 		methods: {
-			// getAddress() {
-			// 	uni.request({
-			// 		url: '/api/login-server/userAddress/getAddress',
-			// 		method: 'POST',
-			// 		header: {
-			// 			token: this.token,
-			// 			"Content-Type": "application/x-www-form-urlencoded",
-			// 		},
-			// 		success: ((res) => {
-			// 			console.log(res);
-			// 			for (let i = 0; i < res.data.data.length; i++) {
-			// 				this.addressList.push({
-			// 					address: res.data.data[i].address,
-			// 					addressId: res.data.data[i].addressId,
-			// 				})
-			// 			}
-			// 		}),
-			// 	});
-			// },
-			addAddress() {
+			getAddress() {
 				uni.request({
-					url: '/api/login-server/userAddress/addAddress',
+					url: '/api/login-server/userAddress/getAddressById',
 					method: 'POST',
 					data: {
-						address: this.addressInfo.address,
+						addressId: this.addressId,
 					},
 					header: {
 						token: this.token,
 						"Content-Type": "application/x-www-form-urlencoded",
 					},
 					success: ((res) => {
+						console.log("getAddress");
+						console.log(res);
+						this.addressInfo.name = res.data.data.receiver;
+						this.addressInfo.address = res.data.data.address;
+						this.addressInfo.tel = res.data.data.tel;
+						if (res.data.data.isDef) this.value = true;
+					}),
+				});
+			},
+			sumbit() {
+				if (this.addressId == null) this.addAddress();
+				else this.updateAddress();
+			},
+			addAddress() {
+				uni.request({
+					url: '/api/login-server/userAddress/addAddress',
+					method: 'POST',
+					data: {
+						address: this.addressInfo.address,
+						receiver: this.addressInfo.name,
+						tel: this.addressInfo.tel,
+					},
+					header: {
+						token: this.token,
+						"Content-Type": "application/x-www-form-urlencoded",
+					},
+					success: ((res) => {
+						console.log("add");
+						console.log(res);
+						this.addressId = res.data.data;
+						if (this.value == 1) {
+							this.setDef();
+						}
+						uni.navigateBack({})
+					}),
+				});
+			},
+			updateAddress() {
+				uni.request({
+					url: '/api/login-server/userAddress/updateAddress',
+					method: 'POST',
+					data: {
+						addressId: this.addressId,
+						address: this.addressInfo.address,
+						receiver: this.addressInfo.name,
+						tel: this.addressInfo.tel,
+					},
+					header: {
+						token: this.token,
+						"Content-Type": "application/x-www-form-urlencoded",
+					},
+					success: ((res) => {
+						console.log("update");
+						console.log(res);
+						if (this.value == 1) {
+							this.setDef();
+						}
+						uni.navigateBack({})
+					}),
+				});
+			},
+			setDef() {
+				uni.request({
+					url: '/api/login-server/userAddress/setDefAddress',
+					method: 'POST',
+					data: {
+						addressId: this.addressId,
+					},
+					header: {
+						token: this.token,
+						"Content-Type": "application/x-www-form-urlencoded",
+					},
+					success: ((res) => {
+						console.log("setDef");
 						console.log(res);
 					}),
 				});
@@ -85,3 +147,9 @@
 		},
 	};
 </script>
+<style scoped lang="scss">
+	.wrap {
+		background-color: #fff7fc;
+		min-height: 100vh;
+	}
+</style>

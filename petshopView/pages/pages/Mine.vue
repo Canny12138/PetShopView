@@ -68,11 +68,13 @@
 					},
 					{
 						name: 'map',
-						title: '收货地址'
+						title: '收货地址',
+						url: 'pages/MyAddress'
 					},
 					{
 						name: 'account',
-						title: '个人资料'
+						title: '个人资料',
+						url: 'pages/User'
 					},
 				],
 			}
