@@ -14,16 +14,26 @@ public class StoreOV {
     private Double longitude;
     private Double latitude;
     private String address;
+    private Integer rank;
 
     public StoreOV(Store store,Address address){
         this.storeId = store.getStoreId();
         this.storeName = store.getStoreName();
+        this.rank = store.getRank();
         this.longitude = address.getLongitude();
         this.latitude = address.getLatitude();
         this.address = address.getAddress();
     }
     public String getStoreId() {
         return storeId;
+    }
+
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
     }
 
     public void setStoreId(String storeId) {

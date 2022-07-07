@@ -15,6 +15,16 @@ public class StoreInfoOV {
     private Double latitude;
     private String address;
     private String info;
+    private Integer rank;
+
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
+
     public StoreInfoOV(Store store, Address address){
         this.storeId = store.getStoreId();
         this.storeName = store.getStoreName();
@@ -22,6 +32,7 @@ public class StoreInfoOV {
         this.latitude = address.getLatitude();
         this.address = address.getAddress();
         this.info = store.getInfo();
+        this.rank = store.getRank();
     }
     public String getStoreId() {
         return storeId;

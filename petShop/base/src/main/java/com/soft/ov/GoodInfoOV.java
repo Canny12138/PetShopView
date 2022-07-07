@@ -53,6 +53,14 @@ public class GoodInfoOV {
         return img;
     }
 
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
     public void setImg(String img) {
         this.img = img;
     }
