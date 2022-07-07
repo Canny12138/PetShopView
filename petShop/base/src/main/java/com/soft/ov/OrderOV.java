@@ -28,6 +28,7 @@ public class OrderOV {
         this.receiver = address.getReceiver();
         this.tel = address.getTel();
         this.orderStatusValue = ordersStatus.getStatus();
+        this.orderStatus = ordersStatus.getStatusValue();
 
     }
     public void setOrderStatus(Integer orderStatus) {
