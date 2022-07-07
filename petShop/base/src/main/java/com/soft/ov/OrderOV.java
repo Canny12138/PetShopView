@@ -25,7 +25,7 @@ public class OrderOV {
         this.createTime = orders.getCreateTime();
         this.price = orders.getPrice();
         this.address = address.getAddress();
-        this.address = address.getReceiver();
+        this.receiver = address.getReceiver();
         this.tel = address.getTel();
         this.orderStatusValue = ordersStatus.getStatus();
 
