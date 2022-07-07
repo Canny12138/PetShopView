@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name="userManage-service",path = "/collect")
+@FeignClient(name="userManage-service",path = "/collect",contextId = "store-collect")
 public interface CollectFeignService {
     @RequestMapping(method = RequestMethod.POST,value = "/getCollectByUserId")
     List<Collect> getCollectByUserId(@RequestParam("userId") String userId);
@@ -33,4 +33,6 @@ public interface CollectFeignService {
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam("userId") String userId
     );
+    @RequestMapping(method = RequestMethod.POST,value = "/getCollectByNoUserId")
+    List<Collect> getCollectByNoUserId(@RequestParam("UserId") String userId);
 }
