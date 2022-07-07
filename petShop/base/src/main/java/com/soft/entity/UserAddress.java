@@ -16,4 +16,6 @@ public class UserAddress {
     private String addressId;
     private String address;
     private String userId;
+    private String receiver;
+    private String tel;
 }

@@ -59,6 +59,7 @@ public class UserAddressController {
                 throw new Exception();
             }
             UserAddressOV userAddressOV = new UserAddressOV(userAddress);
+            userAddressOV.setIsDef(1);
             res.setData(userAddressOV);
             res.success("请求成功");
         }catch (Exception e){
@@ -78,6 +79,7 @@ public class UserAddressController {
             return res;
         }
         try {
+            String defAddressId = userInfoFeignService.getUserInfoByUserId(userId).getDefAddress();
             List<UserAddressOV> resData = new LinkedList<>();
             List<UserAddress> userAddressList = addressFeignService.getAddressByUserId(userId);
             if(userAddressList.size()==0){
@@ -85,6 +87,9 @@ public class UserAddressController {
             }
             for(UserAddress userAddress:userAddressList){
                 UserAddressOV userAddressOV = new UserAddressOV(userAddress);
+                if(userAddressOV.getAddressId()==defAddressId){
+                    userAddressOV.setIsDef(1);
+                }
                 resData.add(userAddressOV);
             }
             res.setData(resData);
@@ -95,7 +100,10 @@ public class UserAddressController {
         return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addAddress")
-    public Result addAddress(@RequestParam("address") String address){
+    public Result addAddress(@RequestParam("address") String address,
+                             @RequestParam("receiver") String receiver,
+                             @RequestParam("tel") String tel
+    ){
         Result res = new Result();
         String token = request.getHeader("token");
         Result tokenRes = JwtUtils.validateToken(token);
@@ -110,6 +118,8 @@ public class UserAddressController {
             userAddress.setAddressId(UUID.randomUUID().toString());
             userAddress.setAddress(address);
             userAddress.setUserId(userId);
+            userAddress.setReceiver(receiver);
+            userAddress.setTel(tel);
             addressFeignService.addUserAddress(userAddress);
             res.success("添加成功");
         }catch (Exception e){
@@ -118,7 +128,11 @@ public class UserAddressController {
         return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/updateAddress")
-    public Result updateAddress(@RequestParam("addressId") String addressId,@RequestParam("address") String address){
+    public Result updateAddress(@RequestParam("addressId") String addressId,
+                                @RequestParam("address") String address,
+                                @RequestParam("receiver") String receiver,
+                                @RequestParam("tel") String tel
+    ){
         Result res = new Result();
         String token = request.getHeader("token");
         Result tokenRes = JwtUtils.validateToken(token);
@@ -131,6 +145,8 @@ public class UserAddressController {
         try {
             UserAddress userAddress = addressFeignService.getAddressByAddressId(addressId);
             userAddress.setAddress(address);
+            userAddress.setReceiver(receiver);
+            userAddress.setTel(tel);
             addressFeignService.updateUserAddress(userAddress);
             res.success("添加成功");
         }catch (Exception e){
