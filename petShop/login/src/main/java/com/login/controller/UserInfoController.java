@@ -115,8 +115,15 @@ public class UserInfoController {
     @RequestMapping(method = RequestMethod.POST,value = "/updateUserInfo")
     public Result updateUserInfo(@RequestBody UserInfoOV userInfoOV){
         Result res = new Result();
+        String token = request.getHeader("token");
+        Result tokenRes = JwtUtils.validateToken(token);
+        String userId = JwtUtils.getUserIdByToken(token);
+        User user = userFeignService.getUserByUserId(userId);
+        if(!tokenRes.getIsSuccess()||user==null){
+            res.againLogin("未登录");
+            return res;
+        }
         try {
-            User user = userFeignService.getUserByUserId(userInfoOV.getUserId());
             UserInfo userInfo = userInfoFeignService.getUserInfoByUserId(userInfoOV.getUserId());
             if (userInfo==null){
                 userInfo = new UserInfo();
