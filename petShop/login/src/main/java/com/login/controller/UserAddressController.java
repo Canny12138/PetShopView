@@ -87,7 +87,7 @@ public class UserAddressController {
             }
             for(UserAddress userAddress:userAddressList){
                 UserAddressOV userAddressOV = new UserAddressOV(userAddress);
-                if(userAddressOV.getAddressId()==defAddressId){
+                if(userAddressOV.getAddressId().equals(defAddressId)){
                     userAddressOV.setIsDef(1);
                 }
                 resData.add(userAddressOV);
