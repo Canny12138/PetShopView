@@ -17,5 +17,5 @@ public class Store {
     private String storeName;
     private String addressId;
     private String info;
-    private Integer rank;
+    private Integer storeRank;
 }
