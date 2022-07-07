@@ -1,0 +1,29 @@
+{
+  "pages": [
+    "pages/index",
+    "pages/pages/Shop",
+    "pages/pages/Shop2",
+    "pages/pages/Home",
+    "pages/pages/Good",
+    "pages/pages/Mine",
+    "pages/pages/Login",
+    "pages/pages/Collect",
+    "pages/pages/Map",
+    "pages/pages/Cart",
+    "pages/pages/Store",
+    "pages/pages/StorePage",
+    "pages/pages/MyAddress",
+    "pages/pages/AddressEdit",
+    "pages/pages/User",
+    "pages/pages/Recommend"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "usingComponents": {}
+}

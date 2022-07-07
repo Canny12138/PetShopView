@@ -54,7 +54,7 @@
 		</uni-card>
 		<view>
 			<u-popup :show="show" @close="close" @open="open">
-				<view style="height: 200px;">
+				<view style="height: 200px;background-color: #fff7fc;">
 					<uni-card style="margin:0px; padding: 10px; background-color: #fff7fc">
 						<image slot='cover' :src="goodTemp.img" mode="aspectFill"
 							style="width: 30%; height: 100px; float: left">
@@ -69,10 +69,12 @@
 						<u-number-box :min="1" :max="goodTemp.stock" v-model="carNum"
 							style="width: 30%; margin-top: 10px; float:left"></u-number-box>
 					</uni-card>
-					<view style="width: 32%; padding-top: 5px; background-color: #fff7fc;">
-						<u-button text="加入购物车" color="linear-gradient(to right, #ffd7d8, #ffadb1)" @click="addCar"
-							style=" border-top-left-radius: 18px; border-bottom-left-radius: 18px;">
-						</u-button>
+					<view style="padding-top: 5px; background-color: #fff7fc;">
+						<view style="width: 40%; margin-right: 20px;float: right">
+							<u-button text="加入购物车" shape="circle" color="linear-gradient(to right, #ffd7d8, #ffadb1)"
+								@click="addCar">
+							</u-button>
+						</view>
 					</view>
 				</view>
 			</u-popup>
@@ -117,7 +119,7 @@
 		methods: {
 			getGood() {
 				uni.request({
-					url: '/api/store-server/goodInfoOV/getInfo',
+					url: this.$baseUrl + '/store-server/goodInfoOV/getInfo',
 					method: 'GET',
 					data: {
 						goodId: this.GoodId,
@@ -146,7 +148,7 @@
 				this.toastParams.message = "";
 				this.toastParams.type = "error";
 				uni.request({
-					url: '/api/login-server/collect/addCollect',
+					url: this.$baseUrl + '/login-server/collect/addCollect',
 					method: 'POST',
 					data: {
 						goodId: this.GoodId,
@@ -171,7 +173,7 @@
 				this.toastParams.message = "";
 				this.toastParams.type = "error";
 				uni.request({
-					url: '/api/login-server/collect/deleteCollect',
+					url: this.$baseUrl + '/login-server/collect/deleteCollect',
 					method: 'POST',
 					data: {
 						goodId: this.GoodId,
@@ -194,7 +196,7 @@
 			},
 			addCar() {
 				uni.request({
-					url: '/api/login-server/cart/addCart',
+					url: this.$baseUrl + '/login-server/cart/addCart',
 					method: 'POST',
 					data: {
 						goodId: this.goodTemp.goodId,

@@ -6,8 +6,12 @@
 			<image slot='cover' :src="storeImg" mode="aspectFill" style="width: 30%; height: 100px; float: left">
 			</image>
 			<view style="width: 65%; float: left; padding-left: 5%;">
-				<text style="font-weight: bold; font-size: 14px;">{{store.storeName}}</text>
-				<text style="text-decoration: underline;">\n\n地址：{{store.address}}\n\n</text>
+				<text style="font-weight: bold; font-size: 14px;">{{store.storeName}}\n</text>
+				<view>
+					<u-icon name="star-fill" color="#ffbc10" v-for="index of store.rank" :key="index"
+						style="float: left;"></u-icon>
+				</view>
+				<text style="text-decoration: underline;">\n地址：{{store.address}}\n\n</text>
 				<text>{{store.info}}</text>
 			</view>
 		</uni-card>
@@ -55,6 +59,7 @@
 					storeName: "",
 					address: "",
 					info: "",
+					rank: "",
 				},
 				triggered: true,
 				showBackTop: false,
@@ -90,7 +95,7 @@
 		methods: {
 			getStore() {
 				uni.request({
-					url: '/api/store-server/storeInfoOV/getStoreInfoOVById',
+					url: this.$baseUrl + '/store-server/storeInfoOV/getStoreInfoOVById',
 					method: 'POST',
 					data: {
 						storeId: this.storeId,
@@ -101,27 +106,17 @@
 					},
 					success: ((res) => {
 						console.log(res);
-						// this.storeTemp = {
-						// 	goodId: res.data.data.goodId,
-						// 	goodName: res.data.data.goodName,
-						// 	goodInfo: res.data.data.goodInfo,
-						// 	img: this.imgUrl + res.data.data.img,
-						// 	isCollect: res.data.data.isCollect,
-						// 	price: res.data.data.price,
-						// 	storeName: res.data.data.storeName,
-						// 	type: res.data.data.type,
-						// };
-						// console.log(this.goodTemp);
 						this.store.storeName = res.data.data.storeName;
 						this.store.address = res.data.data.address;
 						this.store.info = res.data.data.info;
+						this.store.rank = res.data.data.rank;
 					}),
 				});
 			},
 			getGood() {
 				this.status = "loading";
 				uni.request({
-					url: '/api/store-server/goodOV/getGoodOVByPage',
+					url: this.$baseUrl + '/store-server/goodOV/getGoodOVByPage',
 					method: 'GET',
 					data: {
 						pageNum: this.currentPage,
@@ -214,7 +209,7 @@
 			},
 			firstLoad() {
 				uni.request({
-					url: '/api/store-server/goodOV/getGoodOVByPage',
+					url: this.$baseUrl + '/store-server/goodOV/getGoodOVByPage',
 					method: 'GET',
 					data: {
 						pageNum: 1,

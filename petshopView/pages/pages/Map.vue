@@ -3,15 +3,17 @@
 		<u-navbar title="附近商店" :autoBack="true" bgColor="#ffadb1"></u-navbar>
 		<view class="page-body" style="margin-top: 44px;">
 			<view class="page-section page-section-gap">
-				<map style="width: 100%; height: 500px;" :latitude="latitude" :longitude="longitude" :markers="covers">
+				<map style="width: 100%; height: 500px;" @markertap="mapClick" :latitude="latitude"
+					:longitude="longitude" :markers="covers">
 				</map>
 			</view>
 		</view>
+		<u-gap height="10" bgColor="#fff7fc"></u-gap>
 		<scroll-view style="height: 800rpx;" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
 			:refresher-threshold="100" refresher-background="#fff7fc" @refresherpulling="onPulling"
 			@refresherrefresh="onRefresh" @refresherrestore="onRestore" @refresherabort="onAbort">
 			<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
-				:scrollTop="scrollTop" style="background-color: #fff7fc; margin-top: 5px">
+				:scrollTop="scrollTop" style="background-color: #fff7fc;">
 				<u-list-item v-for="(item, index) in lineTemp" :key="index">
 					<uni-card style="margin:0px; padding: 10px; background-color: #fff7fc">
 						<image slot='cover' @click="clickStore(item.storeId)" :src="imgUrl" mode="aspectFill"
@@ -19,8 +21,11 @@
 						</image>
 						<view style="width: 65%; float: left; padding-left: 5%;">
 							<text style="font-weight: bold; font-size: 14px;">{{item.storeName}}</text>
-							<text>\n\n</text>
-							<text>{{item.address}}</text>
+							<view>
+								<u-icon name="star-fill" color="#ffbc10" v-for="index of item.rank" :key="index"
+									style="float: left;"></u-icon>
+							</view>
+							<text>\n{{item.address}}</text>
 						</view>
 					</uni-card>
 				</u-list-item>
@@ -47,6 +52,7 @@
 				scrollTop: 0,
 				searchValue: "",
 				currentPage: 1,
+				curStore: "",
 				indexList: [],
 				lineTemp: [],
 				etc: 1,
@@ -66,7 +72,7 @@
 		methods: {
 			getMap() {
 				uni.request({
-					url: '/api/store-server/storeMap/getAllStoreInMap',
+					url: this.$baseUrl + '/store-server/storeMap/getAllStoreInMap',
 					method: 'POST',
 					success: ((res) => {
 						console.log(res);
@@ -75,10 +81,15 @@
 						// console.log(this.lineTemp[0].good.goodName);
 						for (let i = 0; i < res.data.data.length; i++) {
 							this.covers.push({
+								id: i,
 								latitude: res.data.data[i].latitude,
 								longitude: res.data.data[i].longitude,
-								title: res.data.data[i].storeName,
 								iconPath: 'http://150.158.85.93:88/img/pet store.png',
+								storeId: res.data.data[i].storeId,
+								callout: {
+									content: res.data.data[i].storeName,
+									display: "ALWAYS",
+								}
 							});
 						}
 					}),
@@ -87,7 +98,7 @@
 			getGood() {
 				this.status = "loading";
 				uni.request({
-					url: '/api/store-server/storeOV/getAllStoreOV',
+					url: this.$baseUrl + '/store-server/storeOV/getAllStoreOV',
 					method: 'POST',
 					data: {},
 					header: {
@@ -98,12 +109,17 @@
 						console.log(res);
 						this.lineTemp = [];
 						for (let j = 0; j < res.data.data.length; j++) {
+							if (this.curStore != "" && res.data.data[j].storeId != this.curStore) {
+								continue;
+							}
 							this.lineTemp.push({
 								storeName: res.data.data[j].storeName,
 								address: res.data.data[j].address,
 								storeId: res.data.data[j].storeId,
+								rank: res.data.data[j].rank,
 							});
 						}
+						this.curStore = "";
 						this.status = "nomore";
 						this.isLoad = false;
 					}),
@@ -114,6 +130,11 @@
 				uni.navigateTo({
 					url: 'StorePage?id=' + id
 				});
+			},
+			mapClick(e) {
+				console.log(e.detail.markerId);
+				this.curStore = this.covers[e.detail.markerId].storeId;
+				this.onRefresh();
 			},
 			sectionChange(index) {
 				this.curNow = index;
@@ -165,8 +186,7 @@
 				setTimeout(() => {
 					this.triggered = false;
 					this._freshing = false;
-					this.indexList = [];
-					this.currentPage = 1;
+					this.lineTemp = [];
 					this.isLoad = true;
 					this.loadmore();
 				}, 1000)

@@ -16,8 +16,10 @@
 						</image>
 						<view style="width: 65%; float: left; padding-left: 5%;">
 							<text style="font-weight: bold; font-size: 14px;">{{item.storeName}}</text>
-							<text>\n\n</text>
-							<text>{{item.address}}</text>
+							<view>
+								<u-icon name="star-fill" color="#ffbc10" v-for="index of item.rank" :key="index" style="float: left;"></u-icon>
+							</view>
+							<text>\n{{item.address}}</text>
 						</view>
 					</uni-card>
 				</u-list-item>
@@ -58,7 +60,7 @@
 			getGood() {
 				this.status = "loading";
 				uni.request({
-					url: '/api/store-server/storeOV/getAllStoreOV',
+					url: this.$baseUrl + '/store-server/storeOV/getAllStoreOV',
 					method: 'POST',
 					data: {},
 					header: {
@@ -73,6 +75,7 @@
 								storeName: res.data.data[j].storeName,
 								address: res.data.data[j].address,
 								storeId: res.data.data[j].storeId,
+								rank: res.data.data[j].rank,
 							});
 						}
 						this.status = "nomore";

@@ -72,7 +72,7 @@
 		methods: {
 			getGood() {
 				uni.request({
-					url: '/api/login-server/collect/getCollectPageByUserId',
+					url: this.$baseUrl + '/login-server/collect/getCollectPageByUserId',
 					method: 'POST',
 					data: {
 						pageNum: this.currentPage,
@@ -153,7 +153,7 @@
 			},
 			firstLoad() {
 				uni.request({
-					url: '/api/login-server/collect/getCollectPageByUserId',
+					url: this.$baseUrl + '/login-server/collect/getCollectPageByUserId',
 					method: 'POST',
 					data: {
 						pageNum: 1,

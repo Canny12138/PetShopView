@@ -6,6 +6,8 @@ Vue.use(uView);
 // #ifndef VUE3
 import Vue from 'vue'
 Vue.config.productionTip = false
+// Vue.prototype.$baseUrl = "http://10.0.2.2:9001"
+Vue.prototype.$baseUrl = "http://localhost:9001"
 App.mpType = 'app'
 const app = new Vue({
     ...App

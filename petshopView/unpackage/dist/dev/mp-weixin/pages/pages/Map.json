@@ -1,0 +1,14 @@
+{
+  "navigationBarTitleText": "",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "u-navbar": "/node-modules/uview-ui/components/u-navbar/u-navbar",
+    "u-gap": "/node-modules/uview-ui/components/u-gap/u-gap",
+    "u-list": "/node-modules/uview-ui/components/u-list/u-list",
+    "u-list-item": "/node-modules/uview-ui/components/u-list-item/u-list-item",
+    "uni-card": "/uni_modules/uni-card/components/uni-card/uni-card",
+    "u-transition": "/node-modules/uview-ui/components/u-transition/u-transition",
+    "u-avatar": "/node-modules/uview-ui/components/u-avatar/u-avatar",
+    "u-loadmore": "/node-modules/uview-ui/components/u-loadmore/u-loadmore"
+  }
+}

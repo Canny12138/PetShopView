@@ -43,10 +43,22 @@
 				style="width: 30%; padding-top: 10px; background-color: #ffeefb; float: left;">
 			</u-count-to>
 			<view style="width: 30%; padding-top: 5px; background-color: #ffeefb; float: left;">
-				<u-button text="立即购买" shape="circle" color="linear-gradient(to right, #ffb300, #ffd320)">
+				<u-button @click="toOrder" text="立即购买" shape="circle"
+					color="linear-gradient(to right, #ffb300, #ffd320)">
 				</u-button>
 			</view>
 		</view>
+		<u-popup :show="show" @close="close" @open="open" mode="center">
+			<view style="height: 50vh; width: 45vh;">
+				<text>订单\n</text>
+				<text>收货人 {{order.receiver}}\n\n</text>
+				<text>手机号码 {{order.tel}}\n\n</text>
+				<text>订单时间 {{order.createTime}}\n\n</text>
+				<text>订单号 {{order.orderId}}\n\n</text>
+				<text>价钱 {{order.price}}\n\n</text>
+				<text>订单状态 {{order.orderStatusValue}}\n\n</text>
+			</view>
+		</u-popup>
 		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
@@ -67,7 +79,16 @@
 				isEmpty: true,
 				prePrice: 0,
 				curPrice: 0,
+				show: false,
 				imgUrl: "http://150.158.85.93:88",
+				order: {
+					receiver: "",
+					createTime: "",
+					orderId: "",
+					price: "",
+					tel: "",
+					orderStatusValue: "",
+				},
 				options1: [{
 					text: '删除',
 					style: {
@@ -97,7 +118,7 @@
 		methods: {
 			getGood() {
 				uni.request({
-					url: '/api/login-server/cart/getCartByUserId',
+					url: this.$baseUrl + '/login-server/cart/getCartByUserId',
 					method: 'POST',
 					header: {
 						token: this.token,
@@ -184,6 +205,47 @@
 					}
 				})
 			},
+			toOrder() {
+				this.show = true;
+				console.log("6");
+				uni.request({
+					url: '/api/login-server/order/addOrderByCart',
+					method: 'POST',
+					data: {
+						addressId: "7491b60d-4374-4bdc-a8da-68e1fce0205b",
+					},
+					header: {
+						token: this.token,
+						"Content-Type": "application/x-www-form-urlencoded",
+					},
+					success: ((res) => {
+						console.log(res);
+						this.getOrder();
+					}),
+				});
+			},
+			getOrder() {
+				uni.request({
+					url: '/api/login-server/order/getOrdersByUserId',
+					method: 'POST',
+					data: {
+						addressId: "7491b60d-4374-4bdc-a8da-68e1fce0205b",
+					},
+					header: {
+						token: this.token,
+						"Content-Type": "application/x-www-form-urlencoded",
+					},
+					success: ((res) => {
+						console.log(res);
+						this.order.receiver = res.data.data[0].receiver;
+						this.order.createTime = res.data.data[0].createTime;
+						this.order.orderId = res.data.data[0].orderId;
+						this.order.price = res.data.data[0].price;
+						this.order.tel = res.data.data[0].tel;
+						this.order.orderStatusValue = res.data.data[0].orderStatusValue;
+					}),
+				});
+			},
 			getStorage() {
 				let self = this;
 				uni.getStorage({
@@ -213,7 +275,7 @@
 			},
 			firstLoad() {
 				uni.request({
-					url: '/api/login-server/cart/getCartByUserId',
+					url: this.$baseUrl + '/login-server/cart/getCartByUserId',
 					method: 'POST',
 					header: {
 						token: this.token,
@@ -258,6 +320,13 @@
 				this.triggered = 'restore'; // 需要重置
 			},
 			onAbort() {},
+			open() {
+				// console.log('open');
+			},
+			close() {
+				this.show = false
+				// console.log('close');
+			},
 			showToast(params) {
 				this.$refs.uToast.show({
 					...params,

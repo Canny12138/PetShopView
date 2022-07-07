@@ -49,25 +49,26 @@
 				</u-grid>
 			</swiper-item>
 			<swiper-item style="background-color: #fff7fc;">
-				<scroll-view style="height: 1300rpx;" scroll-y="true" refresher-enabled="true"
-					:refresher-triggered="triggered" :refresher-threshold="100" refresher-background="#fff7fc"
-					@refresherpulling="onPulling" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
-					@refresherabort="onAbort">
+				<scroll-view style="height: 1300rpx;" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
+					:refresher-threshold="100" refresher-background="#fff7fc" @refresherpulling="onPulling"
+					@refresherrefresh="onRefresh" @refresherrestore="onRestore" @refresherabort="onAbort">
 					<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
 						:scrollTop="scrollTop" style="background-color: #fff7fc; margin-top: 5px">
 						<u-list-item v-for="(item, index) in indexList" :key="index">
-							<u-grid :border="false" @click="click" col="2">
+							<u-grid :border="false" col="2">
 								<u-grid-item v-for="(item, index) in item" :key="index">
-									<uni-card style="width: 85%; height:250px; margin: 5px; background-color: #fff7fc">
-										<image slot='cover' :src="item.url" mode="aspectFill"
-											style="width: 150px; height: 130px">
+									<uni-card @click="clickGood(item.goodId)"
+										style="width: 85%; height:250px; margin: 5px; background-color: #fff7fc">
+										<image slot='cover' :src="item.img" mode="aspectFill"
+											style="width: 100%; height: 130px">
 										</image>
-										<text>商品-{{index + 1}}口口口口口口口口口口口口口口口口</text>
+										<text style="font-weight: bold; font-size: 15px;">{{item.goodName}}</text>
 										<text
-											style="color: #ffb300;font-weight: bold; font-size: 18px;">\n¥8888\n</text>
+											style="color: #ffb300;font-weight: bold; font-size: 18px;">\n\n¥{{item.price}}\n</text>
 										<text
-											style="background-color: #eee7ec;border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">旺角大学城店
-											></text>
+											style="background-color: #eee7ec; border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">{{item.storeName}}&nbsp></text>
+										<u-icon name="bookmark-fill" size="40" color="#ffb300" v-show="item.isCollect == 1"
+											style="position: absolute; right: 15px; bottom: 218px"></u-icon>
 									</uni-card>
 								</u-grid-item>
 							</u-grid>
@@ -75,6 +76,7 @@
 						<u-transition :show="showBackTop" style="position: fixed; right: 50px; bottom: 100px">
 							<u-avatar icon="arrow-up" fontSize="22" @click="backTop"></u-avatar>
 						</u-transition>
+						<u-loadmore :status="status" />
 					</u-list>
 				</scroll-view>
 			</swiper-item>
@@ -127,6 +129,16 @@
 				triggered: true,
 				showBackTop: false,
 				scrollTop: 0,
+				curNow: 0,
+				currentPage: 1,
+				indexList: [],
+				lineTemp: [],
+				etc: 1,
+				isLoad: true,
+				status: 'loading',
+				token: "",
+				isCollect: true,
+				imgUrl: "http://150.158.85.93:88",
 				menuBaseUrl: 'https://cdn.uviewui.com/uview/menu/',
 				text1: '欢迎来到PetShop！',
 				list3: [{
@@ -244,13 +256,77 @@
 			}
 		},
 		mounted() {
-			this.loadmore();
+			this.getStorage();
+			this.firstLoad();
 			this._freshing = false;
 			// setTimeout(() => {
 			// this.triggered = true;
 			// }, 1000)
 		},
 		methods: {
+			getGood() {
+				this.status = "loading";
+				uni.request({
+					url: this.$baseUrl + '/store-server/goodOV/getGoodOVByPage',
+					method: 'GET',
+					data: {
+						pageNum: this.currentPage,
+						pageSize: 2,
+						goodName: this.searchValue,
+						type: 3,
+						storeId: "",
+					},
+					header: {
+						token: this.token,
+					},
+					success: ((res) => {
+						// console.log(res);
+						// this.lineTemp = res.data.data;
+						// console.log(this.lineTemp);
+						// console.log(this.lineTemp[0].good.goodName);
+						this.lineTemp = [];
+						for (let j = 0; j < res.data.data.length; j++) {
+							this.lineTemp.push({
+								goodId: res.data.data[j].goodId,
+								goodName: res.data.data[j].goodName,
+								img: this.imgUrl + res.data.data[j].img,
+								price: res.data.data[j].price,
+								storeName: res.data.data[j].storeName,
+								isCollect: res.data.data[j].isCollect,
+							});
+						}
+						if (res.data.data.length == 1) {
+							this.lineTemp.push({
+								goodName: "广告位出租",
+								img: 'http://150.158.85.93:81/pet/1.jpeg',
+								price: 8888,
+								storeName: "广告店",
+								isCollect: 1,
+							});
+						}
+						this.indexList.push(this.lineTemp);
+						this.status = "nomore";
+					}),
+				});
+				this.currentPage++;
+				if (this.currentPage > this.etc) this.isLoad = false;
+			},
+			clickGood(id) {
+				console.log(id);
+				uni.navigateTo({
+					url: 'pages/Good?id=' + id
+				});
+			},
+			getStorage() {
+				let self = this;
+				uni.getStorage({
+					key: "user",
+					success(res) {
+						self.token = res.data.token;
+						console.log('获取成功', res);
+					}
+				})
+			},
 			click1(e) {
 				console.log('click1', e);
 			},
@@ -285,22 +361,34 @@
 				this.showBackTop = true;
 				this.scrollTop = e;
 			},
-			// loadmore() {
-			// 	for (let i = 0; i < 30; i++) {
-			// 		this.indexList.push({
-			// 			url: this.urls[uni.$u.random(0, this.urls.length - 1)]
-			// 		})
-			// 	}
-			// },
+			firstLoad() {
+				uni.request({
+					url: this.$baseUrl + '/store-server/goodOV/getGoodOVByPage',
+					method: 'GET',
+					data: {
+						pageNum: 1,
+						pageSize: 2,
+						goodName: "",
+						type: 3,
+						storeId: "",
+					},
+					header: {
+						token: this.token,
+					},
+					success: ((res) => {
+						this.etc = res.data.etc;
+						this.loadmore();
+					}),
+				});
+			},
 			loadmore() {
-				for (let i = 0; i < 30; i++) {
-					this.lineTemp = [];
-					for (let j = 0; j < 2; j++) {
-						this.lineTemp.push({
-							url: this.urls[uni.$u.random(0, this.urls.length - 1)]
-						});
+				if (this.isLoad) {
+					for (let i = 0; this.isLoad && i < 10; i++) {
+						this.getGood();
 					}
-					this.indexList.push(this.lineTemp);
+					console.log(this.indexList);
+				} else {
+					console.log("到底了");
 				}
 			},
 			onPulling(e) {

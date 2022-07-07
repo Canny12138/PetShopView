@@ -1,0 +1,15 @@
+{
+  "navigationBarTitleText": "",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "u-navbar": "/node-modules/uview-ui/components/u-navbar/u-navbar",
+    "u-gap": "/node-modules/uview-ui/components/u-gap/u-gap",
+    "u--form": "/node-modules/uview-ui/components/u--form/u--form",
+    "u-form-item": "/node-modules/uview-ui/components/u-form-item/u-form-item",
+    "u-avatar": "/node-modules/uview-ui/components/u-avatar/u-avatar",
+    "u--input": "/node-modules/uview-ui/components/u--input/u--input",
+    "u-button": "/node-modules/uview-ui/components/u-button/u-button",
+    "u-popup": "/node-modules/uview-ui/components/u-popup/u-popup",
+    "u-toast": "/node-modules/uview-ui/components/u-toast/u-toast"
+  }
+}

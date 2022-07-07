@@ -25,7 +25,7 @@
 		methods: {
 			getAddress() {
 				uni.request({
-					url: '/api/login-server/userAddress/getAddress',
+					url: this.$baseUrl + '/login-server/userAddress/getAddress',
 					method: 'POST',
 					header: {
 						token: this.token,

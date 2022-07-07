@@ -76,7 +76,7 @@
 		methods: {
 			getUser() {
 				uni.request({
-					url: '/api/login-server/userInfo/getUserInfo',
+					url: this.$baseUrl + '/login-server/userInfo/getUserInfo',
 					method: 'POST',
 					header: {
 						token: this.token,
@@ -95,7 +95,7 @@
 				this.toastParams.message = "fail";
 				this.toastParams.type = "error";
 				uni.request({
-					url: '/api/login-server/userInfo/updateUserInfo',
+					url: this.$baseUrl + '/login-server/userInfo/updateUserInfo',
 					method: 'POST',
 					data: {
 						nickName: this.userInfo.name,
@@ -120,7 +120,7 @@
 				this.toastParams.message = "fail";
 				this.toastParams.type = "error";
 				uni.request({
-					url: '/api/login-server/userInfo/updateUserPassword',
+					url: this.$baseUrl + '/login-server/userInfo/updateUserPassword',
 					method: 'POST',
 					data: {
 						oldPassword: this.password.old,

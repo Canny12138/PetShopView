@@ -8,7 +8,7 @@
 			<u-gap height="10"></u-gap>
 			<u-button @click="login" text="登录" color="#ffadb1"></u-button>
 			<u-gap height="5"></u-gap>
-			<u-button text="注册" color="#ffc4c5"></u-button>
+			<u-button @click="register" text="注册" color="#ffc4c5"></u-button>
 			<!-- <u-button @click="setStorage" text="setStorage" color="#ffadb1"></u-button>
 			<u-button @click="getStorage" text="getStorage" color="#ffadb1"></u-button>
 			<u-button @click="removeStorage" text="removeStorage" color="#ffadb1"></u-button> -->
@@ -35,7 +35,7 @@
 			login() {
 				console.log("ok");
 				uni.request({
-					url: '/api/login-server/login/useLogin',
+					url: this.$baseUrl + '/login-server/login/useLogin',
 					method: 'POST',
 					data: {
 						username: this.username,
@@ -67,6 +67,38 @@
 						}
 						this.showToast(this.toastParams);
 					}),
+					fail: ((err) => {
+						console.log(err);
+					})
+				});
+			},
+			register() {
+				console.log("ok");
+				uni.request({
+					url: this.$baseUrl + '/login-server/login/register',
+					method: 'POST',
+					data: {
+						username: this.username,
+						password: this.password,
+						nickname: "default",
+					},
+					header: {
+						"Content-Type": "application/x-www-form-urlencoded"
+					},
+					success: ((res) => {
+						// console.log(res);
+						this.loginMessage = res.data.message;
+						console.log(this.loginMessage);
+						this.toastParams.message = this.loginMessage;
+						if (res.data.isSuccess) {
+							this.toastParams.type = "success";
+							this.toastParams.url = "../index";
+						}
+						this.showToast(this.toastParams);
+					}),
+					fail: ((err) => {
+						console.log(err);
+					})
 				});
 			},
 			setStorage() {

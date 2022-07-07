@@ -46,7 +46,7 @@
 		methods: {
 			getAddress() {
 				uni.request({
-					url: '/api/login-server/userAddress/getAddressById',
+					url: this.$baseUrl + '/login-server/userAddress/getAddressById',
 					method: 'POST',
 					data: {
 						addressId: this.addressId,
@@ -71,7 +71,7 @@
 			},
 			addAddress() {
 				uni.request({
-					url: '/api/login-server/userAddress/addAddress',
+					url: this.$baseUrl + '/login-server/userAddress/addAddress',
 					method: 'POST',
 					data: {
 						address: this.addressInfo.address,
@@ -95,7 +95,7 @@
 			},
 			updateAddress() {
 				uni.request({
-					url: '/api/login-server/userAddress/updateAddress',
+					url: this.$baseUrl + '/login-server/userAddress/updateAddress',
 					method: 'POST',
 					data: {
 						addressId: this.addressId,
@@ -119,7 +119,7 @@
 			},
 			setDef() {
 				uni.request({
-					url: '/api/login-server/userAddress/setDefAddress',
+					url: this.$baseUrl + '/login-server/userAddress/setDefAddress',
 					method: 'POST',
 					data: {
 						addressId: this.addressId,

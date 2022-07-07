@@ -66,7 +66,7 @@
 			getGood() {
 				this.status = "loading";
 				uni.request({
-					url: '/api/store-server/goodOV/getGoodOVByPage',
+					url: this.$baseUrl + '/store-server/goodOV/getGoodOVByPage',
 					method: 'GET',
 					data: {
 						pageNum: this.currentPage,
@@ -159,13 +159,13 @@
 			},
 			firstLoad() {
 				uni.request({
-					url: '/api/store-server/goodOV/getGoodOVByPage',
+					url: this.$baseUrl + '/store-server/goodOV/getGoodOVByPage',
 					method: 'GET',
 					data: {
 						pageNum: 1,
 						pageSize: 2,
 						goodName: "",
-						type: this.curNow,
+						type: -1 * this.curNow + 1,
 						storeId: "",
 					},
 					header: {

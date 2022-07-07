@@ -59,7 +59,7 @@
 			getGood() {
 				this.status = "loading";
 				uni.request({
-					url: '/api/store-server/goodOV/getRecommend',
+					url: this.$baseUrl + '/store-server/goodOV/getRecommend',
 					method: 'POST',
 					data: {
 						number: 5,

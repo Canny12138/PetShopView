@@ -96,7 +96,7 @@
             "https" : false,
 			"proxy": {
 				"/api": {
-					"target": "http://localhost:9001",
+					"target": "http://172.16.193.180:9001",
 					"changeOrigin": true,
 					"pathRewrite": {
 						"^/api": ""

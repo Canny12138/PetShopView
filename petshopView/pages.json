@@ -137,6 +137,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/pages/Order",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	// "tabBar": {
 	// 	"list": [{
