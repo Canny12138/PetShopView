@@ -99,6 +99,30 @@ public class UserAddressController {
         }
         return res;
     }
+    @RequestMapping(method = RequestMethod.POST,value = "/getAddressById")
+    public Result getAddressOVById(@RequestParam("addressId") String addressId){
+        Result res = new Result();
+        String token = request.getHeader("token");
+        Result tokenRes = JwtUtils.validateToken(token);
+        String userId = JwtUtils.getUserIdByToken(token);
+        User user = userFeignService.getUserByUserId(userId);
+        if(!tokenRes.getIsSuccess()||user==null){
+            res.againLogin("未登录");
+            return res;
+        }
+        try {
+            UserAddress userAddress = addressFeignService.getAddressByAddressId(addressId);
+            if(userAddress==null){
+                throw new Exception();
+            }
+            UserAddressOV userAddressOV = new UserAddressOV(userAddress);
+            res.setData(userAddressOV);
+            res.success("获取成功");
+        }catch (Exception e){
+            res.fail("获取失败");
+        }
+        return res;
+    }
     @RequestMapping(method = RequestMethod.POST,value = "/addAddress")
     public Result addAddress(@RequestParam("address") String address,
                              @RequestParam("receiver") String receiver,
