@@ -149,6 +149,7 @@ public class UserAddressController {
             userAddress.setReceiver(receiver);
             userAddress.setTel(tel);
             addressFeignService.addUserAddress(userAddress);
+            res.setData(userAddress.getAddressId());
             res.success("添加成功");
         }catch (Exception e){
             res.fail("添加失败");
