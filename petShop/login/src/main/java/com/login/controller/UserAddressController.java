@@ -111,11 +111,15 @@ public class UserAddressController {
             return res;
         }
         try {
+            String defAddressId = userInfoFeignService.getUserInfoByUserId(userId).getDefAddress();
             UserAddress userAddress = addressFeignService.getAddressByAddressId(addressId);
             if(userAddress==null){
                 throw new Exception();
             }
             UserAddressOV userAddressOV = new UserAddressOV(userAddress);
+            if(userAddressOV.getAddressId().equals(defAddressId)){
+                userAddressOV.setIsDef(1);
+            }
             res.setData(userAddressOV);
             res.success("获取成功");
         }catch (Exception e){
