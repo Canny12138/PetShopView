@@ -32,6 +32,13 @@ public class OrdersGoodController {
         res = ordersGoodMapper.selectById(id);
         return res;
     }
+    @RequestMapping(method = RequestMethod.POST,value = "/getOrdersGoodByGoodIdOrdersId")
+    public OrdersGood getOrdersGoodByGoodIdOrderId(@RequestParam("goodId") String goodId,@RequestParam("ordersId") String ordersId){
+        OrdersGood params = new OrdersGood();
+        QueryWrapper<OrdersGood> wrapper = new QueryWrapper<>(params);
+        wrapper.eq("good_id",goodId).eq("order_id",ordersId);
+        return ordersGoodMapper.selectOne(wrapper);
+    }
     @RequestMapping(method = RequestMethod.POST,value = "/addOrdersGood")
     public Boolean addOrdersGood(@RequestBody OrdersGood ordersGood){
         OrdersGood res;

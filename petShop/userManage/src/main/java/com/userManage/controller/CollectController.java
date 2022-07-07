@@ -32,6 +32,13 @@ public class CollectController {
         wrapper.eq("user_id",userId);
         return collectMapper.selectPage(page,wrapper);
     }
+    @RequestMapping(method = RequestMethod.POST,value = "/getCollectByNoUserId")
+    public List<Collect> getCollectByNoUserId(@RequestParam("UserId") String userId){
+        Collect params = new Collect();
+        QueryWrapper<Collect> wrapper = new QueryWrapper<>(params);
+        wrapper.ne("user_id",userId);
+        return collectMapper.selectList(wrapper);
+    }
     @RequestMapping(method = RequestMethod.POST,value = "/getCollectByUserIdGoodId")
     public Collect getCollectByUserIdGoodId(
             @RequestParam("userId") String userId,

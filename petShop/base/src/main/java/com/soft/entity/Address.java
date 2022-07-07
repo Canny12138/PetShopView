@@ -14,6 +14,7 @@ import lombok.Data;
 public class Address {
     @TableId
     private String addressId;
+    private String address;
     private Double longitude;
     private Double latitude;
 }

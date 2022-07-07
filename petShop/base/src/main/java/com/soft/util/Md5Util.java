@@ -31,4 +31,9 @@ public class Md5Util {
     public static String getEncode(String pwd) throws Exception{
         return md5Encode(md5Encode(pwd));
     }
+
+    public static void main(String[] args) throws Exception {
+        String code = "";
+        System.out.println(Md5Util.getEncode(code));
+    }
 }

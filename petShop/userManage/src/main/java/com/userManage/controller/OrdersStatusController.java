@@ -1,6 +1,7 @@
 package com.userManage.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.soft.entity.OrdersStatus;
 import com.userManage.mapper.OrdersStatusMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,13 @@ public class OrdersStatusController {
         OrdersStatus res;
         res = ordersStatusMapper.selectById(statusId);
         return res;
+    }
+    @RequestMapping(method = RequestMethod.POST,value = "/getOrdersStatusByValue")
+    public OrdersStatus getOrdersStatusByValue(@RequestParam("value") Integer value){
+        OrdersStatus params = new OrdersStatus();
+        QueryWrapper<OrdersStatus> wrapper = new QueryWrapper<>(params);
+        wrapper.eq("status_value",value);
+        return ordersStatusMapper.selectOne(wrapper);
     }
     @RequestMapping(method = RequestMethod.POST,value = "/addOrdersStatus")
     public Boolean addOrdersStatus(@RequestBody OrdersStatus ordersStatus) {

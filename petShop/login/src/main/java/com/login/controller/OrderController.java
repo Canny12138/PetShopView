@@ -1,14 +1,13 @@
 package com.login.controller;
 
 import com.login.openFeign.*;
-import com.soft.entity.Cart;
-import com.soft.entity.Good;
-import com.soft.entity.Orders;
-import com.soft.entity.OrdersGood;
+import com.soft.entity.*;
+import com.soft.ov.OrderOV;
 import com.soft.util.DateUtil;
 import com.soft.util.JwtUtils;
 import com.soft.util.Result;
 
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,13 +36,19 @@ public class OrderController {
     @Autowired
     private OrdersGoodFeign ordersGoodFeign;
     @Autowired
+    private AddressFeignService addressFeignService;
+    @Autowired
+    private OrdersStatusFeign ordersStatusFeign;
+    @Autowired
     private HttpServletRequest request;
     @RequestMapping(method = RequestMethod.POST,value = "/addOrderByCart")
     public Result addOrderByCart(@RequestParam("addressId") String addressId){
         Result res = new Result();
         String token = request.getHeader("token");
         Result tokenRes = JwtUtils.validateToken(token);
-        if(!tokenRes.getIsSuccess()||userFeignService.getUserByUserId(JwtUtils.getUserIdByToken(token))==null){
+        String userId = JwtUtils.getUserIdByToken(token);
+        User user = userFeignService.getUserByUserId(userId);
+        if(!tokenRes.getIsSuccess()||user==null){
             res.againLogin("未登录");
             return res;
         }
@@ -58,7 +63,7 @@ public class OrderController {
             orders.setOrdersId(ordersId);
             orders.setOrdersStatus(0);
             orders.setCreateTime(DateUtil.getLocalDateTimeStr());
-            orders.setUserId(JwtUtils.getUserIdByToken(token));
+            orders.setUserId(userId);
             orders.setAddressId(addressId);
             orders.setPrice(0.0);
             for(Cart cart:cartList){
@@ -66,18 +71,20 @@ public class OrderController {
                 if(good.getStock()<=0){
                     throw new Exception();
                 }
-                good.setStock(good.getStock()-1);
-                orders.setPrice(orders.getPrice()+good.getPrice());
+                good.setStock(good.getStock()-cart.getNumber());
+                orders.setPrice(orders.getPrice()+good.getPrice()*cart.getNumber());
                 OrdersGood ordersGood = new OrdersGood();
                 ordersGood.setOrdersId(orders.getOrdersId());
                 ordersGood.setGoodId(cart.getGoodId());
                 ordersGood.setId(UUID.randomUUID().toString());
+                ordersGood.setNumber(cart.getNumber());
                 if(!ordersGoodFeign.addOrdersGood(ordersGood)){
                     throw new Exception();
                 }
                 if(!goodFeignService.updateGood(good)){
                     throw new Exception();
                 }
+                cartFeignService.deleteCart(cart.getCartId());
             }
             if(!ordersFeign.addOrders(orders)){
                 throw new Exception();
@@ -94,6 +101,7 @@ public class OrderController {
         res.success("下单成功");
         return res;
     }
+
     @RequestMapping(method = RequestMethod.POST,value = "/addOrderByGood")
     public Result addOrderByGood(@RequestParam("goodId") String goodId,@RequestParam("addressId") String addressId){
         Result res = new Result();
@@ -140,6 +148,33 @@ public class OrderController {
             return res;
         }
         res.success("下单成功");
+        return res;
+    }
+    @RequestMapping(method = RequestMethod.POST,value = "/getOrdersByUserId")
+    public Result getOrderByUserId(){
+        Result res = new Result();
+        String token = request.getHeader("token");
+        Result tokenRes = JwtUtils.validateToken(token);
+        String userId = JwtUtils.getUserIdByToken(token);
+        User user = userFeignService.getUserByUserId(userId);
+        if(!tokenRes.getIsSuccess()||user==null){
+            res.againLogin("未登录");
+            return res;
+        }
+        try {
+            List<Orders> ordersList = ordersFeign.getOrdersByUserId(userId);
+            List<OrderOV> resData = new LinkedList<>();
+            for(Orders orders:ordersList){
+                UserAddress userAddress = addressFeignService.getAddressByAddressId(orders.getAddressId());
+                OrdersStatus ordersStatus = ordersStatusFeign.getOrdersStatusByValue(orders.getOrdersStatus());
+                OrderOV orderOV = new OrderOV(orders,userAddress,ordersStatus);
+                resData.add(orderOV);
+            }
+            res.setData(resData);
+            res.success("获取成功");
+        }catch (Exception e){
+            res.fail("获取失败");
+        }
         return res;
     }
 }

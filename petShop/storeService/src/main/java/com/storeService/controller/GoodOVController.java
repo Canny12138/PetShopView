@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -50,11 +51,12 @@ public class GoodOVController {
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam("goodName") String goodName,
-            @RequestParam("type") String type
+            @RequestParam("type") String type,
+            @RequestParam("storeId") String storeId
             ){
         Result res = new Result();
         String token = request.getHeader("token");
-        Page<Good> page= goodFeignService.page(pageNum,pageSize,goodName,type);
+        Page<Good> page= goodFeignService.page(pageNum,pageSize,goodName,type,storeId);
         List<Good> records = page.getRecords();
         List<GoodOV> resData = new LinkedList<>();
         if(records.size()==0){
@@ -136,5 +138,34 @@ public class GoodOVController {
             result.fail(e.toString());
         }
         return result;
+    }
+    @RequestMapping(method = RequestMethod.POST,value = "/getRecommend")
+    public Result getRecommend(@RequestParam("number") Integer number){
+        Result res = new Result();
+        String token = request.getHeader("token");
+        Result tokenRes = JwtUtils.validateToken(token);
+        if(!tokenRes.getIsSuccess()){
+            res.fail("暂无推荐");
+            return res;
+        }else {
+            String userId = JwtUtils.getUserIdByToken(token);
+            List<Collect> collectList = collectFeignService.getCollectByNoUserId(userId);
+            List<GoodOV> resData = new LinkedList<>();
+            for(Collect collect:collectList){
+                Good good = goodFeignService.getGoodById(collect.getGoodId());
+                GoodOV temp = new GoodOV(good);
+                String store = storeFeignService.getStoreById(good.getStoreId()).getStoreName();
+                temp.setStoreName(store);
+                temp.setIsCollect(0);
+                resData.add(temp);
+                if(number<=resData.size()){
+                    break;
+                }
+            }
+            res.setData(resData);
+            res.setEtc(resData.size());
+            res.success("获取成功");
+        }
+        return res;
     }
 }

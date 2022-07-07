@@ -17,4 +17,6 @@ public interface OrdersStatusFeign {
     Boolean deleteOrdersStatus(@RequestParam("statusId") String statusId);
     @RequestMapping(method = RequestMethod.POST,value = "/updateOrdersStatus")
     Boolean updateOrdersStatus(@RequestBody OrdersStatus ordersStatus);
+    @RequestMapping(method = RequestMethod.POST,value = "/getOrdersStatusByValue")
+    OrdersStatus getOrdersStatusByValue(@RequestParam("value") Integer value);
 }

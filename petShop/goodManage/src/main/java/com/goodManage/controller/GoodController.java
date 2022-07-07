@@ -25,7 +25,8 @@ public class GoodController {
             @RequestParam("pageNum") Integer pageNum,
             @RequestParam("pageSize") Integer pageSize,
             @RequestParam("goodName") String goodName,
-            @RequestParam("type") String type
+            @RequestParam("type") String type,
+            @RequestParam("storeId") String storeId
     ){
         Page<Good> page = new Page<>(pageNum,pageSize);
         Good params = new Good();
@@ -37,6 +38,9 @@ public class GoodController {
         if(typeInt==1||typeInt==0){
             wrapper.eq("type",Integer.parseInt(type));
         }
+        if(storeId!=null&&!"".equals(storeId)){
+            wrapper.eq("store_id",storeId);
+        }
         Page<Good> res = goodMapper.selectPage(page,wrapper);
         return res;
     }
@@ -44,20 +48,19 @@ public class GoodController {
     public Good getGoodById(@RequestParam("goodId") String goodId){
         return goodMapper.selectById(goodId);
     }
-    @RequestMapping(method = RequestMethod.GET,value = "/pageByStoreId")
-    public List<Good> pageByStoreId(
-            @RequestParam("pageNum") Integer pageNum,
-            @RequestParam("pageSize") Integer pageSize,
-            @RequestParam("storeId") String storeId,
-            @RequestParam("goodName") String goodName
-    ){
-        Page<Good> page = new Page<Good>(pageNum,pageSize);
-        Good params = new Good();
-        QueryWrapper<Good> wrapper = new QueryWrapper<Good>(params);
+//    @RequestMapping(method = RequestMethod.GET,value = "/pageByStoreId")
+//    public Page<Good> pageByStoreId(
+//            @RequestParam("pageNum") Integer pageNum,
+//            @RequestParam("pageSize") Integer pageSize,
+//            @RequestParam("storeId") String storeId
+//    ){
+//        Page<Good> page = new Page<Good>(pageNum,pageSize);
+//        Good params = new Good();
+//        QueryWrapper<Good> wrapper = new QueryWrapper<Good>(params);
 //        wrapper.eq("store_id",storeId);
-        Page<Good> res = goodMapper.selectPage(page,wrapper);
-        return res.getRecords();
-    }
+//        Page<Good> res = goodMapper.selectPage(page,wrapper);
+//        return res;
+//    }
     @RequestMapping(method = RequestMethod.POST,value = "/addGood")
     public Boolean addGood(@RequestBody Good good){
         Good res;

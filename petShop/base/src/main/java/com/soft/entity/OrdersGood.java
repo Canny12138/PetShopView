@@ -19,4 +19,5 @@ public class OrdersGood {
     private String id;
     private String ordersId;
     private String goodId;
+    private Integer number;
 }

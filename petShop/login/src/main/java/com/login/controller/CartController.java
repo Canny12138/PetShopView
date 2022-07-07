@@ -62,6 +62,7 @@ public class CartController {
             CartOV temp = new CartOV(good);
             String storeName = storeFeignService.getStoreById(good.getStoreId()).getStoreName();
             temp.setStoreName(storeName);
+            temp.setNumber(cart.getNumber());
             if(collectFeignService.getIsCollect(JwtUtils.getUserIdByToken(token),good.getGoodId())){
                 temp.setIsCollect(1);
             }else {
@@ -72,25 +73,84 @@ public class CartController {
         res.setData(resData);
         return res;
     }
-    @RequestMapping(method = RequestMethod.POST,value = "/addCart")
-    public Result addCart(@RequestParam("goodId") String goodId){
+    @RequestMapping(method = RequestMethod.POST,value = "/updateCart")
+    public Result updateCart(@RequestParam("goodId") String goodId,@RequestParam("number") Integer number){
         Result res = new Result();
         String token = request.getHeader("token");
         Result tokenRes = JwtUtils.validateToken(token);
+        String userId = JwtUtils.getUserIdByToken(token);
         if(!tokenRes.getIsSuccess()){
             res.againLogin("未登录");
             return res;
         }
-        Cart cart = new Cart();
-        cart.setGoodId(goodId);
-        cart.setUserId(JwtUtils.getUserIdByToken(token));
-        cart.setCartId(UUID.randomUUID().toString());
-        cart.setAddTime(DateUtil.getLocalDateTimeStr());
-        if(cartFeignService.addCart(cart)){
+        Cart cart = cartFeignService.getCartByUserIdGoodId(userId,goodId);
+        if(cart!=null){
+            cart.setNumber(number);
+            cartFeignService.updateCart(cart);
+            res.success("修改成功");
+
+        }else {
+            res.fail("未找到商品");
+        }
+        return res;
+    }
+    @RequestMapping(method = RequestMethod.POST,value = "/addCart")
+    public Result addCart(@RequestParam("goodId") String goodId,@RequestParam("number") Integer number){
+        Result res = new Result();
+        String token = request.getHeader("token");
+        Result tokenRes = JwtUtils.validateToken(token);
+        String userId = JwtUtils.getUserIdByToken(token);
+        Integer stock = goodFeignService.getGoodById(goodId).getStock();
+        if(!tokenRes.getIsSuccess()){
+            res.againLogin("未登录");
+            return res;
+        }
+        Cart cart = cartFeignService.getCartByUserIdGoodId(userId,goodId);
+        if(cart!=null){
+            if(cart.getNumber()+number>stock){
+                res.fail("库存不足");
+                return res;
+            }
+            cart.setNumber(cart.getNumber()+number);
+            cartFeignService.updateCart(cart);
+            res.success("增加成功");
+            return res;
+        }
+        Cart temp = new Cart();
+        temp.setGoodId(goodId);
+        temp.setUserId(userId);
+        temp.setCartId(UUID.randomUUID().toString());
+        temp.setAddTime(DateUtil.getLocalDateTimeStr());
+        if(number>stock){
+            res.fail("库存不足");
+            return res;
+        }
+        temp.setNumber(number);
+        if(cartFeignService.addCart(temp)){
             res.success("添加成功");
         }else {
             res.fail("添加失败");
         }
+        return res;
+    }
+    @RequestMapping(method = RequestMethod.POST,value = "/deleteCartNumber")
+    public Result deleteCartNumber(@RequestParam("goodId") String goodId){
+        Result res = new Result();
+        String token = request.getHeader("token");
+        Result tokenRes = JwtUtils.validateToken(token);
+        String userId = JwtUtils.getUserIdByToken(token);
+        if(!tokenRes.getIsSuccess()){
+            res.againLogin("未登录");
+            return res;
+        }
+        Cart cart = cartFeignService.getCartByUserIdGoodId(userId,goodId);
+        if(cart==null){
+            res.fail("未找到该物品");
+            return res;
+        }
+        cart.setNumber(cart.getNumber()-1);
+        cartFeignService.updateCart(cart);
+        res.success("减少成功");
         return res;
     }
     @RequestMapping(method = RequestMethod.POST,value = "/deleteCart")
