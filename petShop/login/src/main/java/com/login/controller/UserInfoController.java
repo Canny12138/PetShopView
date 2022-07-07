@@ -53,7 +53,11 @@ public class UserInfoController {
                 String defAddressId = userInfo.getDefAddress();
                 UserAddress userAddress = addressFeignService.getAddressByAddressId(defAddressId);
                 UserInfoOV userInfoOV = new UserInfoOV(user,userInfo);
-                userInfoOV.setDefAddress(userAddress.getAddress());
+                if(userAddress==null){
+                    userInfoOV.setDefAddress("");
+                }else {
+                    userInfoOV.setDefAddress(userAddress.getAddress());
+                }
                 res.setData(userInfoOV);
                 res.success("获取成功");
             }
