@@ -2,7 +2,7 @@ server:
   port: 8080
 
 rocketmq:
-  name-server: 150.158.85.93:9876
+  name-server: 159.75.4.201:9876
   producer:
     send-message-timeout: 1000000
 spring:

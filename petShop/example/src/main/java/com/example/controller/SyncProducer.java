@@ -16,7 +16,7 @@ public class SyncProducer {
     public static void main(String[] args) throws Exception{
         DefaultMQProducer producer = new DefaultMQProducer("group_test");
 
-        producer.setNamesrvAddr("150.158.85.93:9876");
+        producer.setNamesrvAddr("159.75.4.201:9876");
         producer.setSendMsgTimeout(1000000000);
         producer.start();
         for(int i=0;i<10;i++){
