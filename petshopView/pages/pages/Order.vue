@@ -1,53 +1,46 @@
 <template>
-	<view style="background-color: #fff7fc;">
+	<view>
 		<u-navbar title="订单" bgColor="#ffadb1" leftIcon=""></u-navbar>
-		<u-gap height="19" bgColor="#bbb"></u-gap>
-		<u-empty v-show="isEmpty" mode="car" icon="http://cdn.uviewui.com/uview/empty/car.png" style="height: 1300rpx;">
-		</u-empty>
-		<scroll-view style="height: 1050rpx;" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
-			:refresher-threshold="100" refresher-background="#fff7fc" @refresherpulling="onPulling"
-			@refresherrefresh="onRefresh" @refresherrestore="onRestore" @refresherabort="onAbort">
-			<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
-				:scrollTop="scrollTop" style="background-color: #fff7fc; margin-top: 5px;">
-				<u-list-item v-for="(item, index) in lineTemp" :key="index">
-					<u-swipe-action>
-						<u-swipe-action-item @click="delCar(index)" :options="options1">
-							<uni-card style="margin:0px; padding: 10px; background-color: #fff7fc">
-								<image slot='cover' @click="clickGood(item.goodId)" :src="item.img" mode="aspectFill"
-									style="width: 30%; height: 100px; float: left">
-								</image>
-								<view style="width: 35%; float: left; padding-left: 5%;">
-									<text style="font-weight: bold; font-size: 13px;">{{item.goodName}}</text>
-									<text
-										style="color: #ffb300; font-weight: bold; font-size: 15px;">\n¥{{item.price}}\n</text>
-									<text
-										style="background-color: #eee7ec; font-size: 10px; border-radius: 8px; padding: 1px 10px 1px 10px; position: relative;">{{item.storeName}}&nbsp></text>
-								</view>
-								<u-number-box :min="1" :max="item.stock" v-model="item.number"
-									@change="setCar(item.goodId, item.number, $event.value, index)"
-									style="width: 30%; margin-top: 10px; float:left"></u-number-box>
-							</uni-card>
-						</u-swipe-action-item>
-					</u-swipe-action>
-				</u-list-item>
-				<u-transition :show="showBackTop" style="position: fixed; right: 30px; bottom: 110px; z-index: 100;">
-					<u-avatar icon="arrow-up" fontSize="22" @click="backTop"></u-avatar>
-				</u-transition>
-			</u-list>
-		</scroll-view>
-		<view style="position: fixed; bottom:50px; width:100%; height: 50px; z-index: 20; background-color: #ffeefb">
-			<view
-				style="width: 5%; padding-left: 35%; padding-top: 2px; color: #606266; font-size: 30px; background-color: #ffeefb; float: left;">
-				¥</view>
-			<u-count-to :startVal="prePrice" :endVal="curPrice" :decimals="2" separator=","
-				style="width: 30%; padding-top: 10px; background-color: #ffeefb; float: left;">
-			</u-count-to>
-			<view style="width: 30%; padding-top: 5px; background-color: #ffeefb; float: left;">
-				<u-button text="立即购买" shape="circle" color="linear-gradient(to right, #ffb300, #ffd320)">
-				</u-button>
-			</view>
-		</view>
-		<u-toast ref="uToast"></u-toast>
+		<u-gap height="48" bgColor="#fff7fc"></u-gap>
+		<u-subsection :list="list" :current="curNow" @change="sectionChange" activeColor="#f56c6c"></u-subsection>
+<!-- 		<swiper :current="curNow" @change="swiperChange" class="swiper" style="margin: 0px">
+			<swiper-item style="background-color: #fff7fc;"> -->
+				<view v-for="i in 5">
+					<uni-card style="margin: 5px; background-color: #fff7fc">
+						<text>旺角大学城店</text>
+						<text style="float: right; color: #f56c6c">待收货</text>
+						<u-cell v-for="i in 3">
+							<image slot="icon" :src="img" mode="aspectFill" style="width: 120rpx; height: 120rpx;">
+							</image>
+							<text slot="title" style="padding-bottom: 50rpx; margin-left: 10rpx;">测试商品测试商品</text>
+							<view slot="value" style="padding-bottom: 20rpx;">
+								<text style="color: #ffb300;">¥6.99\n</text>
+								<text style="padding-left: 40rpx; color: gray; font-size: small">x3</text>
+							</view>
+						</u-cell>
+						<view style="width: 40%; float: right">
+							<text
+								style="float: right; padding: 10rpx; font-weight: bold; font-size: medium;">实付款¥99.99</text>
+							<u-button type="error" :plain="true" text="确认收货" shape="circle"
+								style="margin-top: 10rpx; margin-bottom: 20rpx; background-color: #fff7fc; ">
+							</u-button>
+						</view>
+					</uni-card>
+				</view>
+<!-- 			</swiper-item>
+			<swiper-item style="background-color: #fff7fc;">
+				page1
+			</swiper-item>
+			<swiper-item style="background-color: #fff7fc;">
+				page2
+			</swiper-item>
+			<swiper-item style="background-color: #fff7fc;">
+				page3
+			</swiper-item>
+			<swiper-item style="background-color: #fff7fc;">
+				page4
+			</swiper-item>
+		</swiper> -->
 	</view>
 </template>
 
@@ -55,219 +48,28 @@
 	export default {
 		data() {
 			return {
-				triggered: true,
-				showBackTop: false,
-				scrollTop: 0,
-				currentPage: 1,
-				indexList: [],
-				lineTemp: [],
-				etc: 1,
-				isLoad: true,
-				token: "",
-				isEmpty: true,
-				prePrice: 0,
-				curPrice: 0,
-				imgUrl: "http://150.158.85.93:88",
-				options1: [{
-					text: '删除',
-					style: {
-						backgroundColor: '#f56c6c'
-					}
-				}],
-				toastParams: {
-					type: 'error',
-					message: "",
-				},
+				list: ['全部', '待付款', '待发货', '待收货', '待评价'],
+				img: "http://150.158.85.93:81/pet/1.jpeg",
+				// 或者如下，也可以配置keyName参数修改对象键名
+				// list: [{name: '未付款'}, {name: '待评价'}, {name: '已付款'}],
+				curNow: 0,
 			}
 		},
-		mounted() {
-			this.getStorage();
-			this.firstLoad();
-			this._freshing = false;
-			// setTimeout(() => {
-			// this.triggered = true;
-			// }, 1000)
-			// uni.$u.http.setConfig((config) => {
-			// 	/* config 为默认全局配置*/
-			// 	config.baseURL = `https://172.16.193.151:9001`; /* 根域名 */
-			// 	return config
-			// });
-			// this.getGood();
-		},
 		methods: {
-			getGood() {
-				uni.request({
-					url: this.$baseUrl + '/login-server/cart/getCartByUserId',
-					method: 'POST',
-					header: {
-						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
-					},
-					success: ((res) => {
-						console.log(res);
-						// this.lineTemp = res.data.data;
-						// console.log(this.lineTemp);
-						// console.log(this.lineTemp[0].good.goodName);
-						this.lineTemp = [];
-						for (let i = 0; i < res.data.data.length; i++) {
-							this.lineTemp.push({
-								goodId: res.data.data[i].goodId,
-								goodName: res.data.data[i].goodName,
-								img: this.imgUrl + res.data.data[i].img,
-								price: res.data.data[i].price,
-								storeName: res.data.data[i].storeName,
-								stock: res.data.data[i].stock,
-								number: res.data.data[i].number,
-							});
-							this.curPrice += res.data.data[i].price * res.data.data[i].number;
-						}
-						this.indexList.push(this.lineTemp);
-					}),
-				});
-				this.isLoad = false;
+			sectionChange(index) {
+				this.curNow = index;
 			},
-			clickGood(id) {
-				console.log(id);
-				uni.navigateTo({
-					url: 'Good?id=' + id
-				});
-			},
-			setCar(goodId, preNum, curNum, i) {
-				console.log(goodId, preNum, curNum, i);
-				this.prePrice = this.curPrice;
-				this.curPrice -= this.lineTemp[i].price * preNum;
-				this.curPrice += this.lineTemp[i].price * curNum;
-				uni.request({
-					url: '/api/login-server/cart/updateCart',
-					method: 'POST',
-					data: {
-						goodId: this.lineTemp[i].goodId,
-						number: curNum,
-					},
-					header: {
-						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
-					},
-					success: ((res) => {
-						console.log(res);
-					}),
-				});
-			},
-			delCar(i) {
-				console.log('click', i);
-				uni.showModal({
-					title: '温馨提示',
-					content: '确定要删除吗？',
-					success: res => {
-						if (res.confirm) {
-							console.log("进入删除");
-							uni.request({
-								url: '/api/login-server/cart/deleteCart',
-								method: 'POST',
-								data: {
-									goodId: this.lineTemp[i].goodId,
-								},
-								header: {
-									token: this.token,
-									"Content-Type": "application/x-www-form-urlencoded",
-								},
-								success: ((res) => {
-									console.log(res);
-									console.log("删除成功");
-									this.toastParams.message = res.data.message;
-									this.toastParams.type = "success";
-									this.showToast(this.toastParams);
-									this.onRefresh();
-								}),
-							});
-						}
-					}
-				})
-			},
-			getStorage() {
-				let self = this;
-				uni.getStorage({
-					key: "user",
-					success(res) {
-						self.token = res.data.token;
-						console.log('获取成功', res);
-					}
-				})
-			},
-			click(name) {
-				// this.$refs.uToast.success(`点击了第${name}个`)
-			},
-			backTop() {
-				this.scrollTop = 0;
-			},
-			scrolltolower() {
-				this.loadmore();
-			},
-			scrolltoupper() {
-				this.showBackTop = false;
-			},
-			scroll(e) {
-				// console.log(e);
-				this.showBackTop = true;
-				this.scrollTop = e;
-			},
-			firstLoad() {
-				uni.request({
-					url: this.$baseUrl + '/login-server/cart/getCartByUserId',
-					method: 'POST',
-					header: {
-						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
-					},
-					success: ((res) => {
-						console.log(res);
-						if (res.data.statusCode == "400") {
-							this.isLoad = false;
-							this.isEmpty = true;
-						} else {
-							this.etc = res.data.etc;
-							this.isEmpty = false;
-							this.loadmore();
-						}
-					}),
-				});
-			},
-			loadmore() {
-				if (this.isLoad) {
-					this.getGood();
-				} else {
-					console.log("到底了");
-				}
-			},
-			onPulling(e) {},
-			onRefresh() {
-				if (this._freshing) return;
-				this._freshing = true;
-				setTimeout(() => {
-					this.triggered = false;
-					this._freshing = false;
-					this.indexList = [];
-					this.currentPage = 1;
-					this.isLoad = true;
-					this.prePrice = this.curPrice;
-					this.curPrice = 0;
-					this.firstLoad();
-				}, 1000)
-			},
-			onRestore() {
-				this.triggered = 'restore'; // 需要重置
-			},
-			onAbort() {},
-			showToast(params) {
-				this.$refs.uToast.show({
-					...params,
-				})
+			swiperChange(index) {
+				this.curNow = index.detail.current;
 			},
 		}
 	}
 </script>
 
 <style lang="scss">
+	page{
+		background-color: #fff7fc;
+	}
 	.scroll-list {
 		@include flex(column);
 

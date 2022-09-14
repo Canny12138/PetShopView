@@ -119,7 +119,7 @@
 				// this.$refs.uToast.success(`点击了第${name}个`)
 			},
 			backTop() {
-				this.scrollTop = 0;
+				this.scrollTop = this.scrollTop == 0 ? -1 : 0;
 			},
 			scrolltolower() {
 				this.loadmore();
@@ -130,7 +130,6 @@
 			scroll(e) {
 				// console.log(e);
 				this.showBackTop = true;
-				this.scrollTop = e;
 			},
 			firstLoad() {
 				this.loadmore();

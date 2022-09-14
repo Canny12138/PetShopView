@@ -10,8 +10,8 @@
 			<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
 				:scrollTop="scrollTop" style="background-color: #fff7fc; margin-top: 5px">
 				<u-list-item v-for="(item, index) in lineTemp" :key="index">
-					<uni-card style="margin:0px; padding: 10px; background-color: #fff7fc">
-						<image slot='cover' @click="clickStore(item.storeId)" :src="imgUrl" mode="aspectFill"
+					<uni-card @click="clickStore(item.storeId)" style="margin:0px; padding: 10px; background-color: #fff7fc">
+						<image slot='cover' :src="imgUrl" mode="aspectFill"
 							style="width: 30%; height: 100px; float: left">
 						</image>
 						<view style="width: 65%; float: left; padding-left: 5%;">
@@ -117,7 +117,7 @@
 				// this.$refs.uToast.success(`点击了第${name}个`)
 			},
 			backTop() {
-				this.scrollTop = 0;
+				this.scrollTop = this.scrollTop == 0 ? -1 : 0;
 			},
 			scrolltolower() {
 				this.loadmore();
@@ -128,7 +128,6 @@
 			scroll(e) {
 				// console.log(e);
 				this.showBackTop = true;
-				this.scrollTop = e;
 			},
 			firstLoad() {
 				this.loadmore();

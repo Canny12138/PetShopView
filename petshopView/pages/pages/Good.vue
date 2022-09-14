@@ -15,7 +15,7 @@
 			<u-gap height="20"></u-gap>
 			<text style="font-size: 20px; font-weight: 600;">{{goodTemp.goodName}}</text>
 			<u-gap height="10"></u-gap>
-			<text
+			<text @click="clickStore(goodTemp.storeId)"
 				style="background-color: #eee7ec; border-radius: 8px; padding: 1px 15px 1px 15px; font-size: 15px;">{{goodTemp.storeName}}&nbsp进入></text>
 			<u-divider text="分割线" :dot="true"></u-divider>
 			<text style="font-size: 17px;">{{goodTemp.goodInfo}}</text>
@@ -23,7 +23,7 @@
 			<text>商品类型：{{goodTemp.type}}</text>
 			<u-tabbar :fixed="true" :placeholder="true" :safeAreaInsetBottom="true">
 				<view style="width: 12%; padding-top: 5px; background-color: #fff7fc;">
-					<u-button color="#fff7fc">
+					<u-button @click="clickStore(goodTemp.storeId)" color="#fff7fc">
 						<u-icon label="店铺" labelSize="1" labelPos="bottom" size="25" name="bag"></u-icon>
 					</u-button>
 				</view>
@@ -137,6 +137,7 @@
 							price: res.data.data.price,
 							storeName: res.data.data.storeName,
 							type: res.data.data.type,
+							storeId: res.data.data.storeId,
 						};
 						this.list1[0] = this.goodTemp.img;
 						console.log(this.goodTemp);
@@ -215,6 +216,12 @@
 						} else this.toastParams.type = "error";
 						this.showToast(this.toastParams);
 					}),
+				});
+			},
+			clickStore(id) {
+				console.log(id);
+				uni.navigateTo({
+					url: 'StorePage?id=' + id
 				});
 			},
 			getStorage() {

@@ -1,6 +1,6 @@
 <template>
 	<view style="background-color: #fff7fc;">
-		<u-navbar title="购物车" bgColor="#ffadb1" leftIcon=""></u-navbar>
+		<u-navbar title="购物车" bgColor="#ffadb1" :autoBack="true"></u-navbar>
 		<u-gap height="19" bgColor="#bbb"></u-gap>
 		<u-empty v-show="isEmpty" mode="car" icon="http://cdn.uviewui.com/uview/empty/car.png" style="height: 1300rpx;">
 		</u-empty>
@@ -159,7 +159,7 @@
 				this.curPrice -= this.lineTemp[i].price * preNum;
 				this.curPrice += this.lineTemp[i].price * curNum;
 				uni.request({
-					url: '/api/login-server/cart/updateCart',
+					url: this.$baseUrl + '/login-server/cart/updateCart',
 					method: 'POST',
 					data: {
 						goodId: this.lineTemp[i].goodId,
@@ -183,7 +183,7 @@
 						if (res.confirm) {
 							console.log("进入删除");
 							uni.request({
-								url: '/api/login-server/cart/deleteCart',
+								url: this.$baseUrl + '/login-server/cart/deleteCart',
 								method: 'POST',
 								data: {
 									goodId: this.lineTemp[i].goodId,
@@ -209,7 +209,7 @@
 				this.show = true;
 				console.log("6");
 				uni.request({
-					url: '/api/login-server/order/addOrderByCart',
+					url: this.$baseUrl + '/login-server/order/addOrderByCart',
 					method: 'POST',
 					data: {
 						addressId: "7491b60d-4374-4bdc-a8da-68e1fce0205b",
@@ -222,11 +222,14 @@
 						console.log(res);
 						this.getOrder();
 					}),
+					fail: ((res) => {
+						console.log(res);
+					})
 				});
 			},
 			getOrder() {
 				uni.request({
-					url: '/api/login-server/order/getOrdersByUserId',
+					url: this.$baseUrl + '/login-server/order/getOrdersByUserId',
 					method: 'POST',
 					data: {
 						addressId: "7491b60d-4374-4bdc-a8da-68e1fce0205b",
@@ -260,7 +263,7 @@
 				// this.$refs.uToast.success(`点击了第${name}个`)
 			},
 			backTop() {
-				this.scrollTop = 0;
+				this.scrollTop = this.scrollTop == 0 ? -1 : 0;
 			},
 			scrolltolower() {
 				this.loadmore();
@@ -271,7 +274,6 @@
 			scroll(e) {
 				// console.log(e);
 				this.showBackTop = true;
-				this.scrollTop = e;
 			},
 			firstLoad() {
 				uni.request({
