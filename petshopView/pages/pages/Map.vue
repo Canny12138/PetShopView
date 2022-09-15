@@ -72,8 +72,8 @@
 		methods: {
 			getMap() {
 				uni.request({
-					url: this.$baseUrl + '/store-server/storeMap/getAllStoreInMap',
-					method: 'POST',
+					url: this.$baseUrl + '/store/storeOV/getAllInMap',
+					method: 'GET',
 					success: ((res) => {
 						console.log(res);
 						// this.lineTemp = res.data.data;
@@ -98,28 +98,28 @@
 			getGood() {
 				this.status = "loading";
 				uni.request({
-					url: this.$baseUrl + '/store-server/storeOV/getAllStoreOV',
-					method: 'POST',
-					data: {},
-					header: {
-						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
+					url: this.$baseUrl + '/store/storeOV/page',
+					method: 'GET',
+					data: {
+						limit: 100,
+						page: 1,
+						storeName: this.curStore,
 					},
+					// header: {
+					// 	token: this.token,
+					// 	"Content-Type": "application/x-www-form-urlencoded",
+					// },
 					success: ((res) => {
 						console.log(res);
 						this.lineTemp = [];
-						for (let j = 0; j < res.data.data.length; j++) {
-							if (this.curStore != "" && res.data.data[j].storeId != this.curStore) {
-								continue;
-							}
+						for (let j = 0; j < res.data.data.total; j++) {
 							this.lineTemp.push({
-								storeName: res.data.data[j].storeName,
-								address: res.data.data[j].address,
-								storeId: res.data.data[j].storeId,
-								rank: res.data.data[j].rank,
+								storeName: res.data.data.list[j].storeName,
+								address: res.data.data.list[j].address,
+								storeId: res.data.data.list[j].storeId,
+								rank: res.data.data.list[j].rank,
 							});
 						}
-						this.curStore = "";
 						this.status = "nomore";
 						this.isLoad = false;
 					}),
@@ -133,7 +133,7 @@
 			},
 			mapClick(e) {
 				console.log(e.detail.markerId);
-				this.curStore = this.covers[e.detail.markerId].storeId;
+				this.curStore = this.covers[e.detail.markerId].callout.content;
 				this.onRefresh();
 			},
 			sectionChange(index) {

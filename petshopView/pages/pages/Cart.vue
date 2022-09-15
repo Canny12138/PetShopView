@@ -76,6 +76,7 @@
 				etc: 1,
 				isLoad: true,
 				token: "",
+				memberId: "",
 				isEmpty: true,
 				prePrice: 0,
 				curPrice: 0,
@@ -118,11 +119,11 @@
 		methods: {
 			getGood() {
 				uni.request({
-					url: this.$baseUrl + '/login-server/cart/getCartByUserId',
-					method: 'POST',
+					url: this.$baseUrl + `/product/productOV/getCart/${this.memberId}`,
+					method: 'GET',
 					header: {
 						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
+						// "Content-Type": "application/x-www-form-urlencoded",
 					},
 					success: ((res) => {
 						console.log(res);
@@ -132,12 +133,12 @@
 						this.lineTemp = [];
 						for (let i = 0; i < res.data.data.length; i++) {
 							this.lineTemp.push({
-								goodId: res.data.data[i].goodId,
-								goodName: res.data.data[i].goodName,
+								goodId: res.data.data[i].id,
+								goodName: res.data.data[i].productName,
 								img: this.imgUrl + res.data.data[i].img,
 								price: res.data.data[i].price,
 								storeName: res.data.data[i].storeName,
-								stock: res.data.data[i].stock,
+								// stock: res.data.data[i].stock,
 								number: res.data.data[i].number,
 							});
 							this.curPrice += res.data.data[i].price * res.data.data[i].number;
@@ -159,15 +160,16 @@
 				this.curPrice -= this.lineTemp[i].price * preNum;
 				this.curPrice += this.lineTemp[i].price * curNum;
 				uni.request({
-					url: this.$baseUrl + '/login-server/cart/updateCart',
-					method: 'POST',
+					url: this.$baseUrl + '/member/membercart',
+					method: 'PUT',
 					data: {
-						goodId: this.lineTemp[i].goodId,
+						cartId: this.memberId,
+						productId: this.lineTemp[i].goodId,
 						number: curNum,
 					},
 					header: {
 						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
+						// "Content-Type": "application/x-www-form-urlencoded",
 					},
 					success: ((res) => {
 						console.log(res);
@@ -183,19 +185,20 @@
 						if (res.confirm) {
 							console.log("进入删除");
 							uni.request({
-								url: this.$baseUrl + '/login-server/cart/deleteCart',
-								method: 'POST',
+								url: this.$baseUrl + '/member/membercart/remove',
+								method: 'DELETE',
 								data: {
-									goodId: this.lineTemp[i].goodId,
+									productId: this.lineTemp[i].goodId,
+									memberId: this.memberId,
 								},
 								header: {
-									token: this.token,
 									"Content-Type": "application/x-www-form-urlencoded",
+									token: this.token,
 								},
 								success: ((res) => {
 									console.log(res);
 									console.log("删除成功");
-									this.toastParams.message = res.data.message;
+									this.toastParams.message = "删除成功";
 									this.toastParams.type = "success";
 									this.showToast(this.toastParams);
 									this.onRefresh();
@@ -255,6 +258,7 @@
 					key: "user",
 					success(res) {
 						self.token = res.data.token;
+						self.memberId = res.data.memberId;
 						console.log('获取成功', res);
 					}
 				})
@@ -277,19 +281,19 @@
 			},
 			firstLoad() {
 				uni.request({
-					url: this.$baseUrl + '/login-server/cart/getCartByUserId',
-					method: 'POST',
+					url: this.$baseUrl + `/product/productOV/getCart/${this.memberId}`,
+					method: 'GET',
 					header: {
 						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
+						// "Content-Type": "application/x-www-form-urlencoded",
 					},
 					success: ((res) => {
 						console.log(res);
-						if (res.data.statusCode == "400") {
+						if (res.data.statusCode == 0) {
 							this.isLoad = false;
 							this.isEmpty = true;
 						} else {
-							this.etc = res.data.etc;
+							// this.etc = res.data.etc;
 							this.isEmpty = false;
 							this.loadmore();
 						}

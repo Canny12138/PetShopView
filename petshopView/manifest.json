@@ -94,15 +94,16 @@
         },
         "devServer" : {
             "https" : false,
-			"proxy": {
-				"/api": {
-					"target": "http://172.16.193.180:9001",
-					"changeOrigin": true,
-					"pathRewrite": {
-						"^/api": ""
-					}
-				}
-			}
+            "proxy" : {
+                "/api" : {
+                    "target" : "http://127.0.0.1:88/renren-admin",
+                    "changeOrigin" : true,
+                    "pathRewrite" : {
+                        "^/api" : ""
+                    }
+                }
+            },
+            "port" : 8081
         }
     }
 }

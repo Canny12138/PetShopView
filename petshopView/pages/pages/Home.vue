@@ -52,33 +52,32 @@
 					:refresher-triggered="triggered" :refresher-threshold="100" refresher-background="#fff7fc"
 					@refresherpulling="onPulling" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
 					@refresherabort="onAbort"> -->
-					<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
-						:scrollTop="scrollTop" :preLoadScreen="2" style="background-color: #fff7fc; margin-top: 5px">
-						<u-list-item v-for="(item, index) in indexList" :key="index">
-							<u-grid :border="false" col="2" style="height: 260px;">
-								<u-grid-item v-for="(item, index) in item" :key="index">
-									<uni-card @click="clickGood(item.goodId)"
-										style="width: 85%; height:250px; margin: 5px; background-color: #fff7fc">
-										<image slot='cover' :src="item.img" mode="aspectFill"
-											style="width: 100%; height: 130px">
-										</image>
-										<text style="font-weight: bold; font-size: 15px;">{{item.goodName}}</text>
-										<text
-											style="color: #ffb300;font-weight: bold; font-size: 18px;">\n\n¥{{item.price}}\n</text>
-										<text
-											style="background-color: #eee7ec; border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">{{item.storeName}}&nbsp></text>
-										<u-icon name="bookmark-fill" size="40" color="#ffb300"
-											v-show="item.isCollect == 1"
-											style="position: absolute; right: 15px; bottom: 218px"></u-icon>
-									</uni-card>
-								</u-grid-item>
-							</u-grid>
-						</u-list-item>
-						<u-transition :show="showBackTop" style="position: fixed; right: 50px; bottom: 100px">
-							<u-avatar icon="arrow-up" fontSize="22" @click="backTop"></u-avatar>
-						</u-transition>
-						<u-loadmore :status="status" />
-					</u-list>
+				<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
+					:scrollTop="scrollTop" :preLoadScreen="2" style="background-color: #fff7fc; margin-top: 5px">
+					<u-list-item v-for="(item, index) in indexList" :key="index">
+						<u-grid :border="false" col="2" style="height: 260px;">
+							<u-grid-item v-for="(item, index) in item" :key="index">
+								<uni-card @click="clickGood(item.goodId)"
+									style="width: 85%; height:250px; margin: 5px; background-color: #fff7fc">
+									<image slot='cover' :src="item.img" mode="aspectFill"
+										style="width: 100%; height: 130px">
+									</image>
+									<text style="font-weight: bold; font-size: 15px;">{{item.goodName}}</text>
+									<text
+										style="color: #ffb300;font-weight: bold; font-size: 18px;">\n\n¥{{item.price}}\n</text>
+									<text
+										style="background-color: #eee7ec; border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">{{item.storeName}}&nbsp></text>
+									<u-icon name="bookmark-fill" size="40" color="#ffb300" v-show="item.isCollect == 1"
+										style="position: absolute; right: 15px; bottom: 218px"></u-icon>
+								</uni-card>
+							</u-grid-item>
+						</u-grid>
+					</u-list-item>
+					<u-transition :show="showBackTop" style="position: fixed; right: 50px; bottom: 100px">
+						<u-avatar icon="arrow-up" fontSize="22" @click="backTop"></u-avatar>
+					</u-transition>
+					<u-loadmore :status="status" />
+				</u-list>
 				<!-- </scroll-view> -->
 			</swiper-item>
 			<swiper-item style="background-color: #fff7fc;">
@@ -286,17 +285,18 @@
 			getGood() {
 				this.status = "loading";
 				uni.request({
-					url: this.$baseUrl + '/store-server/goodOV/getGoodOVByPage',
+					url: this.$baseUrl + '/product/productOV/page',
 					method: 'GET',
 					data: {
-						pageNum: this.currentPage,
-						pageSize: 2,
-						goodName: this.searchValue,
-						type: 3,
-						storeId: "",
+						page: this.currentPage,
+						limit: 2,
+						productName: this.searchValue,
+						memberId: this.memberId,
+						// categoryId: 1,
+						// type: -1 * this.curNow + 1,
 					},
 					header: {
-						token: this.token,
+						// token: this.token,
 					},
 					success: ((res) => {
 						// console.log(res);
@@ -304,17 +304,17 @@
 						// console.log(this.lineTemp);
 						// console.log(this.lineTemp[0].good.goodName);
 						this.lineTemp = [];
-						for (let j = 0; j < res.data.data.length; j++) {
+						for (let j = 0; j < res.data.data.list.length; j++) {
 							this.lineTemp.push({
-								goodId: res.data.data[j].goodId,
-								goodName: res.data.data[j].goodName,
-								img: this.imgUrl + res.data.data[j].img,
-								price: res.data.data[j].price,
-								storeName: res.data.data[j].storeName,
-								isCollect: res.data.data[j].isCollect,
+								goodId: res.data.data.list[j].id,
+								goodName: res.data.data.list[j].productName,
+								img: this.imgUrl + res.data.data.list[j].img,
+								price: res.data.data.list[j].price,
+								storeName: res.data.data.list[j].storeName,
+								isCollect: res.data.data.list[j].isCollect,
 							});
 						}
-						if (res.data.data.length == 1) {
+						if (res.data.data.list.length == 1) {
 							this.lineTemp.push({
 								goodName: "广告位出租",
 								img: 'http://150.158.85.93:81/pet/1.jpeg',
@@ -381,20 +381,21 @@
 			},
 			firstLoad() {
 				uni.request({
-					url: this.$baseUrl + '/store-server/goodOV/getGoodOVByPage',
+					url: this.$baseUrl + '/product/productOV/page',
 					method: 'GET',
 					data: {
-						pageNum: 1,
-						pageSize: 2,
-						goodName: "",
-						type: 3,
-						storeId: "",
+						page: this.currentPage,
+						limit: 2,
+						productName: this.searchValue,
+						// categoryId: 1,
+						// type: -1 * this.curNow + 1,
 					},
 					header: {
-						token: this.token,
+						// token: this.token,
 					},
 					success: ((res) => {
-						this.etc = res.data.etc;
+						this.etc = Math.ceil(res.data.data.total / 2);
+						console.log(res.data.data.list.length);
 						this.loadmore();
 					}),
 				});

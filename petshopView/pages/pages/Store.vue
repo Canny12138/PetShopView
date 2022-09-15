@@ -60,22 +60,26 @@
 			getGood() {
 				this.status = "loading";
 				uni.request({
-					url: this.$baseUrl + '/store-server/storeOV/getAllStoreOV',
-					method: 'POST',
-					data: {},
-					header: {
-						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
+					url: this.$baseUrl + '/store/storeOV/page',
+					method: 'GET',
+					data: {
+						limit: 100,
+						page: 1,
+						storeName: this.searchValue,
 					},
+					// header: {
+					// 	token: this.token,
+					// 	"Content-Type": "application/x-www-form-urlencoded",
+					// },
 					success: ((res) => {
 						console.log(res);
 						this.lineTemp = [];
-						for (let j = 0; j < res.data.data.length; j++) {
+						for (let j = 0; j < res.data.data.total; j++) {
 							this.lineTemp.push({
-								storeName: res.data.data[j].storeName,
-								address: res.data.data[j].address,
-								storeId: res.data.data[j].storeId,
-								rank: res.data.data[j].rank,
+								storeName: res.data.data.list[j].storeName,
+								address: res.data.data.list[j].address,
+								storeId: res.data.data.list[j].storeId,
+								rank: res.data.data.list[j].rank,
 							});
 						}
 						this.status = "nomore";

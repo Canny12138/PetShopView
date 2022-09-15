@@ -9,9 +9,9 @@
 			<u-button @click="login" text="登录" color="#ffadb1"></u-button>
 			<u-gap height="5"></u-gap>
 			<u-button @click="register" text="注册" color="#ffc4c5"></u-button>
-			<!-- <u-button @click="setStorage" text="setStorage" color="#ffadb1"></u-button>
+			<u-button @click="setStorage" text="setStorage" color="#ffadb1"></u-button>
 			<u-button @click="getStorage" text="getStorage" color="#ffadb1"></u-button>
-			<u-button @click="removeStorage" text="removeStorage" color="#ffadb1"></u-button> -->
+			<u-button @click="removeStorage" text="removeStorage" color="#ffadb1"></u-button>
 		</view>
 		<u-toast ref="uToast"></u-toast>
 	</view>
@@ -35,7 +35,7 @@
 			login() {
 				console.log("ok");
 				uni.request({
-					url: this.$baseUrl + '/login-server/login/useLogin',
+					url: this.$baseUrl + '/member/member/login',
 					method: 'POST',
 					data: {
 						username: this.username,
@@ -45,11 +45,11 @@
 						"Content-Type": "application/x-www-form-urlencoded"
 					},
 					success: ((res) => {
-						// console.log(res);
-						this.loginMessage = res.data.message;
+						console.log(res);
+						this.loginMessage = res.data.data.res;
 						console.log(this.loginMessage);
 						this.toastParams.message = this.loginMessage;
-						if (res.data.isSuccess) {
+						if (res.data.code == 0) {
 							this.removeStorage();
 							uni.setStorage({
 								key: "user",
@@ -57,6 +57,7 @@
 									username: this.username,
 									nickname: res.data.data.nickname,
 									token: res.data.data.token,
+									memberId: res.data.data.memberId,
 								},
 								success() {
 									console.log('储存成功');
@@ -75,7 +76,7 @@
 			register() {
 				console.log("ok");
 				uni.request({
-					url: this.$baseUrl + '/login-server/login/register',
+					url: this.$baseUrl + '/member/member/register',
 					method: 'POST',
 					data: {
 						username: this.username,
@@ -83,14 +84,27 @@
 						nickname: "default",
 					},
 					header: {
-						"Content-Type": "application/x-www-form-urlencoded"
+						"Content-Type": "application/json"
 					},
 					success: ((res) => {
-						// console.log(res);
-						this.loginMessage = res.data.message;
+						console.log(res);
+						this.loginMessage = res.data.data.res;
 						console.log(this.loginMessage);
 						this.toastParams.message = this.loginMessage;
-						if (res.data.isSuccess) {
+						if (res.data.code == 0) {
+							this.removeStorage();
+							uni.setStorage({
+								key: "user",
+								data: {
+									username: this.username,
+									nickname: "default",
+									token: res.data.data.token,
+									memberId: res.data.data.memberId,
+								},
+								success() {
+									console.log('储存成功');
+								}
+							});
 							this.toastParams.type = "success";
 							this.toastParams.url = "../index";
 						}
