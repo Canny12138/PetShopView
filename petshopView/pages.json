@@ -132,6 +132,20 @@
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "pages/pages/ScoreEdit",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/pages/ScorePage",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
 		}
 	],
 	// "tabBar": {

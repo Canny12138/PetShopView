@@ -48,17 +48,6 @@
 				</u-button>
 			</view>
 		</view>
-		<u-popup :show="show" @close="close" @open="open" mode="center">
-			<view style="height: 50vh; width: 45vh;">
-				<text>订单\n</text>
-				<text>收货人 {{order.receiver}}\n\n</text>
-				<text>手机号码 {{order.tel}}\n\n</text>
-				<text>订单时间 {{order.createTime}}\n\n</text>
-				<text>订单号 {{order.orderId}}\n\n</text>
-				<text>价钱 {{order.price}}\n\n</text>
-				<text>订单状态 {{order.orderStatusValue}}\n\n</text>
-			</view>
-		</u-popup>
 		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
@@ -80,7 +69,6 @@
 				isEmpty: true,
 				prePrice: 0,
 				curPrice: 0,
-				show: false,
 				imgUrl: "http://150.158.85.93:88",
 				order: {
 					receiver: "",
@@ -134,11 +122,12 @@
 						for (let i = 0; i < res.data.data.length; i++) {
 							this.lineTemp.push({
 								goodId: res.data.data[i].id,
+								cartId: res.data.data[i].cartId,
 								goodName: res.data.data[i].productName,
 								img: this.imgUrl + res.data.data[i].img,
 								price: res.data.data[i].price,
 								storeName: res.data.data[i].storeName,
-								// stock: res.data.data[i].stock,
+								stock: res.data.data[i].stock,
 								number: res.data.data[i].number,
 							});
 							this.curPrice += res.data.data[i].price * res.data.data[i].number;
@@ -163,8 +152,8 @@
 					url: this.$baseUrl + '/member/membercart',
 					method: 'PUT',
 					data: {
-						cartId: this.memberId,
-						productId: this.lineTemp[i].goodId,
+						memberId: this.lineTemp[i].memberId,
+						id: this.lineTemp[i].cartId,
 						number: curNum,
 					},
 					header: {
@@ -209,13 +198,13 @@
 				})
 			},
 			toOrder() {
-				this.show = true;
 				console.log("6");
 				uni.request({
-					url: this.$baseUrl + '/login-server/order/addOrderByCart',
+					url: this.$baseUrl + '/product/orderOV/orderByCart',
 					method: 'POST',
 					data: {
-						addressId: "7491b60d-4374-4bdc-a8da-68e1fce0205b",
+						addressId: 2,
+						memberId: this.memberId,
 					},
 					header: {
 						token: this.token,
@@ -223,33 +212,18 @@
 					},
 					success: ((res) => {
 						console.log(res);
-						this.getOrder();
+						this.toastParams.type = "error";
+						this.toastParams.message = res.data.msg;
+						if (res.data.code == 0) {
+							this.toastParams.type = "success";
+							this.toastParams.message = "下单成功";
+							this.onRefresh();
+						}
+						this.showToast(this.toastParams);
 					}),
 					fail: ((res) => {
 						console.log(res);
 					})
-				});
-			},
-			getOrder() {
-				uni.request({
-					url: this.$baseUrl + '/login-server/order/getOrdersByUserId',
-					method: 'POST',
-					data: {
-						addressId: "7491b60d-4374-4bdc-a8da-68e1fce0205b",
-					},
-					header: {
-						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
-					},
-					success: ((res) => {
-						console.log(res);
-						this.order.receiver = res.data.data[0].receiver;
-						this.order.createTime = res.data.data[0].createTime;
-						this.order.orderId = res.data.data[0].orderId;
-						this.order.price = res.data.data[0].price;
-						this.order.tel = res.data.data[0].tel;
-						this.order.orderStatusValue = res.data.data[0].orderStatusValue;
-					}),
 				});
 			},
 			getStorage() {
@@ -289,7 +263,7 @@
 					},
 					success: ((res) => {
 						console.log(res);
-						if (res.data.statusCode == 0) {
+						if (res.data.data.length == 0) {
 							this.isLoad = false;
 							this.isEmpty = true;
 						} else {

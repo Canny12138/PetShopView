@@ -10533,7 +10533,6 @@ try {
     uAvatar: __webpack_require__(/*! uview-ui/components/u-avatar/u-avatar.vue */ 200).default,
     uCountTo: __webpack_require__(/*! uview-ui/components/u-count-to/u-count-to.vue */ 348).default,
     uButton: __webpack_require__(/*! uview-ui/components/u-button/u-button.vue */ 253).default,
-    uPopup: __webpack_require__(/*! uview-ui/components/u-popup/u-popup.vue */ 264).default,
     uToast: __webpack_require__(/*! uview-ui/components/u-toast/u-toast.vue */ 356).default
   }
 } catch (e) {
@@ -10860,53 +10859,7 @@ var render = function() {
         ],
         1
       ),
-      _c(
-        "u-popup",
-        {
-          attrs: { _i: 23 },
-          on: {
-            close: function($event) {
-              return _vm.$handleViewEvent($event)
-            },
-            open: function($event) {
-              return _vm.$handleViewEvent($event)
-            }
-          }
-        },
-        [
-          _c(
-            "uni-view",
-            {
-              staticStyle: { height: "50vh", width: "45vh" },
-              attrs: { _i: 24 }
-            },
-            [
-              _c("v-uni-text", { attrs: { _i: 25 } }, [_vm._v("订单\\n")]),
-              _c("v-uni-text", { attrs: { _i: 26 } }, [
-                _vm._v("收货人 " + _vm._$g(26, "t0-0") + "\\n\\n")
-              ]),
-              _c("v-uni-text", { attrs: { _i: 27 } }, [
-                _vm._v("手机号码 " + _vm._$g(27, "t0-0") + "\\n\\n")
-              ]),
-              _c("v-uni-text", { attrs: { _i: 28 } }, [
-                _vm._v("订单时间 " + _vm._$g(28, "t0-0") + "\\n\\n")
-              ]),
-              _c("v-uni-text", { attrs: { _i: 29 } }, [
-                _vm._v("订单号 " + _vm._$g(29, "t0-0") + "\\n\\n")
-              ]),
-              _c("v-uni-text", { attrs: { _i: 30 } }, [
-                _vm._v("价钱 " + _vm._$g(30, "t0-0") + "\\n\\n")
-              ]),
-              _c("v-uni-text", { attrs: { _i: 31 } }, [
-                _vm._v("订单状态 " + _vm._$g(31, "t0-0") + "\\n\\n")
-              ])
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _c("u-toast", { ref: "uToast", attrs: { _i: 32 } })
+      _c("u-toast", { ref: "uToast", attrs: { _i: 23 } })
     ],
     1
   )
@@ -17855,7 +17808,6 @@ try {
     uAvatar: __webpack_require__(/*! uview-ui/components/u-avatar/u-avatar.vue */ 200).default,
     uCountTo: __webpack_require__(/*! uview-ui/components/u-count-to/u-count-to.vue */ 348).default,
     uButton: __webpack_require__(/*! uview-ui/components/u-button/u-button.vue */ 253).default,
-    uPopup: __webpack_require__(/*! uview-ui/components/u-popup/u-popup.vue */ 264).default,
     uToast: __webpack_require__(/*! uview-ui/components/u-toast/u-toast.vue */ 356).default
   }
 } catch (e) {
@@ -18182,53 +18134,7 @@ var render = function() {
         ],
         1
       ),
-      _c(
-        "u-popup",
-        {
-          attrs: { _i: 23 },
-          on: {
-            close: function($event) {
-              return _vm.$handleViewEvent($event)
-            },
-            open: function($event) {
-              return _vm.$handleViewEvent($event)
-            }
-          }
-        },
-        [
-          _c(
-            "uni-view",
-            {
-              staticStyle: { height: "50vh", width: "45vh" },
-              attrs: { _i: 24 }
-            },
-            [
-              _c("v-uni-text", { attrs: { _i: 25 } }, [_vm._v("订单\\n")]),
-              _c("v-uni-text", { attrs: { _i: 26 } }, [
-                _vm._v("收货人 " + _vm._$g(26, "t0-0") + "\\n\\n")
-              ]),
-              _c("v-uni-text", { attrs: { _i: 27 } }, [
-                _vm._v("手机号码 " + _vm._$g(27, "t0-0") + "\\n\\n")
-              ]),
-              _c("v-uni-text", { attrs: { _i: 28 } }, [
-                _vm._v("订单时间 " + _vm._$g(28, "t0-0") + "\\n\\n")
-              ]),
-              _c("v-uni-text", { attrs: { _i: 29 } }, [
-                _vm._v("订单号 " + _vm._$g(29, "t0-0") + "\\n\\n")
-              ]),
-              _c("v-uni-text", { attrs: { _i: 30 } }, [
-                _vm._v("价钱 " + _vm._$g(30, "t0-0") + "\\n\\n")
-              ]),
-              _c("v-uni-text", { attrs: { _i: 31 } }, [
-                _vm._v("订单状态 " + _vm._$g(31, "t0-0") + "\\n\\n")
-              ])
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _c("u-toast", { ref: "uToast", attrs: { _i: 32 } })
+      _c("u-toast", { ref: "uToast", attrs: { _i: 23 } })
     ],
     1
   )
@@ -19855,7 +19761,7 @@ var render = function() {
                 model: {
                   value: _vm._$g(9, "v-model"),
                   callback: function() {},
-                  expression: "addressInfo.address"
+                  expression: "addressInfo.province"
                 }
               })
             ],
@@ -19865,11 +19771,86 @@ var render = function() {
             "u-form-item",
             { attrs: { _i: 10 } },
             [
-              _c("u-switch", {
+              _c("u--input", {
                 attrs: { _i: 11 },
-                slot: "right",
                 model: {
                   value: _vm._$g(11, "v-model"),
+                  callback: function() {},
+                  expression: "addressInfo.city"
+                }
+              })
+            ],
+            1
+          ),
+          _c(
+            "u-form-item",
+            { attrs: { _i: 12 } },
+            [
+              _c("u--input", {
+                attrs: { _i: 13 },
+                model: {
+                  value: _vm._$g(13, "v-model"),
+                  callback: function() {},
+                  expression: "addressInfo.region"
+                }
+              })
+            ],
+            1
+          ),
+          _c(
+            "u-form-item",
+            { attrs: { _i: 14 } },
+            [
+              _c("u--input", {
+                attrs: { _i: 15 },
+                model: {
+                  value: _vm._$g(15, "v-model"),
+                  callback: function() {},
+                  expression: "addressInfo.address"
+                }
+              })
+            ],
+            1
+          ),
+          _c(
+            "u-form-item",
+            { attrs: { _i: 16 } },
+            [
+              _c("u--input", {
+                attrs: { _i: 17 },
+                model: {
+                  value: _vm._$g(17, "v-model"),
+                  callback: function() {},
+                  expression: "addressInfo.postCode"
+                }
+              })
+            ],
+            1
+          ),
+          _c(
+            "u-form-item",
+            { attrs: { _i: 18 } },
+            [
+              _c("u--input", {
+                attrs: { _i: 19 },
+                model: {
+                  value: _vm._$g(19, "v-model"),
+                  callback: function() {},
+                  expression: "addressInfo.areacode"
+                }
+              })
+            ],
+            1
+          ),
+          _c(
+            "u-form-item",
+            { attrs: { _i: 20 } },
+            [
+              _c("u-switch", {
+                attrs: { _i: 21 },
+                slot: "right",
+                model: {
+                  value: _vm._$g(21, "v-model"),
                   callback: function() {},
                   expression: "value"
                 }
@@ -19878,7 +19859,7 @@ var render = function() {
             1
           ),
           _c("u-button", {
-            attrs: { _i: 12 },
+            attrs: { _i: 22 },
             on: {
               click: function($event) {
                 return _vm.$handleViewEvent($event)
@@ -20875,8 +20856,8 @@ try {
     uAvatar: __webpack_require__(/*! uview-ui/components/u-avatar/u-avatar.vue */ 200).default,
     "u-Input": __webpack_require__(/*! uview-ui/components/u--input/u--input.vue */ 431).default,
     uButton: __webpack_require__(/*! uview-ui/components/u-button/u-button.vue */ 253).default,
-    uPopup: __webpack_require__(/*! uview-ui/components/u-popup/u-popup.vue */ 264).default,
-    uToast: __webpack_require__(/*! uview-ui/components/u-toast/u-toast.vue */ 356).default
+    uToast: __webpack_require__(/*! uview-ui/components/u-toast/u-toast.vue */ 356).default,
+    uPopup: __webpack_require__(/*! uview-ui/components/u-popup/u-popup.vue */ 264).default
   }
 } catch (e) {
   if (
@@ -20959,9 +20940,14 @@ var render = function() {
             "u-form-item",
             { attrs: { _i: 12 } },
             [
-              _c("v-uni-text", { attrs: { _i: 13 } }, [
-                _vm._v(_vm._$g(13, "t0-0"))
-              ])
+              _c("u--input", {
+                attrs: { _i: 13 },
+                model: {
+                  value: _vm._$g(13, "v-model"),
+                  callback: function() {},
+                  expression: "userInfo.mail"
+                }
+              })
             ],
             1
           ),
@@ -20974,14 +20960,34 @@ var render = function() {
                 model: {
                   value: _vm._$g(15, "v-model"),
                   callback: function() {},
-                  expression: "userInfo.mail"
+                  expression: "userInfo.city"
                 }
               })
             ],
             1
           ),
+          _c(
+            "u-form-item",
+            { attrs: { _i: 16 } },
+            [
+              _c("v-uni-text", { attrs: { _i: 17 } }, [
+                _vm._v("Level." + _vm._$g(17, "t0-0"))
+              ])
+            ],
+            1
+          ),
+          _c(
+            "u-form-item",
+            { attrs: { _i: 18 } },
+            [
+              _c("v-uni-text", { attrs: { _i: 19 } }, [
+                _vm._v(_vm._$g(19, "t0-0"))
+              ])
+            ],
+            1
+          ),
           _c("u-button", {
-            attrs: { _i: 16 },
+            attrs: { _i: 20 },
             on: {
               click: function($event) {
                 return _vm.$handleViewEvent($event)
@@ -20989,7 +20995,7 @@ var render = function() {
             }
           }),
           _c("u-button", {
-            attrs: { _i: 17 },
+            attrs: { _i: 21 },
             on: {
               click: function($event) {
                 return _vm.$handleViewEvent($event)
@@ -20999,10 +21005,11 @@ var render = function() {
         ],
         1
       ),
+      _c("u-toast", { ref: "uToast", attrs: { _i: 22 } }),
       _c(
         "u-popup",
         {
-          attrs: { _i: 18 },
+          attrs: { _i: 23 },
           on: {
             close: function($event) {
               return _vm.$handleViewEvent($event)
@@ -21017,18 +21024,18 @@ var render = function() {
             "uni-view",
             {
               staticStyle: { height: "50vh", width: "45vh" },
-              attrs: { _i: 19 }
+              attrs: { _i: 24 }
             },
             [
               _c(
                 "u--form",
-                { staticStyle: { margin: "25px" }, attrs: { _i: 20 } },
+                { staticStyle: { margin: "25px" }, attrs: { _i: 25 } },
                 [
                   _c(
                     "u-form-item",
-                    { attrs: { _i: 21 } },
+                    { attrs: { _i: 26 } },
                     [
-                      _c("v-uni-text", { attrs: { _i: 22 } }, [
+                      _c("v-uni-text", { attrs: { _i: 27 } }, [
                         _vm._v("修改密码")
                       ])
                     ],
@@ -21036,12 +21043,12 @@ var render = function() {
                   ),
                   _c(
                     "u-form-item",
-                    { attrs: { _i: 23 } },
+                    { attrs: { _i: 28 } },
                     [
                       _c("u--input", {
-                        attrs: { _i: 24 },
+                        attrs: { _i: 29 },
                         model: {
-                          value: _vm._$g(24, "v-model"),
+                          value: _vm._$g(29, "v-model"),
                           callback: function() {},
                           expression: "password.old"
                         }
@@ -21051,12 +21058,12 @@ var render = function() {
                   ),
                   _c(
                     "u-form-item",
-                    { attrs: { _i: 25 } },
+                    { attrs: { _i: 30 } },
                     [
                       _c("u--input", {
-                        attrs: { _i: 26 },
+                        attrs: { _i: 31 },
                         model: {
-                          value: _vm._$g(26, "v-model"),
+                          value: _vm._$g(31, "v-model"),
                           callback: function() {},
                           expression: "password.new"
                         }
@@ -21068,7 +21075,7 @@ var render = function() {
                 1
               ),
               _c("u-button", {
-                attrs: { _i: 27 },
+                attrs: { _i: 32 },
                 on: {
                   click: function($event) {
                     return _vm.$handleViewEvent($event)
@@ -21078,7 +21085,7 @@ var render = function() {
             ],
             1
           ),
-          _c("u-toast", { ref: "uToast", attrs: { _i: 28 } })
+          _c("u-toast", { ref: "uToast", attrs: { _i: 33 } })
         ],
         1
       )
@@ -22089,20 +22096,25 @@ var render = function() {
           }
         }
       }),
-      _vm._l(5, function(i, $10, $20, $30) {
+      _vm._l(_vm._$g(4, "f"), function(item, index, $20, $30) {
         return _c(
           "uni-view",
-          { attrs: { _i: "4-" + $30 } },
+          { key: item, attrs: { _i: "4-" + $30 } },
           [
             _c(
               "uni-card",
               {
                 staticStyle: { margin: "5px", "background-color": "#fff7fc" },
-                attrs: { _i: "5-" + $30 }
+                attrs: { _i: "5-" + $30 },
+                on: {
+                  click: function($event) {
+                    return _vm.$handleViewEvent($event)
+                  }
+                }
               },
               [
                 _c("v-uni-text", { attrs: { _i: "6-" + $30 } }, [
-                  _vm._v("旺角大学城店")
+                  _vm._v("订单编号 " + _vm._$g("6-" + $30, "t0-0"))
                 ]),
                 _c(
                   "v-uni-text",
@@ -22110,12 +22122,17 @@ var render = function() {
                     staticStyle: { float: "right", color: "#f56c6c" },
                     attrs: { _i: "7-" + $30 }
                   },
-                  [_vm._v("待收货")]
+                  [_vm._v(_vm._$g("7-" + $30, "t0-0"))]
                 ),
-                _vm._l(3, function(i, $11, $21, $31) {
+                _vm._l(_vm._$g(8 + "-" + $30, "f"), function(
+                  item,
+                  index,
+                  $21,
+                  $31
+                ) {
                   return _c(
                     "u-cell",
-                    { attrs: { _i: "8-" + $30 + "-" + $31 } },
+                    { key: item, attrs: { _i: "8-" + $30 + "-" + $31 } },
                     [
                       _c("v-uni-image", {
                         staticStyle: { width: "120rpx", height: "120rpx" },
@@ -22131,19 +22148,33 @@ var render = function() {
                         "v-uni-text",
                         {
                           staticStyle: {
-                            "padding-bottom": "50rpx",
+                            "padding-bottom": "30rpx",
                             "margin-left": "10rpx"
                           },
                           attrs: { slot: "title", _i: "10-" + $30 + "-" + $31 },
                           slot: "title"
                         },
-                        [_vm._v("测试商品测试商品")]
+                        [_vm._v(_vm._$g("10-" + $30 + "-" + $31, "t0-0"))]
+                      ),
+                      _c(
+                        "v-uni-text",
+                        {
+                          staticStyle: {
+                            "font-size": "small",
+                            color: "#6a6a6a",
+                            "padding-bottom": "10rpx",
+                            "margin-left": "10rpx"
+                          },
+                          attrs: { slot: "title", _i: "11-" + $30 + "-" + $31 },
+                          slot: "title"
+                        },
+                        [_vm._v(_vm._$g("11-" + $30 + "-" + $31, "t0-0"))]
                       ),
                       _c(
                         "uni-view",
                         {
                           staticStyle: { "padding-bottom": "20rpx" },
-                          attrs: { slot: "value", _i: "11-" + $30 + "-" + $31 },
+                          attrs: { slot: "value", _i: "12-" + $30 + "-" + $31 },
                           slot: "value"
                         },
                         [
@@ -22151,9 +22182,15 @@ var render = function() {
                             "v-uni-text",
                             {
                               staticStyle: { color: "#ffb300" },
-                              attrs: { _i: "12-" + $30 + "-" + $31 }
+                              attrs: { _i: "13-" + $30 + "-" + $31 }
                             },
-                            [_vm._v("¥6.99\\n")]
+                            [
+                              _vm._v(
+                                "¥" +
+                                  _vm._$g("13-" + $30 + "-" + $31, "t0-0") +
+                                  "\\n"
+                              )
+                            ]
                           ),
                           _c(
                             "v-uni-text",
@@ -22163,9 +22200,13 @@ var render = function() {
                                 color: "gray",
                                 "font-size": "small"
                               },
-                              attrs: { _i: "13-" + $30 + "-" + $31 }
+                              attrs: { _i: "14-" + $30 + "-" + $31 }
                             },
-                            [_vm._v("x3")]
+                            [
+                              _vm._v(
+                                "x" + _vm._$g("14-" + $30 + "-" + $31, "t0-0")
+                              )
+                            ]
                           )
                         ],
                         1
@@ -22178,7 +22219,7 @@ var render = function() {
                   "uni-view",
                   {
                     staticStyle: { width: "40%", float: "right" },
-                    attrs: { _i: "14-" + $30 }
+                    attrs: { _i: "15-" + $30 }
                   },
                   [
                     _c(
@@ -22190,9 +22231,9 @@ var render = function() {
                           "font-weight": "bold",
                           "font-size": "medium"
                         },
-                        attrs: { _i: "15-" + $30 }
+                        attrs: { _i: "16-" + $30 }
                       },
-                      [_vm._v("实付款¥99.99")]
+                      [_vm._v("实付款¥" + _vm._$g("16-" + $30, "t0-0"))]
                     ),
                     _c("u-button", {
                       staticStyle: {
@@ -22200,7 +22241,12 @@ var render = function() {
                         "margin-bottom": "20rpx",
                         "background-color": "#fff7fc"
                       },
-                      attrs: { _i: "16-" + $30 }
+                      attrs: { _i: "17-" + $30 },
+                      on: {
+                        click: function($event) {
+                          return _vm.$handleViewEvent($event)
+                        }
+                      }
                     })
                   ],
                   1
@@ -22422,203 +22468,291 @@ var render = function() {
     [
       _c("u-navbar", { attrs: { _i: 1 } }),
       _c("u-gap", { attrs: { _i: 2 } }),
-      _c(
-        "uni-card",
-        {
-          staticStyle: {
-            margin: "5px",
-            "margin-bottom": "150rpx",
-            "background-color": "#fff7fc"
-          },
-          attrs: { _i: 3 }
-        },
-        [
-          _c("v-uni-text", { attrs: { _i: 4 } }, [_vm._v("旺角大学城店")]),
-          _c(
-            "v-uni-text",
-            {
-              staticStyle: { float: "right", color: "#f56c6c" },
-              attrs: { _i: 5 }
-            },
-            [_vm._v("待收货")]
-          ),
-          _vm._l(3, function(i, $10, $20, $30) {
-            return _c(
-              "u-cell",
-              { attrs: { _i: "6-" + $30 } },
+      _vm._l(_vm._$g(3, "f"), function(item, index, $20, $30) {
+        return _c(
+          "uni-view",
+          { key: item, attrs: { _i: "3-" + $30 } },
+          [
+            _c(
+              "uni-card",
+              {
+                staticStyle: {
+                  margin: "5px",
+                  "margin-bottom": "150rpx",
+                  "background-color": "#fff7fc"
+                },
+                attrs: { _i: "4-" + $30 }
+              },
               [
-                _c("v-uni-image", {
-                  staticStyle: { width: "120rpx", height: "120rpx" },
-                  attrs: {
-                    slot: "icon",
-                    src: _vm._$g("7-" + $30, "a-src"),
-                    mode: "aspectFill",
-                    _i: "7-" + $30
-                  },
-                  slot: "icon"
-                }),
                 _c(
                   "v-uni-text",
                   {
-                    staticStyle: {
-                      "padding-bottom": "50rpx",
-                      "margin-left": "10rpx"
-                    },
-                    attrs: { slot: "title", _i: "8-" + $30 },
-                    slot: "title"
+                    staticStyle: { float: "right", color: "#f56c6c" },
+                    attrs: { _i: "5-" + $30 }
                   },
-                  [_vm._v("测试商品测试商品")]
+                  [_vm._v(_vm._$g("5-" + $30, "t0-0"))]
                 ),
+                _vm._l(_vm._$g(6 + "-" + $30, "f"), function(
+                  item,
+                  index,
+                  $21,
+                  $31
+                ) {
+                  return _c(
+                    "u-cell",
+                    { key: item, attrs: { _i: "6-" + $30 + "-" + $31 } },
+                    [
+                      _c("v-uni-image", {
+                        staticStyle: { width: "120rpx", height: "120rpx" },
+                        attrs: {
+                          slot: "icon",
+                          src: _vm._$g("7-" + $30 + "-" + $31, "a-src"),
+                          mode: "aspectFill",
+                          _i: "7-" + $30 + "-" + $31
+                        },
+                        slot: "icon"
+                      }),
+                      _c(
+                        "v-uni-text",
+                        {
+                          staticStyle: {
+                            "padding-bottom": "30rpx",
+                            "margin-left": "10rpx"
+                          },
+                          attrs: { slot: "title", _i: "8-" + $30 + "-" + $31 },
+                          slot: "title"
+                        },
+                        [_vm._v(_vm._$g("8-" + $30 + "-" + $31, "t0-0"))]
+                      ),
+                      _c(
+                        "v-uni-text",
+                        {
+                          staticStyle: {
+                            "font-size": "small",
+                            color: "#6a6a6a",
+                            "padding-bottom": "10rpx",
+                            "margin-left": "10rpx"
+                          },
+                          attrs: { slot: "title", _i: "9-" + $30 + "-" + $31 },
+                          slot: "title"
+                        },
+                        [_vm._v(_vm._$g("9-" + $30 + "-" + $31, "t0-0"))]
+                      ),
+                      _c(
+                        "uni-view",
+                        {
+                          staticStyle: { "padding-bottom": "20rpx" },
+                          attrs: { slot: "value", _i: "10-" + $30 + "-" + $31 },
+                          slot: "value"
+                        },
+                        [
+                          _c(
+                            "v-uni-text",
+                            {
+                              staticStyle: { color: "#ffb300" },
+                              attrs: { _i: "11-" + $30 + "-" + $31 }
+                            },
+                            [
+                              _vm._v(
+                                "¥" +
+                                  _vm._$g("11-" + $30 + "-" + $31, "t0-0") +
+                                  "\\n"
+                              )
+                            ]
+                          ),
+                          _c(
+                            "v-uni-text",
+                            {
+                              staticStyle: {
+                                "padding-left": "40rpx",
+                                color: "gray",
+                                "font-size": "small"
+                              },
+                              attrs: { _i: "12-" + $30 + "-" + $31 }
+                            },
+                            [
+                              _vm._v(
+                                "x" + _vm._$g("12-" + $30 + "-" + $31, "t0-0")
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                }),
                 _c(
                   "uni-view",
                   {
-                    staticStyle: { "padding-bottom": "20rpx" },
-                    attrs: { slot: "value", _i: "9-" + $30 },
-                    slot: "value"
+                    staticStyle: {
+                      width: "100%",
+                      float: "right",
+                      margin: "10rpx"
+                    },
+                    attrs: { _i: "13-" + $30 }
                   },
                   [
                     _c(
                       "v-uni-text",
                       {
-                        staticStyle: { color: "#ffb300" },
-                        attrs: { _i: "10-" + $30 }
+                        staticStyle: {
+                          float: "left",
+                          padding: "10rpx",
+                          "font-weight": "bold",
+                          "font-size": "medium"
+                        },
+                        attrs: { _i: "14-" + $30 }
                       },
-                      [_vm._v("¥6.99\\n")]
+                      [_vm._v("实付款")]
                     ),
                     _c(
                       "v-uni-text",
                       {
                         staticStyle: {
-                          "padding-left": "40rpx",
-                          color: "gray",
-                          "font-size": "small"
+                          float: "right",
+                          padding: "10rpx",
+                          "font-weight": "bold",
+                          "font-size": "medium",
+                          color: "#f56c6c"
                         },
-                        attrs: { _i: "11-" + $30 }
+                        attrs: { _i: "15-" + $30 }
                       },
-                      [_vm._v("x3")]
+                      [_vm._v("¥" + _vm._$g("15-" + $30, "t0-0"))]
+                    )
+                  ],
+                  1
+                ),
+                _c(
+                  "uni-view",
+                  {
+                    staticStyle: {
+                      width: "100%",
+                      float: "right",
+                      margin: "10rpx"
+                    },
+                    attrs: { _i: "16-" + $30 }
+                  },
+                  [
+                    _c(
+                      "v-uni-text",
+                      {
+                        staticStyle: {
+                          float: "left",
+                          padding: "10rpx",
+                          "font-weight": "bold",
+                          "font-size": "medium"
+                        },
+                        attrs: { _i: "17-" + $30 }
+                      },
+                      [_vm._v("收货信息:")]
+                    ),
+                    _c(
+                      "v-uni-text",
+                      {
+                        staticStyle: { width: "60%", float: "right" },
+                        attrs: { _i: "18-" + $30 }
+                      },
+                      [
+                        _vm._v(
+                          _vm._$g("18-" + $30, "t0-0") +
+                            "，" +
+                            _vm._$g("18-" + $30, "t0-1") +
+                            "，" +
+                            _vm._$g("18-" + $30, "t0-2")
+                        )
+                      ]
+                    )
+                  ],
+                  1
+                ),
+                _c(
+                  "uni-view",
+                  {
+                    staticStyle: {
+                      width: "100%",
+                      float: "right",
+                      margin: "10rpx"
+                    },
+                    attrs: { _i: "19-" + $30 }
+                  },
+                  [
+                    _c(
+                      "v-uni-text",
+                      {
+                        staticStyle: {
+                          float: "left",
+                          padding: "10rpx",
+                          "font-weight": "bold",
+                          "font-size": "medium"
+                        },
+                        attrs: { _i: "20-" + $30 }
+                      },
+                      [_vm._v("订单编号:")]
+                    ),
+                    _c(
+                      "v-uni-text",
+                      {
+                        staticStyle: { float: "right", padding: "10rpx" },
+                        attrs: { _i: "21-" + $30 }
+                      },
+                      [_vm._v(_vm._$g("21-" + $30, "t0-0"))]
+                    )
+                  ],
+                  1
+                ),
+                _c(
+                  "uni-view",
+                  {
+                    staticStyle: {
+                      width: "100%",
+                      float: "right",
+                      margin: "10rpx"
+                    },
+                    attrs: { _i: "22-" + $30 }
+                  },
+                  [
+                    _c(
+                      "v-uni-text",
+                      {
+                        staticStyle: {
+                          float: "left",
+                          padding: "10rpx",
+                          "font-weight": "bold",
+                          "font-size": "medium"
+                        },
+                        attrs: { _i: "23-" + $30 }
+                      },
+                      [_vm._v("下单时间:")]
+                    ),
+                    _c(
+                      "v-uni-text",
+                      {
+                        staticStyle: { float: "right", padding: "10rpx" },
+                        attrs: { _i: "24-" + $30 }
+                      },
+                      [_vm._v(_vm._$g("24-" + $30, "t0-0"))]
                     )
                   ],
                   1
                 )
               ],
-              1
+              2
             )
-          }),
-          _c(
-            "uni-view",
-            {
-              staticStyle: { width: "100%", float: "right", margin: "10rpx" },
-              attrs: { _i: 12 }
-            },
-            [
-              _c(
-                "v-uni-text",
-                {
-                  staticStyle: {
-                    float: "left",
-                    padding: "10rpx",
-                    "font-weight": "bold",
-                    "font-size": "medium"
-                  },
-                  attrs: { _i: 13 }
-                },
-                [_vm._v("实付款")]
-              ),
-              _c(
-                "v-uni-text",
-                {
-                  staticStyle: {
-                    float: "right",
-                    padding: "10rpx",
-                    "font-weight": "bold",
-                    "font-size": "medium",
-                    color: "#f56c6c"
-                  },
-                  attrs: { _i: 14 }
-                },
-                [_vm._v("¥99.99")]
-              )
-            ],
-            1
-          ),
-          _c(
-            "uni-view",
-            {
-              staticStyle: { width: "100%", float: "right", margin: "10rpx" },
-              attrs: { _i: 15 }
-            },
-            [
-              _c(
-                "v-uni-text",
-                {
-                  staticStyle: {
-                    float: "left",
-                    padding: "10rpx",
-                    "font-weight": "bold",
-                    "font-size": "medium"
-                  },
-                  attrs: { _i: 16 }
-                },
-                [_vm._v("收货信息:")]
-              ),
-              _c(
-                "v-uni-text",
-                {
-                  staticStyle: { width: "60%", float: "right" },
-                  attrs: { _i: 17 }
-                },
-                [
-                  _vm._v(
-                    "李先生，12345678901，福建省厦门市集美区后溪镇厦门理工学院学生公寓1期"
-                  )
-                ]
-              )
-            ],
-            1
-          ),
-          _c(
-            "uni-view",
-            {
-              staticStyle: { width: "100%", float: "right", margin: "10rpx" },
-              attrs: { _i: 18 }
-            },
-            [
-              _c(
-                "v-uni-text",
-                {
-                  staticStyle: {
-                    float: "left",
-                    padding: "10rpx",
-                    "font-weight": "bold",
-                    "font-size": "medium"
-                  },
-                  attrs: { _i: 19 }
-                },
-                [_vm._v("订单编号:")]
-              ),
-              _c(
-                "v-uni-text",
-                {
-                  staticStyle: { float: "right", padding: "10rpx" },
-                  attrs: { _i: 20 }
-                },
-                [_vm._v("12345678987654321")]
-              )
-            ],
-            1
-          )
-        ],
-        2
-      ),
+          ],
+          1
+        )
+      }),
       _c(
         "u-tabbar",
-        { attrs: { _i: 21 } },
+        { attrs: { _i: 25 } },
         [
           _c(
             "uni-view",
             {
               staticStyle: { width: "100%", "background-color": "#fff7fc" },
-              attrs: { _i: 22 }
+              attrs: { _i: 26 }
             },
             [
               _c("u-button", {
@@ -22628,7 +22762,7 @@ var render = function() {
                   float: "right",
                   "background-color": "#fff7fc"
                 },
-                attrs: { _i: 23 }
+                attrs: { _i: 27 }
               })
             ],
             1
@@ -22637,7 +22771,7 @@ var render = function() {
         1
       )
     ],
-    1
+    2
   )
 }
 var recyclableRender = false

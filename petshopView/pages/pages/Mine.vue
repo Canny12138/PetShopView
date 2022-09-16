@@ -87,7 +87,9 @@
 		// },
 		methods: {
 			click(name) {
-
+				uni.navigateTo({
+					url: "pages/Order",
+				});
 			},
 			click2(name) {
 				// console.log(this.baseList2)
