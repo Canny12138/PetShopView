@@ -9,9 +9,9 @@
 			<u-button @click="login" text="登录" color="#ffadb1"></u-button>
 			<u-gap height="5"></u-gap>
 			<u-button @click="register" text="注册" color="#ffc4c5"></u-button>
-			<u-button @click="setStorage" text="setStorage" color="#ffadb1"></u-button>
+<!-- 			<u-button @click="setStorage" text="setStorage" color="#ffadb1"></u-button>
 			<u-button @click="getStorage" text="getStorage" color="#ffadb1"></u-button>
-			<u-button @click="removeStorage" text="removeStorage" color="#ffadb1"></u-button>
+			<u-button @click="removeStorage" text="removeStorage" color="#ffadb1"></u-button> -->
 		</view>
 		<u-toast ref="uToast"></u-toast>
 	</view>
@@ -58,9 +58,19 @@
 									nickname: res.data.data.nickname,
 									token: res.data.data.token,
 									memberId: res.data.data.memberId,
+									level: res.data.data.level,
 								},
 								success() {
 									console.log('储存成功');
+								}
+							});
+							uni.setStorage({
+								key: "wallet",
+								data: {
+									money: 2000,
+								},
+								success() {
+									console.log('储存钱包成功');
 								}
 							});
 							this.toastParams.type = "success";
@@ -100,9 +110,19 @@
 									nickname: "default",
 									token: res.data.data.token,
 									memberId: res.data.data.memberId,
+									level: res.data.data.level,
 								},
 								success() {
 									console.log('储存成功');
+								}
+							});
+							uni.setStorage({
+								key: "wallet",
+								data: {
+									money: 2000,
+								},
+								success() {
+									console.log('储存钱包成功');
 								}
 							});
 							this.toastParams.type = "success";

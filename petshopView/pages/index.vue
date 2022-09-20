@@ -5,7 +5,7 @@
 		<u-tabbar :list="tabbar" v-model="current" @change="changeTb" :placeholder="false" :fixed="true"
 			:safeAreaInsetBottom="true" activeColor="#fff7fc" inactiveColor="#ff5558" z-index="100"
 			style="background-color: #ffadb1;">
-			<u-tabbar-item text="HOME" icon="home"></u-tabbar-item>
+			<u-tabbar-item text="主页" icon="home"></u-tabbar-item>
 			<u-tabbar-item text="商品" icon="photo"></u-tabbar-item>
 			<u-tabbar-item text="购物车" icon="photo"></u-tabbar-item>
 			<u-tabbar-item text="我的" icon="photo"></u-tabbar-item>

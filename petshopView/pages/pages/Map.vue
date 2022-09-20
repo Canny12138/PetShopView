@@ -63,12 +63,21 @@
 				imgUrl: "http://150.158.85.93:88/img/Pet Store.png",
 			}
 		},
-		mounted() {
+		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
+			console.log(option.storeName); //打印出上个页面传递的参数。
+			// console.log(option.name); //打印出上个页面传递的参数。
+			this.curStore = option.storeName;
 			this.getMap();
 			this.getStorage();
 			this.firstLoad();
 			this._freshing = false;
 		},
+		// mounted() {
+		// 	this.getMap();
+		// 	this.getStorage();
+		// 	this.firstLoad();
+		// 	this._freshing = false;
+		// },
 		methods: {
 			getMap() {
 				uni.request({
@@ -120,6 +129,8 @@
 								rank: res.data.data.list[j].rank,
 							});
 						}
+						this.latitude = res.data.data.list[0].latitude;
+						this.longitude = res.data.data.list[0].longitude;
 						this.status = "nomore";
 						this.isLoad = false;
 					}),

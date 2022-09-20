@@ -25,9 +25,9 @@
 				</view>
 				<view style="width: 40%; float: right">
 					<text
-						style="float: right; padding: 10rpx; font-weight: bold; font-size: medium;">实付款¥{{item.price}}</text>
-					<u-button type="error" @click="clickButton(item.orderStatus, item.orderId)" :plain="true"
-						:text="getStatusButton(item.orderStatus)" shape="circle"
+						style="float: right; padding: 10rpx; font-weight: bold; font-size: medium;">实付款¥{{item.price.toFixed(2)}}</text>
+					<u-button type="error" @click="clickButton(item.orderStatus, item.orderId, item.price)"
+						:plain="true" :text="getStatusButton(item.orderStatus)" shape="circle"
 						style="margin-top: 10rpx; margin-bottom: 20rpx; background-color: #fff7fc; ">
 					</u-button>
 				</view>
@@ -59,7 +59,8 @@
 				// 或者如下，也可以配置keyName参数修改对象键名
 				// list: [{name: '未付款'}, {name: '待评价'}, {name: '已付款'}],
 				token: "",
-				member: "",
+				memberId: "",
+				money: "",
 				curNow: 0,
 				orderList: [],
 				productList: [],
@@ -68,6 +69,7 @@
 		},
 		mounted() {
 			this.getStorage();
+			this.getWallet();
 			this.getOrder();
 		},
 		methods: {
@@ -115,7 +117,7 @@
 				});
 			},
 			clickOrder(id, status) {
-				console.log(id);
+				console.log(id, status);
 				uni.navigateTo({
 					url: 'OrderPage?id=' + id + '&?status=' + status
 				});
@@ -186,10 +188,11 @@
 						break;
 				}
 			},
-			clickButton(code, id) {
+			clickButton(code, id, price) {
 				switch (code) {
 					case 0:
 						this.changeStatus(id, 1);
+						this.pay(price);
 						break;
 					case 1:
 						this.changeStatus(id, 3);
@@ -257,6 +260,29 @@
 						console.log('获取成功', res);
 					}
 				})
+			},
+			getWallet() {
+				let self = this;
+				uni.getStorage({
+					key: "wallet",
+					success(res) {
+						console.log('获取钱包成功', res);
+						self.money = res.data.money;
+					}
+				})
+			},
+			pay(price) {
+				let self = this;
+				uni.setStorage({
+					key: "wallet",
+					data: {
+						money: self.money - price,
+					},
+					success() {
+						console.log('储存钱包成功');
+						self.getWallet();
+					}
+				});
 			},
 			sectionChange(index) {
 				this.curNow = index;

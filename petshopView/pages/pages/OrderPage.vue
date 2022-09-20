@@ -3,6 +3,11 @@
 		<u-navbar title="订单" bgColor="#ffadb1" :autoBack="true"></u-navbar>
 		<u-gap height="100" bgColor="#fff7fc"></u-gap>
 		<view v-for="(item, index) in orderList" :key="index">
+			<view v-show="item.orderStatus == 0" style="padding-left: 40rpx;">
+				<text style="font-size: 40rpx; font-weight: bold">等待买家付款</text>
+				<u-count-down :time="item.createTime + 300000 - new Date().getTime()" format="HH:mm:ss"
+					style="font-weight: bold"></u-count-down>
+			</view>
 			<uni-card style="margin: 5px; margin-bottom: 150rpx;background-color: #fff7fc">
 				<text style="float: right; color: #f56c6c">{{getOrderStatus(item.orderStatus)}}</text>
 				<u-cell v-for="(item, index) in item.productList" :key="index">
@@ -19,7 +24,7 @@
 				<view style="width: 100%; float: right; margin: 10rpx">
 					<text style="float: left; padding: 10rpx; font-weight: bold; font-size: medium;">实付款</text>
 					<text
-						style="float: right; padding: 10rpx; font-weight: bold; font-size: medium; color: #f56c6c">¥{{item.price}}</text>
+						style="float: right; padding: 10rpx; font-weight: bold; font-size: medium; color: #f56c6c">¥{{item.price.toFixed(2)}}</text>
 				</view>
 				<view style="width: 100%; float: right; margin: 10rpx">
 					<text style="float: left; padding: 10rpx; font-weight: bold; font-size: medium;">收货信息:</text>
@@ -31,13 +36,19 @@
 				</view>
 				<view style="width: 100%; float: right; margin: 10rpx">
 					<text style="float: left; padding: 10rpx; font-weight: bold; font-size: medium;">下单时间:</text>
-					<text style="float: right; padding: 10rpx;">{{item.createTime}}</text>
+					<text
+						style="float: right; padding: 10rpx;">{{$u.timeFormat(item.createTime, 'yyyy-mm-dd hh:MM:ss')}}</text>
 				</view>
 			</uni-card>
 		</view>
 		<u-tabbar :fixed="true" :placeholder="true" :safeAreaInsetBottom="true">
 			<view style="width: 100%; background-color: #fff7fc">
-				<u-button type="error" :plain="true" :text="getStatusButton(1)" shape="circle"
+				<u-button type="error" @click="clickButton(orderStatus, orderId, price)" :plain="true"
+					:text="getStatusButton(this.orderStatus)" shape="circle"
+					style="margin-right: 20rpx; width: 30%; float: right; background-color: #fff7fc;">
+				</u-button>
+				<u-button type="error" @click="changeStatus(orderId, -2)"
+					v-show="this.orderStatus > 0 && this.orderStatus < 4" :plain="true" text="申请退款" shape="circle"
 					style="margin-right: 20rpx; width: 30%; float: right; background-color: #fff7fc; ">
 				</u-button>
 			</view>
@@ -54,19 +65,24 @@
 				// 或者如下，也可以配置keyName参数修改对象键名
 				// list: [{name: '未付款'}, {name: '待评价'}, {name: '已付款'}],
 				token: "",
-				member: "",
+				memberId: "",
+				money: "",
 				curNow: 0,
 				orderList: [],
 				productList: [],
 				orderStatus: "",
 				orderId: 1000017,
+				price: "",
 			}
 		},
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
 			console.log(option.id); //打印出上个页面传递的参数。
 			// console.log(option.name); //打印出上个页面传递的参数。
 			this.getStorage();
+			this.getWallet();
 			this.orderId = option.id;
+			// this.orderStatus = option.status;
+			// console.log(this.orderId);
 			this.getOrder();
 		},
 		// mounted() {
@@ -75,7 +91,6 @@
 		// },
 		methods: {
 			getOrder() {
-				this.orderStatus = "";
 				if (this.curNow != 0) this.orderStatus = this.curNow - 1;
 				uni.request({
 					url: this.$baseUrl + '/product/orderOV/getOrder',
@@ -83,7 +98,6 @@
 					data: {
 						page: 1,
 						limit: 100,
-						orderStatus: this.orderStatus,
 						memberId: this.memberId,
 						order: "desc",
 						orderField: "id",
@@ -119,6 +133,8 @@
 							name: res.data.data.list[0].receiveAddress.name,
 							phone: res.data.data.list[0].receiveAddress.phone,
 						});
+						this.orderStatus = res.data.data.list[0].orderStatus;
+						this.price = res.data.data.list[0].price;
 						console.log(this.orderList);
 					}),
 				});
@@ -171,7 +187,7 @@
 						return "去评价";
 						break;
 					case 4:
-						return "已完成";
+						return "查看评价";
 						break;
 					case -1:
 						return "删除订单";
@@ -189,10 +205,11 @@
 						break;
 				}
 			},
-			clickButton(code, id) {
+			clickButton(code, id, price) {
 				switch (code) {
 					case 0:
 						this.changeStatus(id, 1);
+						this.pay(price);
 						break;
 					case 1:
 						this.changeStatus(id, 3);
@@ -204,7 +221,7 @@
 						this.toScore(id);
 						break;
 					case 4:
-						return "查看评价";
+						this.toScorePage(id);
 						break;
 					case -1:
 						return "删除订单";
@@ -238,6 +255,18 @@
 					})
 				})
 			},
+			toScore(id) {
+				console.log(id);
+				uni.navigateTo({
+					url: 'ScoreEdit?id=' + id
+				});
+			},
+			toScorePage(id) {
+				console.log(id);
+				uni.navigateTo({
+					url: 'ScorePage?id=' + id
+				});
+			},
 			getStorage() {
 				let self = this;
 				uni.getStorage({
@@ -248,6 +277,29 @@
 						console.log('获取成功', res);
 					}
 				})
+			},
+			getWallet() {
+				let self = this;
+				uni.getStorage({
+					key: "wallet",
+					success(res) {
+						console.log('获取钱包成功', res);
+						self.money = res.data.money;
+					}
+				})
+			},
+			pay(price) {
+				let self = this;
+				uni.setStorage({
+					key: "wallet",
+					data: {
+						money: self.money - price,
+					},
+					success() {
+						console.log('储存钱包成功');
+						self.getWallet();
+					}
+				});
 			},
 			sectionChange(index) {
 				this.curNow = index;

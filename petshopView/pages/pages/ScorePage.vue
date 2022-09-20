@@ -3,7 +3,7 @@
 		<u-navbar title="评价" bgColor="#ffadb1" :autoBack="true"></u-navbar>
 		<u-gap height="44" bgColor="#bbb"></u-gap>
 		<view style="margin: 30rpx;">
-			<u--textarea v-model="value" placeholder="请输入您的评价" confirmType="done" count
+			<u--textarea v-model="value" placeholder="请输入您的评价" confirmType="done" disabled count
 				style="background-color: #fff7fc">
 			</u--textarea>
 			<u-gap height="20" bgColor="#fff7fc"></u-gap>

@@ -11,7 +11,7 @@
 					<u-icon name="star-fill" color="#ffbc10" v-for="index of store.rank" :key="index"
 						style="float: left;"></u-icon>
 				</view>
-				<text style="text-decoration: underline;">\n地址：{{store.address}}\n\n</text>
+				<text @click="toMap()" style="text-decoration: underline;">\n地址：{{store.address}}\n\n</text>
 				<text>{{store.info}}</text>
 			</view>
 		</uni-card>
@@ -201,6 +201,12 @@
 			scroll(e) {
 				// console.log(e);
 				this.showBackTop = true;
+			},
+			toMap() {
+				console.log(this.store.storeName);
+				uni.navigateTo({
+					url: 'Map?storeName=' + this.store.storeName
+				});
 			},
 			firstLoad() {
 				uni.request({

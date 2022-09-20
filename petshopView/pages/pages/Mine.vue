@@ -5,9 +5,24 @@
 		<u-gap height="40"></u-gap>
 		<u-avatar :text="nickname" fontSize="20" size="70" randomBgColor style="float: left; margin-left: 10px;">
 		</u-avatar>
-		<view style="font-weight: bold; padding-top: 30px; padding-left: 100px; padding-bottom: 30px; font-size: 20px;">
-			{{nickname}}
+		<view style="padding-top: 30px; padding-left: 100px; padding-bottom: 30px;">
+			<text style="font-weight: bold; font-size: 20px;">{{nickname}}</text>
+			<text style="margin-left: 20rpx;">Lv.{{this.level}}</text>
 		</view>
+		<uni-card style="margin: 15px; background-color: #fff7fc">
+			<u-grid :border="false" col="2">
+				<u-grid-item>
+					<u-icon name="red-packet" size="30"></u-icon>
+					<text>余额</text>
+					<text>¥{{this.money}}</text>
+				</u-grid-item>
+				<u-grid-item @click="topUp()">
+					<u-icon name="red-packet-fill" size="30"></u-icon>
+					<text>充值</text>
+					<text>\n</text>
+				</u-grid-item>
+			</u-grid>
+		</uni-card>
 		<uni-card style="height:250rpx; margin: 15px; background-color: #fff7fc">
 			<view>我的订单</view>
 			<u-gap height="10"></u-gap>
@@ -39,7 +54,9 @@
 		data() {
 			return {
 				nickname: "未登录",
+				level: "",
 				isLogin: false,
+				money: "",
 				baseList: [{
 						name: 'rmb-circle',
 						title: '待付款'
@@ -81,6 +98,7 @@
 		},
 		mounted() {
 			this.getStorage();
+			this.getWallet();
 		},
 		// updated() {
 		// 	this.getStorage();
@@ -119,8 +137,32 @@
 						console.log('获取成功', res);
 						self.nickname = res.data.nickname;
 						self.isLogin = true;
+						self.level = res.data.level;
 					}
 				})
+			},
+			getWallet() {
+				let self = this;
+				uni.getStorage({
+					key: "wallet",
+					success(res) {
+						console.log('获取钱包成功', res);
+						self.money = res.data.money;
+					}
+				})
+			},
+			topUp() {
+				let self = this;
+				uni.setStorage({
+					key: "wallet",
+					data: {
+						money: self.money + 2000,
+					},
+					success() {
+						console.log('储存钱包成功');
+						self.getWallet();
+					}
+				});
 			},
 			removeStorage() {
 				let self = this;
@@ -129,7 +171,15 @@
 					success() {
 						console.log('删除成功');
 						self.nickname = "未登录";
+						self.level = "";
 						self.isLogin = false;
+					}
+				});
+				uni.removeStorage({
+					key: "wallet",
+					success() {
+						console.log('删除钱包成功');
+						self.money = "";
 					}
 				})
 			},

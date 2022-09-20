@@ -196,12 +196,13 @@
 							icon: 'https://cdn.uviewui.com/uview/menu/11.png',
 							url: 'Recommend'
 						}, {
-							name: '宠物零食',
-							icon: 'https://cdn.uviewui.com/uview/menu/11.png',
-							url: 'Test'
+							name: '特价秒杀',
+							icon: 'https://cdn.uviewui.com/uview/menu/9.png',
+							url: 'Sale'
 						}, {
 							name: '宠物用品',
-							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png',
+							url: 'Test'
 						}, {
 							name: '分类',
 							icon: 'https://cdn.uviewui.com/uview/menu/11.png'

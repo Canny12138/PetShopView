@@ -146,6 +146,13 @@
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "pages/pages/Sale",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
 		}
 	],
 	// "tabBar": {

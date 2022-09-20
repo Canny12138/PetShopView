@@ -226,6 +226,22 @@
 					})
 				});
 			},
+			getDefAddressId() {
+				uni.request({
+					url: this.$baseUrl + '',
+					method: 'GET',
+					data: {
+
+					},
+					header: {
+						token: this.token,
+						"Content-Type": "application/x-www-form-urlencoded",
+					},
+					success: ((res) => {
+
+					}),
+				});
+			},
 			getStorage() {
 				let self = this;
 				uni.getStorage({

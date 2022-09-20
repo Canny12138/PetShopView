@@ -11,8 +11,17 @@
 			</view>
 		</u-swiper>
 		<uni-card style=" margin: 8px; padding-top:10px; background-color: #fff7fc">
-			<text style="color: #ffb300; font-size: 30px;">¥{{goodTemp.price}}</text>
-			<u-gap height="20"></u-gap>
+			<text style="color: #ffb300; font-size: 30px; float: left;">¥{{goodTemp.price}}</text>
+			
+			<view v-show="goodTemp.isSale == 1">
+				<text
+					style="margin-left: 20rpx; text-decoration: line-through; float: left;">原价¥{{goodTemp.priceNoSale}}</text>
+				<text style="margin-left: 20rpx; float: left;">剩余时间:</text>
+				<u-count-down :time="goodTemp.createTime + goodTemp.saleTime - new Date().getTime()" format="HH:mm:ss"
+					style="font-weight: bold; "></u-count-down>
+			</view>
+			
+			<u-gap height="20" style="width: 100%;"></u-gap>
 			<text style="font-size: 20px; font-weight: 600;">{{goodTemp.goodName}}</text>
 			<u-gap height="10"></u-gap>
 			<text @click="clickStore(goodTemp.storeId)"
@@ -54,7 +63,7 @@
 		</uni-card>
 		<view>
 			<u-popup :show="show" @close="close" @open="open">
-				<view style="height: 200px;background-color: #fff7fc;">
+				<view style="height: 200px; background-color: #fff7fc;">
 					<uni-card style="margin:0px; padding: 10px; background-color: #fff7fc">
 						<image slot='cover' :src="goodTemp.img" mode="aspectFill"
 							style="width: 30%; height: 100px; float: left">
@@ -141,6 +150,10 @@
 							type: res.data.data.category,
 							storeId: res.data.data.storeId,
 							stock: res.data.data.stock,
+							isSale: res.data.data.isSale,
+							priceNoSale: res.data.data.priceNoSale,
+							createTime: res.data.data.createTime,
+							saleTime: (res.data.data.saleTime - 16) * 3600000,
 						};
 						this.list1[0] = this.goodTemp.img;
 						console.log(this.goodTemp);

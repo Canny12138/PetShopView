@@ -1,6 +1,6 @@
 <template>
 	<view style="background-color: #fff7fc;">
-		<u-navbar title="商品推荐" :autoBack="true" bgColor="#ffadb1" style="margin-top: 44px;">
+		<u-navbar title="特价商品" :autoBack="true" bgColor="#ffadb1" style="margin-top: 44px;">
 		</u-navbar>
 		<u-search shape="round" style="padding: 15px; padding-top: 5px; background-color: #ffadb1" @custom="toSearch">
 		</u-search>
@@ -16,7 +16,14 @@
 						</image>
 						<view style="width: 60%; float: left; padding-left: 10%;">
 							<text style="font-weight: bold; font-size: 13px;">{{item.goodName}}</text>
-							<text style="color: #ffb300; font-weight: bold; font-size: 15px;">\n¥{{item.price}}\n</text>
+							<text style="color: #ffb300; font-weight: bold; font-size: 15px;">\n¥{{item.price}}</text>
+							<text
+								style="margin-left: 20rpx; text-decoration: line-through;">原价¥{{item.noSalePrice}}</text>
+							<view>
+								<text style="margin-right: 10rpx; float: left;">剩余时间:</text>
+								<u-count-down :time="item.createTime + item.saleTime - new Date().getTime()"
+									format="HH:mm:ss" style="font-weight: bold; "></u-count-down>
+							</view>
 							<text
 								style="background-color: #eee7ec; font-size: 10px; border-radius: 8px; padding: 1px 10px 1px 10px; position: relative;">{{item.storeName}}&nbsp></text>
 						</view>
@@ -60,7 +67,7 @@
 			getGood() {
 				this.status = "loading";
 				uni.request({
-					url: this.$baseUrl + '/product/productOV/getRecommend',
+					url: this.$baseUrl + '/product/productOV/getSale',
 					method: 'GET',
 					data: {
 						limit: 100,
@@ -74,13 +81,16 @@
 					success: ((res) => {
 						console.log(res);
 						this.lineTemp = [];
-						for (let j = 0; j < res.data.data.list.length; j++) {
+						for (let j = 0; j < res.data.data.length; j++) {
 							this.lineTemp.push({
-								goodId: res.data.data.list[j].id,
-								goodName: res.data.data.list[j].productName,
-								storeName: res.data.data.list[j].storeName,
-								price: res.data.data.list[j].price,
-								img: res.data.data.list[j].img,
+								goodId: res.data.data[j].id,
+								goodName: res.data.data[j].productName,
+								storeName: res.data.data[j].storeName,
+								price: res.data.data[j].price,
+								img: res.data.data[j].img,
+								noSalePrice: res.data.data[j].noSalePrice,
+								createTime: res.data.data[j].createTime,
+								saleTime: (res.data.data[j].saleTime - 16) * 3600000,
 							});
 						}
 						this.status = "nomore";
