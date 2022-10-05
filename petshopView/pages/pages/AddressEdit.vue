@@ -121,7 +121,10 @@
 						// if (this.value == 1) {
 						this.setDef();
 						// }
-						uni.navigateBack({})
+						// uni.navigateBack({})
+						uni.navigateTo({
+							url: 'MyAddress'
+						});
 					}),
 				});
 			},
@@ -151,7 +154,10 @@
 						if (this.value == 1) {
 							this.setDef();
 						}
-						uni.navigateBack({})
+						// uni.navigateBack({})
+						uni.navigateTo({
+							url: 'MyAddress'
+						});
 					}),
 				});
 			},

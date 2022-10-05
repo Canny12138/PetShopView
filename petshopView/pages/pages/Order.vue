@@ -33,20 +33,7 @@
 				</view>
 			</uni-card>
 		</view>
-		<!-- 			</swiper-item>
-			<swiper-item style="background-color: #fff7fc;">
-				page1
-			</swiper-item>
-			<swiper-item style="background-color: #fff7fc;">
-				page2
-			</swiper-item>
-			<swiper-item style="background-color: #fff7fc;">
-				page3
-			</swiper-item>
-			<swiper-item style="background-color: #fff7fc;">
-				page4
-			</swiper-item>
-		</swiper> -->
+		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
 
@@ -65,6 +52,10 @@
 				orderList: [],
 				productList: [],
 				orderStatus: "",
+				toastParams: {
+					type: "success",
+					message: "",
+				},
 			}
 		},
 		mounted() {
@@ -193,12 +184,18 @@
 					case 0:
 						this.changeStatus(id, 1);
 						this.pay(price);
+						this.toastParams.message = "支付成功";
+						this.showToast(this.toastParams);
 						break;
 					case 1:
 						this.changeStatus(id, 3);
+						this.toastParams.message = "确认收货";
+						this.showToast(this.toastParams);
 						break;
 					case 2:
 						this.changeStatus(id, 3);
+						this.toastParams.message = "确认收货";
+						this.showToast(this.toastParams);
 						break;
 					case 3:
 						this.toScore(id);
@@ -283,6 +280,11 @@
 						self.getWallet();
 					}
 				});
+			},
+			showToast(params) {
+				this.$refs.uToast.show({
+					...params,
+				})
 			},
 			sectionChange(index) {
 				this.curNow = index;

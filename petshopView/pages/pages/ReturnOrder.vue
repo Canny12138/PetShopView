@@ -1,14 +1,13 @@
 <template>
 	<view class="wrap">
-		<u-navbar title="评价" bgColor="#ffadb1" :autoBack="true"></u-navbar>
+		<u-navbar title="申请退款" bgColor="#ffadb1" :autoBack="true"></u-navbar>
 		<u-gap height="44" bgColor="#bbb"></u-gap>
 		<view style="margin: 30rpx;">
-			<u--textarea v-model="value" placeholder="请输入您的评价" confirmType="done" count
+			<u--textarea v-model="value" placeholder="请输入您的申请理由" confirmType="done" count
 				style="background-color: #fff7fc">
 			</u--textarea>
 			<u-gap height="20" bgColor="#fff7fc"></u-gap>
-			<u-rate :count="count" v-model="rank" size="25"></u-rate>
-			<u-button type="error" text="评价" customStyle="margin-top: 50px" @click="submit()"></u-button>
+			<u-button type="error" text="提交申请" customStyle="margin-top: 50px" @click="toReturnOrder()"></u-button>
 		</view>
 	</view>
 </template>
@@ -19,7 +18,6 @@
 			return {
 				count: 5,
 				value: '',
-				rank: 0,
 				token: '',
 				memberId: '',
 				orderId: '',
@@ -31,28 +29,39 @@
 			this.orderId = option.id;
 		},
 		methods: {
-			submit() {
+			changeStatus(id, status) {
 				uni.request({
-					url: this.$baseUrl + '/order/orderscore',
-					method: 'POST',
+					url: this.$baseUrl + '/order/order',
+					method: 'PUT',
 					data: {
-						orderId: this.orderId,
-						info: this.value,
-						orderRank: this.rank,
+						id: id,
+						orderStatus: status,
 					},
 					header: {
 						token: this.token,
-						// "Content-Type": "application/x-www-form-urlencoded",
 					},
 					success: ((res) => {
-						console.log("提交评价");
-						console.log(res);
-						// uni.navigateBack({})
 						uni.navigateTo({
-							url: 'Order'
+							url: 'OrderPage?id=' + this.orderId
 						});
-					}),
-				});
+					})
+				})
+			},
+			toReturnOrder() {
+				uni.request({
+					url: this.$baseUrl + '/order/orderreturnsubmit',
+					method: 'POST',
+					data: {
+						orderId: this.orderId,
+						returnReason: this.value,
+					},
+					header: {
+						token: this.token,
+					},
+					success: ((res) => {
+						this.changeStatus(this.orderId, -2);
+					})
+				})
 			},
 			getStorage() {
 				let self = this;

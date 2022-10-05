@@ -47,12 +47,13 @@
 					:text="getStatusButton(this.orderStatus)" shape="circle"
 					style="margin-right: 20rpx; width: 30%; float: right; background-color: #fff7fc;">
 				</u-button>
-				<u-button type="error" @click="changeStatus(orderId, -2)"
-					v-show="this.orderStatus > 0 && this.orderStatus < 4" :plain="true" text="申请退款" shape="circle"
+				<u-button type="error" @click="toReturnOrder()" v-show="this.orderStatus > 0 && this.orderStatus < 4"
+					:plain="true" text="申请退款" shape="circle"
 					style="margin-right: 20rpx; width: 30%; float: right; background-color: #fff7fc; ">
 				</u-button>
 			</view>
 		</u-tabbar>
+		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
 
@@ -73,6 +74,10 @@
 				orderStatus: "",
 				orderId: 1000017,
 				price: "",
+				toastParams: {
+					type: "success",
+					message: "",
+				},
 			}
 		},
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
@@ -210,12 +215,18 @@
 					case 0:
 						this.changeStatus(id, 1);
 						this.pay(price);
+						this.toastParams.message = "支付成功";
+						this.showToast(this.toastParams);
 						break;
 					case 1:
 						this.changeStatus(id, 3);
+						this.toastParams.message = "确认收货";
+						this.showToast(this.toastParams);
 						break;
 					case 2:
 						this.changeStatus(id, 3);
+						this.toastParams.message = "确认收货";
+						this.showToast(this.toastParams);
 						break;
 					case 3:
 						this.toScore(id);
@@ -254,6 +265,11 @@
 						this.getOrder();
 					})
 				})
+			},
+			toReturnOrder() {
+				uni.navigateTo({
+					url: 'ReturnOrder?id=' + this.orderId
+				});
 			},
 			toScore(id) {
 				console.log(id);
@@ -300,6 +316,11 @@
 						self.getWallet();
 					}
 				});
+			},
+			showToast(params) {
+				this.$refs.uToast.show({
+					...params,
+				})
 			},
 			sectionChange(index) {
 				this.curNow = index;
