@@ -11,7 +11,7 @@
 					<u-icon name="star-fill" color="#ffbc10" v-for="index of store.rank" :key="index"
 						style="float: left;"></u-icon>
 				</view>
-				<text style="text-decoration: underline;">\n地址：{{store.address}}\n\n</text>
+				<text @click="toMap()" style="text-decoration: underline;">\n地址：{{store.address}}\n\n</text>
 				<text>{{store.info}}</text>
 			</view>
 		</uni-card>
@@ -54,7 +54,7 @@
 	export default {
 		data() {
 			return {
-				storeId: "f2627c21-3148-4db7-8064-6e7944efa76d",
+				storeId: "5",
 				store: {
 					storeName: "",
 					address: "",
@@ -73,6 +73,7 @@
 				isLoad: true,
 				status: 'loading',
 				token: "",
+				memberId: "",
 				isCollect: true,
 				imgUrl: "http://150.158.85.93:88",
 				storeImg: "http://150.158.85.93:88/img/Pet Store.png",
@@ -95,15 +96,12 @@
 		methods: {
 			getStore() {
 				uni.request({
-					url: this.$baseUrl + '/store-server/storeInfoOV/getStoreInfoOVById',
-					method: 'POST',
-					data: {
-						storeId: this.storeId,
-					},
-					header: {
-						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
-					},
+					url: this.$baseUrl + `/store/storeOV/${this.storeId}`,
+					method: 'GET',
+					// header: {
+					// 	token: this.token,
+					// 	"Content-Type": "application/x-www-form-urlencoded",
+					// },
 					success: ((res) => {
 						console.log(res);
 						this.store.storeName = res.data.data.storeName;
@@ -116,35 +114,32 @@
 			getGood() {
 				this.status = "loading";
 				uni.request({
-					url: this.$baseUrl + '/store-server/goodOV/getGoodOVByPage',
+					url: this.$baseUrl + '/product/productOV/page',
 					method: 'GET',
 					data: {
-						pageNum: this.currentPage,
-						pageSize: 2,
-						goodName: this.searchValue,
-						type: -1 * this.curNow + 1,
+						page: this.currentPage,
+						limit: 2,
+						productName: this.searchValue,
+						memberId: this.memberId,
 						storeId: this.storeId,
+						// type: -1 * this.curNow + 1,
 					},
 					header: {
-						token: this.token,
+						// token: this.token,
 					},
 					success: ((res) => {
-						// console.log(res);
-						// this.lineTemp = res.data.data;
-						// console.log(this.lineTemp);
-						// console.log(this.lineTemp[0].good.goodName);
 						this.lineTemp = [];
-						for (let j = 0; j < res.data.data.length; j++) {
+						for (let j = 0; j < res.data.data.list.length; j++) {
 							this.lineTemp.push({
-								goodId: res.data.data[j].goodId,
-								goodName: res.data.data[j].goodName,
-								img: this.imgUrl + res.data.data[j].img,
-								price: res.data.data[j].price,
-								storeName: res.data.data[j].storeName,
-								isCollect: res.data.data[j].isCollect,
+								goodId: res.data.data.list[j].id,
+								goodName: res.data.data.list[j].productName,
+								img: this.imgUrl + res.data.data.list[j].img,
+								price: res.data.data.list[j].price,
+								storeName: res.data.data.list[j].storeName,
+								isCollect: res.data.data.list[j].isCollect,
 							});
 						}
-						if (res.data.data.length == 1) {
+						if (res.data.data.list.length == 1) {
 							this.lineTemp.push({
 								goodName: "广告位出租",
 								img: 'http://150.158.85.93:81/pet/1.jpeg',
@@ -163,7 +158,7 @@
 			clickGood(id) {
 				console.log(id);
 				uni.navigateTo({
-					url: 'pages/Good?id=' + id
+					url: 'Good?id=' + id
 				});
 			},
 			collect() {
@@ -186,6 +181,7 @@
 					key: "user",
 					success(res) {
 						self.token = res.data.token;
+						self.memberId = res.data.memberId;
 						console.log('获取成功', res);
 					}
 				})
@@ -194,7 +190,7 @@
 				// this.$refs.uToast.success(`点击了第${name}个`)
 			},
 			backTop() {
-				this.scrollTop = 0;
+				this.scrollTop = this.scrollTop == 0 ? -1 : 0;
 			},
 			scrolltolower() {
 				this.loadmore();
@@ -205,24 +201,30 @@
 			scroll(e) {
 				// console.log(e);
 				this.showBackTop = true;
-				this.scrollTop = e;
+			},
+			toMap() {
+				console.log(this.store.storeName);
+				uni.navigateTo({
+					url: 'Map?storeName=' + this.store.storeName
+				});
 			},
 			firstLoad() {
 				uni.request({
-					url: this.$baseUrl + '/store-server/goodOV/getGoodOVByPage',
+					url: this.$baseUrl + '/product/productOV/page',
 					method: 'GET',
 					data: {
-						pageNum: 1,
-						pageSize: 2,
-						goodName: "",
-						type: this.curNow,
+						page: this.currentPage,
+						limit: 2,
+						productName: this.searchValue,
 						storeId: this.storeId,
+						// type: -1 * this.curNow + 1,
 					},
 					header: {
-						token: this.token,
+						// token: this.token,
 					},
 					success: ((res) => {
-						this.etc = res.data.etc;
+						this.etc = Math.ceil(res.data.data.total / 2);
+						console.log(res.data.data.list.length);
 						this.loadmore();
 					}),
 				});
@@ -249,7 +251,7 @@
 					this.indexList = [];
 					this.currentPage = 1;
 					this.isLoad = true;
-					this.loadmore();
+					this.firstLoad();
 				}, 1000)
 			},
 			onRestore() {

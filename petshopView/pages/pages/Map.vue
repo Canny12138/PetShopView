@@ -63,17 +63,26 @@
 				imgUrl: "http://150.158.85.93:88/img/Pet Store.png",
 			}
 		},
-		mounted() {
+		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
+			console.log(option.storeName); //打印出上个页面传递的参数。
+			// console.log(option.name); //打印出上个页面传递的参数。
+			this.curStore = option.storeName;
 			this.getMap();
 			this.getStorage();
 			this.firstLoad();
 			this._freshing = false;
 		},
+		// mounted() {
+		// 	this.getMap();
+		// 	this.getStorage();
+		// 	this.firstLoad();
+		// 	this._freshing = false;
+		// },
 		methods: {
 			getMap() {
 				uni.request({
-					url: this.$baseUrl + '/store-server/storeMap/getAllStoreInMap',
-					method: 'POST',
+					url: this.$baseUrl + '/store/storeOV/getAllInMap',
+					method: 'GET',
 					success: ((res) => {
 						console.log(res);
 						// this.lineTemp = res.data.data;
@@ -98,28 +107,30 @@
 			getGood() {
 				this.status = "loading";
 				uni.request({
-					url: this.$baseUrl + '/store-server/storeOV/getAllStoreOV',
-					method: 'POST',
-					data: {},
-					header: {
-						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
+					url: this.$baseUrl + '/store/storeOV/page',
+					method: 'GET',
+					data: {
+						limit: 100,
+						page: 1,
+						storeName: this.curStore,
 					},
+					// header: {
+					// 	token: this.token,
+					// 	"Content-Type": "application/x-www-form-urlencoded",
+					// },
 					success: ((res) => {
 						console.log(res);
 						this.lineTemp = [];
-						for (let j = 0; j < res.data.data.length; j++) {
-							if (this.curStore != "" && res.data.data[j].storeId != this.curStore) {
-								continue;
-							}
+						for (let j = 0; j < res.data.data.total; j++) {
 							this.lineTemp.push({
-								storeName: res.data.data[j].storeName,
-								address: res.data.data[j].address,
-								storeId: res.data.data[j].storeId,
-								rank: res.data.data[j].rank,
+								storeName: res.data.data.list[j].storeName,
+								address: res.data.data.list[j].address,
+								storeId: res.data.data.list[j].storeId,
+								rank: res.data.data.list[j].rank,
 							});
 						}
-						this.curStore = "";
+						this.latitude = res.data.data.list[0].latitude;
+						this.longitude = res.data.data.list[0].longitude;
 						this.status = "nomore";
 						this.isLoad = false;
 					}),
@@ -133,7 +144,7 @@
 			},
 			mapClick(e) {
 				console.log(e.detail.markerId);
-				this.curStore = this.covers[e.detail.markerId].storeId;
+				this.curStore = this.covers[e.detail.markerId].callout.content;
 				this.onRefresh();
 			},
 			sectionChange(index) {
@@ -154,7 +165,7 @@
 				// this.$refs.uToast.success(`点击了第${name}个`)
 			},
 			backTop() {
-				this.scrollTop = 0;
+				this.scrollTop = this.scrollTop == 0 ? -1 : 0;
 			},
 			scrolltolower() {
 				this.loadmore();
@@ -165,7 +176,6 @@
 			scroll(e) {
 				// console.log(e);
 				this.showBackTop = true;
-				this.scrollTop = e;
 			},
 			firstLoad() {
 				this.loadmore();

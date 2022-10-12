@@ -1,6 +1,6 @@
 <template>
 	<view style="background-color: #fff7fc;">
-		<u-navbar title="购物车" bgColor="#ffadb1" leftIcon=""></u-navbar>
+		<u-navbar title="购物车" bgColor="#ffadb1" :autoBack="true"></u-navbar>
 		<u-gap height="19" bgColor="#bbb"></u-gap>
 		<u-empty v-show="isEmpty" mode="car" icon="http://cdn.uviewui.com/uview/empty/car.png" style="height: 1300rpx;">
 		</u-empty>
@@ -48,17 +48,6 @@
 				</u-button>
 			</view>
 		</view>
-		<u-popup :show="show" @close="close" @open="open" mode="center">
-			<view style="height: 50vh; width: 45vh;">
-				<text>订单\n</text>
-				<text>收货人 {{order.receiver}}\n\n</text>
-				<text>手机号码 {{order.tel}}\n\n</text>
-				<text>订单时间 {{order.createTime}}\n\n</text>
-				<text>订单号 {{order.orderId}}\n\n</text>
-				<text>价钱 {{order.price}}\n\n</text>
-				<text>订单状态 {{order.orderStatusValue}}\n\n</text>
-			</view>
-		</u-popup>
 		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
@@ -76,10 +65,10 @@
 				etc: 1,
 				isLoad: true,
 				token: "",
+				memberId: "",
 				isEmpty: true,
 				prePrice: 0,
 				curPrice: 0,
-				show: false,
 				imgUrl: "http://150.158.85.93:88",
 				order: {
 					receiver: "",
@@ -118,11 +107,11 @@
 		methods: {
 			getGood() {
 				uni.request({
-					url: this.$baseUrl + '/login-server/cart/getCartByUserId',
-					method: 'POST',
+					url: this.$baseUrl + `/product/productOV/getCart/${this.memberId}`,
+					method: 'GET',
 					header: {
 						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
+						// "Content-Type": "application/x-www-form-urlencoded",
 					},
 					success: ((res) => {
 						console.log(res);
@@ -132,8 +121,9 @@
 						this.lineTemp = [];
 						for (let i = 0; i < res.data.data.length; i++) {
 							this.lineTemp.push({
-								goodId: res.data.data[i].goodId,
-								goodName: res.data.data[i].goodName,
+								goodId: res.data.data[i].id,
+								cartId: res.data.data[i].cartId,
+								goodName: res.data.data[i].productName,
 								img: this.imgUrl + res.data.data[i].img,
 								price: res.data.data[i].price,
 								storeName: res.data.data[i].storeName,
@@ -159,15 +149,16 @@
 				this.curPrice -= this.lineTemp[i].price * preNum;
 				this.curPrice += this.lineTemp[i].price * curNum;
 				uni.request({
-					url: '/api/login-server/cart/updateCart',
-					method: 'POST',
+					url: this.$baseUrl + '/member/membercart',
+					method: 'PUT',
 					data: {
-						goodId: this.lineTemp[i].goodId,
+						memberId: this.lineTemp[i].memberId,
+						id: this.lineTemp[i].cartId,
 						number: curNum,
 					},
 					header: {
 						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
+						// "Content-Type": "application/x-www-form-urlencoded",
 					},
 					success: ((res) => {
 						console.log(res);
@@ -183,19 +174,20 @@
 						if (res.confirm) {
 							console.log("进入删除");
 							uni.request({
-								url: '/api/login-server/cart/deleteCart',
-								method: 'POST',
+								url: this.$baseUrl + '/member/membercart/remove',
+								method: 'DELETE',
 								data: {
-									goodId: this.lineTemp[i].goodId,
+									productId: this.lineTemp[i].goodId,
+									memberId: this.memberId,
 								},
 								header: {
-									token: this.token,
 									"Content-Type": "application/x-www-form-urlencoded",
+									token: this.token,
 								},
 								success: ((res) => {
 									console.log(res);
 									console.log("删除成功");
-									this.toastParams.message = res.data.message;
+									this.toastParams.message = "删除成功";
 									this.toastParams.type = "success";
 									this.showToast(this.toastParams);
 									this.onRefresh();
@@ -206,13 +198,13 @@
 				})
 			},
 			toOrder() {
-				this.show = true;
 				console.log("6");
 				uni.request({
-					url: '/api/login-server/order/addOrderByCart',
+					url: this.$baseUrl + '/product/orderOV/orderByCart',
 					method: 'POST',
 					data: {
-						addressId: "7491b60d-4374-4bdc-a8da-68e1fce0205b",
+						addressId: 2,
+						memberId: this.memberId,
 					},
 					header: {
 						token: this.token,
@@ -220,29 +212,33 @@
 					},
 					success: ((res) => {
 						console.log(res);
-						this.getOrder();
+						this.toastParams.type = "error";
+						this.toastParams.message = res.data.msg;
+						if (res.data.code == 0) {
+							this.toastParams.type = "success";
+							this.toastParams.message = "下单成功";
+							this.onRefresh();
+						}
+						this.showToast(this.toastParams);
 					}),
+					fail: ((res) => {
+						console.log(res);
+					})
 				});
 			},
-			getOrder() {
+			getDefAddressId() {
 				uni.request({
-					url: '/api/login-server/order/getOrdersByUserId',
-					method: 'POST',
+					url: this.$baseUrl + '',
+					method: 'GET',
 					data: {
-						addressId: "7491b60d-4374-4bdc-a8da-68e1fce0205b",
+
 					},
 					header: {
 						token: this.token,
 						"Content-Type": "application/x-www-form-urlencoded",
 					},
 					success: ((res) => {
-						console.log(res);
-						this.order.receiver = res.data.data[0].receiver;
-						this.order.createTime = res.data.data[0].createTime;
-						this.order.orderId = res.data.data[0].orderId;
-						this.order.price = res.data.data[0].price;
-						this.order.tel = res.data.data[0].tel;
-						this.order.orderStatusValue = res.data.data[0].orderStatusValue;
+
 					}),
 				});
 			},
@@ -252,6 +248,7 @@
 					key: "user",
 					success(res) {
 						self.token = res.data.token;
+						self.memberId = res.data.memberId;
 						console.log('获取成功', res);
 					}
 				})
@@ -260,7 +257,7 @@
 				// this.$refs.uToast.success(`点击了第${name}个`)
 			},
 			backTop() {
-				this.scrollTop = 0;
+				this.scrollTop = this.scrollTop == 0 ? -1 : 0;
 			},
 			scrolltolower() {
 				this.loadmore();
@@ -271,23 +268,22 @@
 			scroll(e) {
 				// console.log(e);
 				this.showBackTop = true;
-				this.scrollTop = e;
 			},
 			firstLoad() {
 				uni.request({
-					url: this.$baseUrl + '/login-server/cart/getCartByUserId',
-					method: 'POST',
+					url: this.$baseUrl + `/product/productOV/getCart/${this.memberId}`,
+					method: 'GET',
 					header: {
 						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
+						// "Content-Type": "application/x-www-form-urlencoded",
 					},
 					success: ((res) => {
 						console.log(res);
-						if (res.data.statusCode == "400") {
+						if (res.data.data.length == 0) {
 							this.isLoad = false;
 							this.isEmpty = true;
 						} else {
-							this.etc = res.data.etc;
+							// this.etc = res.data.etc;
 							this.isEmpty = false;
 							this.loadmore();
 						}

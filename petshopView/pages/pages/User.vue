@@ -16,15 +16,22 @@
 			<u-form-item label="手机号码" leftIcon="phone" borderBottom labelWidth="100px">
 				<u--input placeholder="请输入手机号" v-model="userInfo.tel" border="none"></u--input>
 			</u-form-item>
-			<u-form-item label="默认地址" leftIcon="map" borderBottom labelWidth="100px">
-				<text>{{userInfo.address}}</text>
-			</u-form-item>
-			<u-form-item label="电子邮箱" leftIcon="map" borderBottom labelWidth="100px">
+			<u-form-item label="电子邮箱" leftIcon="email" borderBottom labelWidth="100px">
 				<u--input placeholder="请输入邮箱" v-model="userInfo.mail" border="none"></u--input>
+			</u-form-item>
+			<u-form-item label="城市" leftIcon="map" borderBottom labelWidth="100px">
+				<u--input placeholder="请输入所在城市" v-model="userInfo.city" border="none"></u--input>
+			</u-form-item>
+			<u-form-item label="会员等级" leftIcon="map" borderBottom labelWidth="100px">
+				<text>Level.{{userInfo.level}}</text>
+			</u-form-item>
+			<u-form-item label="注册时间" leftIcon="map" borderBottom labelWidth="100px">
+				<text>{{userInfo.createTime}}</text>
 			</u-form-item>
 			<u-button type="error" text="保存" customStyle="margin-top: 50px" @click="updateUser"></u-button>
 			<u-button type="error" text="修改密码" customStyle="margin-top: 20px" @click="show = true"></u-button>
 		</u--form>
+		<u-toast ref="uToast"></u-toast>
 		<u-popup :show="show" @close="close" @open="open" mode="center">
 			<view style="height: 50vh; width: 45vh;">
 				<u--form labelPosition="left" :model="userInfo" style="margin: 25px">
@@ -52,11 +59,16 @@
 				value: true,
 				show: false,
 				username: "",
+				token: "",
+				memberId: "",
 				userInfo: {
 					name: '',
 					tel: '',
-					address: '',
+					createTime: '',
 					mail: '',
+					city: '',
+					id: '',
+					level: '',
 				},
 				password: {
 					old: "",
@@ -76,18 +88,21 @@
 		methods: {
 			getUser() {
 				uni.request({
-					url: this.$baseUrl + '/login-server/userInfo/getUserInfo',
-					method: 'POST',
+					url: this.$baseUrl + `/member/member/${this.memberId}`,
+					method: 'GET',
 					header: {
-						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
+						// token: this.token,
+						// 		"Content-Type": "application/x-www-form-urlencoded",
 					},
 					success: ((res) => {
 						console.log(res);
 						this.userInfo.name = res.data.data.nickname;
-						this.userInfo.address = res.data.data.defAddress;
-						this.userInfo.tel = res.data.data.tel;
-						this.userInfo.mail = res.data.data.mail;
+						this.userInfo.createTime = res.data.data.createTime;
+						this.userInfo.city = res.data.data.city;
+						this.userInfo.tel = res.data.data.mobile;
+						this.userInfo.mail = res.data.data.email;
+						this.userInfo.id = res.data.data.id;
+						this.userInfo.level = res.data.data.level;
 					}),
 				});
 			},
@@ -95,22 +110,24 @@
 				this.toastParams.message = "fail";
 				this.toastParams.type = "error";
 				uni.request({
-					url: this.$baseUrl + '/login-server/userInfo/updateUserInfo',
-					method: 'POST',
+					url: this.$baseUrl + '/member/member',
+					method: 'PUT',
 					data: {
-						nickName: this.userInfo.name,
-						tel: this.userInfo.tel,
-						mail: this.userInfo.mail,
+						city: this.userInfo.city,
+						email: this.userInfo.mail,
+						id: this.userInfo.id,
+						mobile: this.userInfo.tel,
+						nickname: this.userInfo.name,
 					},
 					header: {
-						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
+						// token: this.token,
+						// "Content-Type": "application/x-www-form-urlencoded",
 					},
 					success: ((res) => {
 						console.log("update");
 						console.log(res);
-						this.toastParams.message = res.data.message;
-						if (res.data.statusCode == "200")
+						this.toastParams.message = res.data.msg;
+						if (res.data.code == 0)
 							this.toastParams.type = "success";
 						this.showToast(this.toastParams);
 					}),
@@ -147,6 +164,7 @@
 					success(res) {
 						self.token = res.data.token;
 						self.username = res.data.username;
+						self.memberId = res.data.memberId;
 						console.log('获取成功', res);
 					}
 				})

@@ -1,120 +1,29 @@
 <template>
-	<view @tap="btnBClick">
-		<view style="background-color: #ffadb1">
-			<u-icon name="github-circle-fill" color="#ff5558" size="40" label="PetShop" labelColor="#ff5558"
-				labelSize="19"></u-icon>
-			<u-search shape="round" style="padding: 15px; padding-top: 5px;"></u-search>
-		</view>
-		<u-notice-bar :text="text1"></u-notice-bar>
-		<u-swiper :list="list3" :autoplay="false" indicator indicatorMode="line" circular showTitle></u-swiper>
-		<view class="u-demo-block" style="padding-left: 5px; margin-top: -10px; background-color: #fff7fc;">
-			<u-scroll-list>
-				<view class="scroll-list" style="text-align: center;">
-					<view class="scroll-list__line" v-for="(item, index) in menuArr" :key="index">
-						<view @click="toPage(item1.url)" class="scroll-list__line__item" v-for="(item1, index1) in item"
-							:key="index1"
-							:class="[(index1 === item.length - 1) && 'scroll-list__line__item--no-margin-right']">
-							<image class="scroll-list__line__item__image" :src="item1.icon" mode="">
+	<view class="u-page">
+		<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll" :scrollTop="scrollTop"
+			:preLoadScreen="2" style="background-color: #fff7fc; margin-top: 5px">
+			<u-list-item v-for="(item, index) in indexList" :key="index">
+				<u-grid :border="false" col="2" style="height: 260px;">
+					<u-grid-item v-for="(item, index) in item" :key="index">
+						<uni-card @click="clickGood(item.goodId)"
+							style="width: 85%; height:250px; margin: 5px; background-color: #fff7fc">
+							<image slot='cover' :src="item.img" mode="aspectFill" style="width: 100%; height: 130px">
 							</image>
-							<text class="scroll-list__line__item__text">{{ item1.name }}</text>
-						</view>
-					</view>
-				</view>
-			</u-scroll-list>
-		</view>
-		<u-line color="#efedee"></u-line>
-		<u-sticky offset-top="-45">
-			<u-tabs :list="list4" lineWidth="30" :current="indexN" @change="indexToindexN" lineColor="#f56c6c"
-				:activeStyle="{
-		            color: '#303133',
-		            fontWeight: 'bold',
-		            transform: 'scale(1.05)',
-		        }" :inactiveStyle="{
-		            color: '#606266',
-		            transform: 'scale(1)'
-		        }" itemStyle="padding-top: 5px; padding-bottom: 5px; height: 35px; background-color: #fff7fc;">
-			</u-tabs>
-		</u-sticky>
-		<!-- <view v-if="indexN == 0">page0</view>
-		<view v-if="indexN == 1">page1</view>
-		<view v-if="indexN == 2">page2</view> -->
-		<swiper :current="indexN" @change="sIndexToindexN" class="swiper" style="margin: 0px">
-			<swiper-item style="background-color: #fff7fc;">
-				<u-grid :border="true" col="2">
-					<u-grid-item v-for="(baseListItem,baseListIndex) in baseList" :key="baseListIndex">
-						<u-icon :customStyle="{paddingTop:20+'rpx'}" :name="baseListItem.name" :size="22"></u-icon>
-						<text class="grid-text">{{baseListItem.title}}</text>
+							<text style="font-weight: bold; font-size: 15px;">{{item.goodName}}</text>
+							<text
+								style="color: #ffb300;font-weight: bold; font-size: 18px;">\n\n¥{{item.price}}\n</text>
+							<text
+								style="background-color: #eee7ec; border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">{{item.storeName}}&nbsp></text>
+							<u-icon name="bookmark-fill" size="40" color="#ffb300" v-show="item.isCollect == 1"
+								style="position: absolute; right: 15px; bottom: 218px"></u-icon>
+						</uni-card>
 					</u-grid-item>
 				</u-grid>
-			</swiper-item>
-			<swiper-item style="background-color: #fff7fc;">
-				<!-- <scroll-view style="height: 1300rpx;" scroll-y="true" refresher-enabled="true"
-					:refresher-triggered="triggered" :refresher-threshold="100" refresher-background="#fff7fc"
-					@refresherpulling="onPulling" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
-					@refresherabort="onAbort"> -->
-				<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
-					:scrollTop="scrollTop" :preLoadScreen="2" style="background-color: #fff7fc; margin-top: 5px">
-					<u-list-item v-for="(item, index) in indexList" :key="index">
-						<u-grid :border="false" col="2" style="height: 260px;">
-							<u-grid-item v-for="(item, index) in item" :key="index">
-								<uni-card @click="clickGood(item.goodId)"
-									style="width: 85%; height:250px; margin: 5px; background-color: #fff7fc">
-									<image slot='cover' :src="item.img" mode="aspectFill"
-										style="width: 100%; height: 130px">
-									</image>
-									<text style="font-weight: bold; font-size: 15px;">{{item.goodName}}</text>
-									<text
-										style="color: #ffb300;font-weight: bold; font-size: 18px;">\n\n¥{{item.price}}\n</text>
-									<text
-										style="background-color: #eee7ec; border-radius: 8px; padding: 1px 10px 1px 10px; position: relative; top: 5px">{{item.storeName}}&nbsp></text>
-									<u-icon name="bookmark-fill" size="40" color="#ffb300" v-show="item.isCollect == 1"
-										style="position: absolute; right: 15px; bottom: 218px"></u-icon>
-								</uni-card>
-							</u-grid-item>
-						</u-grid>
-					</u-list-item>
-					<u-transition :show="showBackTop" style="position: fixed; right: 50px; bottom: 100px">
-						<u-avatar icon="arrow-up" fontSize="22" @click="backTop"></u-avatar>
-					</u-transition>
-					<u-loadmore :status="status" />
-				</u-list>
-				<!-- </scroll-view> -->
-			</swiper-item>
-			<swiper-item style="background-color: #fff7fc;">
-				<scroll-view style="height: 1300px;" scroll-y="true" refresher-enabled="true"
-					:refresher-triggered="triggered" :refresher-threshold="100" refresher-background="#fff7fc"
-					@refresherpulling="onPulling" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
-					@refresherabort="onAbort">
-					<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
-						:scrollTop="scrollTop">
-						<u-list-item v-for="(item, index) in indexList" :key="index">
-							<u-cell :title="`商品-${index + 1}`">
-								<u-avatar slot="icon" shape="square" size="80" :src="item.url"
-									customStyle="margin: -3px 5px -3px 0"></u-avatar>
-							</u-cell>
-						</u-list-item>
-						<u-transition :show="showBackTop" style="position: fixed; right: 50px; bottom: 100px">
-							<u-avatar icon="arrow-up" fontSize="22" @click="backTop"></u-avatar>
-						</u-transition>
-					</u-list>
-				</scroll-view>
-			</swiper-item>
-			<swiper-item>
-				page3
-			</swiper-item>
-			<swiper-item>
-				page4
-			</swiper-item>
-			<swiper-item>
-				page5
-			</swiper-item>
-			<swiper-item>
-				page6
-			</swiper-item>
-			<swiper-item>
-				page7
-			</swiper-item>
-		</swiper>
+			</u-list-item>
+			<u-transition :show="showBackTop" style="position: fixed; right: 50px; bottom: 100px">
+				<u-avatar icon="arrow-up" fontSize="22" @click="backTop"></u-avatar>
+			</u-transition>
+		</u-list>
 	</view>
 </template>
 
@@ -129,6 +38,7 @@
 				triggered: true,
 				showBackTop: false,
 				scrollTop: 0,
+				currentScroll: 0,
 				curNow: 0,
 				currentPage: 1,
 				indexList: [],
@@ -196,13 +106,12 @@
 							icon: 'https://cdn.uviewui.com/uview/menu/11.png',
 							url: 'Recommend'
 						}, {
-							name: '特价秒杀',
-							icon: 'https://cdn.uviewui.com/uview/menu/9.png',
-							url: 'Sale'
-						}, {
-							name: '宠物用品',
+							name: '宠物零食',
 							icon: 'https://cdn.uviewui.com/uview/menu/11.png',
 							url: 'Test'
+						}, {
+							name: '宠物用品',
+							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
 						}, {
 							name: '分类',
 							icon: 'https://cdn.uviewui.com/uview/menu/11.png'
@@ -240,7 +149,6 @@
 				}, {
 					name: '手工'
 				}],
-				indexList: [],
 				urls: [
 					'http://150.158.85.93:81/pet/1.jpeg',
 					'http://150.158.85.93:81/pet/2.jpeg',
@@ -259,8 +167,9 @@
 		},
 		mounted() {
 			this.getStorage();
-			this.firstLoad();
-			// this.testGood();
+			// this.firstLoad();
+			this.testGood();
+			console.log(this.indexList);
 			this._freshing = false;
 			// setTimeout(() => {
 			// this.triggered = true;
@@ -286,18 +195,17 @@
 			getGood() {
 				this.status = "loading";
 				uni.request({
-					url: this.$baseUrl + '/product/productOV/page',
+					url: this.$baseUrl + '/store-server/goodOV/getGoodOVByPage',
 					method: 'GET',
 					data: {
-						page: this.currentPage,
-						limit: 2,
-						productName: this.searchValue,
-						memberId: this.memberId,
-						// categoryId: 1,
-						// type: -1 * this.curNow + 1,
+						pageNum: this.currentPage,
+						pageSize: 2,
+						goodName: this.searchValue,
+						type: 3,
+						storeId: "",
 					},
 					header: {
-						// token: this.token,
+						token: this.token,
 					},
 					success: ((res) => {
 						// console.log(res);
@@ -305,17 +213,17 @@
 						// console.log(this.lineTemp);
 						// console.log(this.lineTemp[0].good.goodName);
 						this.lineTemp = [];
-						for (let j = 0; j < res.data.data.list.length; j++) {
+						for (let j = 0; j < res.data.data.length; j++) {
 							this.lineTemp.push({
-								goodId: res.data.data.list[j].id,
-								goodName: res.data.data.list[j].productName,
-								img: this.imgUrl + res.data.data.list[j].img,
-								price: res.data.data.list[j].price,
-								storeName: res.data.data.list[j].storeName,
-								isCollect: res.data.data.list[j].isCollect,
+								goodId: res.data.data[j].goodId,
+								goodName: res.data.data[j].goodName,
+								img: this.imgUrl + res.data.data[j].img,
+								price: res.data.data[j].price,
+								storeName: res.data.data[j].storeName,
+								isCollect: res.data.data[j].isCollect,
 							});
 						}
-						if (res.data.data.list.length == 1) {
+						if (res.data.data.length == 1) {
 							this.lineTemp.push({
 								goodName: "广告位出租",
 								img: 'http://150.158.85.93:81/pet/1.jpeg',
@@ -379,24 +287,24 @@
 			scroll(e) {
 				// console.log(e);
 				this.showBackTop = true;
+				// this.scrollTop = e;
 			},
 			firstLoad() {
 				uni.request({
-					url: this.$baseUrl + '/product/productOV/page',
+					url: this.$baseUrl + '/store-server/goodOV/getGoodOVByPage',
 					method: 'GET',
 					data: {
-						page: this.currentPage,
-						limit: 2,
-						productName: this.searchValue,
-						// categoryId: 1,
-						// type: -1 * this.curNow + 1,
+						pageNum: 1,
+						pageSize: 2,
+						goodName: "",
+						type: 3,
+						storeId: "",
 					},
 					header: {
-						// token: this.token,
+						token: this.token,
 					},
 					success: ((res) => {
-						this.etc = Math.ceil(res.data.data.total / 2);
-						console.log(res.data.data.list.length);
+						this.etc = res.data.etc;
 						this.loadmore();
 					}),
 				});

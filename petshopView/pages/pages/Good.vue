@@ -11,11 +11,20 @@
 			</view>
 		</u-swiper>
 		<uni-card style=" margin: 8px; padding-top:10px; background-color: #fff7fc">
-			<text style="color: #ffb300; font-size: 30px;">¥{{goodTemp.price}}</text>
-			<u-gap height="20"></u-gap>
+			<text style="color: #ffb300; font-size: 30px; float: left;">¥{{goodTemp.price}}</text>
+			
+			<view v-show="goodTemp.isSale == 1">
+				<text
+					style="margin-left: 20rpx; text-decoration: line-through; float: left;">原价¥{{goodTemp.priceNoSale}}</text>
+				<text style="margin-left: 20rpx; float: left;">剩余时间:</text>
+				<u-count-down :time="goodTemp.createTime + goodTemp.saleTime - new Date().getTime()" format="HH:mm:ss"
+					style="font-weight: bold; "></u-count-down>
+			</view>
+			
+			<u-gap height="20" style="width: 100%;"></u-gap>
 			<text style="font-size: 20px; font-weight: 600;">{{goodTemp.goodName}}</text>
 			<u-gap height="10"></u-gap>
-			<text
+			<text @click="clickStore(goodTemp.storeId)"
 				style="background-color: #eee7ec; border-radius: 8px; padding: 1px 15px 1px 15px; font-size: 15px;">{{goodTemp.storeName}}&nbsp进入></text>
 			<u-divider text="分割线" :dot="true"></u-divider>
 			<text style="font-size: 17px;">{{goodTemp.goodInfo}}</text>
@@ -23,7 +32,7 @@
 			<text>商品类型：{{goodTemp.type}}</text>
 			<u-tabbar :fixed="true" :placeholder="true" :safeAreaInsetBottom="true">
 				<view style="width: 12%; padding-top: 5px; background-color: #fff7fc;">
-					<u-button color="#fff7fc">
+					<u-button @click="clickStore(goodTemp.storeId)" color="#fff7fc">
 						<u-icon label="店铺" labelSize="1" labelPos="bottom" size="25" name="bag"></u-icon>
 					</u-button>
 				</view>
@@ -54,7 +63,7 @@
 		</uni-card>
 		<view>
 			<u-popup :show="show" @close="close" @open="open">
-				<view style="height: 200px;background-color: #fff7fc;">
+				<view style="height: 200px; background-color: #fff7fc;">
 					<uni-card style="margin:0px; padding: 10px; background-color: #fff7fc">
 						<image slot='cover' :src="goodTemp.img" mode="aspectFill"
 							style="width: 30%; height: 100px; float: left">
@@ -63,8 +72,7 @@
 							<text style="font-weight: bold; font-size: 13px;">{{goodTemp.goodName}}</text>
 							<text
 								style="color: #ffb300; font-weight: bold; font-size: 15px;">\n¥{{goodTemp.price}}\n</text>
-							<text
-								style="background-color: #eee7ec; font-size: 10px; border-radius: 8px; padding: 1px 10px 1px 10px; position: relative;">{{goodTemp.storeName}}&nbsp></text>
+							<text>剩余{{goodTemp.stock}}件</text>
 						</view>
 						<u-number-box :min="1" :max="goodTemp.stock" v-model="carNum"
 							style="width: 30%; margin-top: 10px; float:left"></u-number-box>
@@ -72,7 +80,7 @@
 					<view style="padding-top: 5px; background-color: #fff7fc;">
 						<view style="width: 40%; margin-right: 20px;float: right">
 							<u-button text="加入购物车" shape="circle" color="linear-gradient(to right, #ffd7d8, #ffadb1)"
-								@click="addCar">
+								@click="addCar_del">
 							</u-button>
 						</view>
 					</view>
@@ -87,7 +95,7 @@
 	export default {
 		data() {
 			return {
-				GoodId: "12a9ae63-774c-4c45-994a-e52f2f3ea1be",
+				GoodId: "1",
 				current: 0,
 				imgUrl: "http://150.158.85.93:88",
 				list1: [
@@ -98,6 +106,7 @@
 				goodTemp: [],
 				carNum: 1,
 				token: "",
+				memberId: "",
 				isCollect: 0,
 				show: false,
 				toastParams: {
@@ -119,24 +128,32 @@
 		methods: {
 			getGood() {
 				uni.request({
-					url: this.$baseUrl + '/store-server/goodInfoOV/getInfo',
+					url: this.$baseUrl + `/product/productOV/info`,
 					method: 'GET',
 					data: {
-						goodId: this.GoodId,
+						id: this.GoodId,
+						memberId: this.memberId,
 					},
 					header: {
-						token: this.token,
+						// token: this.token,
 					},
 					success: ((res) => {
+						console.log(res);
 						this.goodTemp = {
-							goodId: res.data.data.goodId,
-							goodName: res.data.data.goodName,
-							goodInfo: res.data.data.goodInfo,
+							goodId: res.data.data.id,
+							goodName: res.data.data.productName,
+							goodInfo: res.data.data.info,
 							img: this.imgUrl + res.data.data.img,
 							isCollect: res.data.data.isCollect,
 							price: res.data.data.price,
 							storeName: res.data.data.storeName,
-							type: res.data.data.type,
+							type: res.data.data.category,
+							storeId: res.data.data.storeId,
+							stock: res.data.data.stock,
+							isSale: res.data.data.isSale,
+							priceNoSale: res.data.data.priceNoSale,
+							createTime: res.data.data.createTime,
+							saleTime: (res.data.data.saleTime - 16) * 3600000,
 						};
 						this.list1[0] = this.goodTemp.img;
 						console.log(this.goodTemp);
@@ -148,21 +165,23 @@
 				this.toastParams.message = "";
 				this.toastParams.type = "error";
 				uni.request({
-					url: this.$baseUrl + '/login-server/collect/addCollect',
+					url: this.$baseUrl + '/member/membercollect',
 					method: 'POST',
 					data: {
-						goodId: this.GoodId,
+						productId: this.GoodId,
+						memberId: this.memberId,
 					},
 					header: {
-						"Content-Type": "application/x-www-form-urlencoded",
+						// "Content-Type": "application/x-www-form-urlencoded",
 						token: this.token,
 					},
 					success: ((res) => {
-						this.toastParams.message = res.data.message;
-						if (res.data.statusCode == "200") {
+						this.toastParams.message = res.data.msg;
+						if (res.data.code == 0) {
 							console.log("收藏成功!");
 							console.log(res);
 							this.toastParams.type = "success";
+							this.toastParams.message = "收藏成功"
 							this.isCollect = 1;
 						}
 						this.showToast(this.toastParams);
@@ -173,21 +192,23 @@
 				this.toastParams.message = "";
 				this.toastParams.type = "error";
 				uni.request({
-					url: this.$baseUrl + '/login-server/collect/deleteCollect',
-					method: 'POST',
+					url: this.$baseUrl + '/member/membercollect/remove',
+					method: 'DELETE',
 					data: {
-						goodId: this.GoodId,
+						productId: this.GoodId,
+						memberId: this.memberId,
 					},
 					header: {
 						"Content-Type": "application/x-www-form-urlencoded",
 						token: this.token,
 					},
 					success: ((res) => {
-						this.toastParams.message = res.data.message;
-						if (res.data.statusCode == "200") {
+						this.toastParams.message = res.data.msg;
+						if (res.data.code == 0) {
 							console.log("取消收藏");
 							console.log(res);
 							this.toastParams.type = "success";
+							this.toastParams.message = "取消收藏"
 							this.isCollect = 0;
 						}
 						this.showToast(this.toastParams);
@@ -196,25 +217,50 @@
 			},
 			addCar() {
 				uni.request({
-					url: this.$baseUrl + '/login-server/cart/addCart',
+					url: this.$baseUrl + '/member/membercart',
 					method: 'POST',
 					data: {
-						goodId: this.goodTemp.goodId,
+						productId: this.GoodId,
+						memberId: this.memberId,
 						number: this.carNum,
 					},
 					header: {
 						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
+						// "Content-Type": "application/x-www-form-urlencoded",
 					},
 					success: ((res) => {
 						console.log(res);
 						this.show = false;
-						this.toastParams.message = res.data.message;
-						if (res.data.statusCode == "200") {
+						this.toastParams.message = res.data.msg;
+						if (res.data.code == 0) {
 							this.toastParams.type = "success";
+							this.toastParams.message = "添加成功"
 						} else this.toastParams.type = "error";
 						this.showToast(this.toastParams);
 					}),
+				});
+			},
+			addCar_del() {
+				uni.request({
+					url: this.$baseUrl + '/member/membercart/remove',
+					method: 'DELETE',
+					data: {
+						productId: this.GoodId,
+						memberId: this.memberId,
+					},
+					header: {
+						"Content-Type": "application/x-www-form-urlencoded",
+						token: this.token,
+					},
+					success: ((res) => {
+						this.addCar();
+					}),
+				});
+			},
+			clickStore(id) {
+				console.log(id);
+				uni.navigateTo({
+					url: 'StorePage?id=' + id
 				});
 			},
 			getStorage() {
@@ -223,6 +269,7 @@
 					key: "user",
 					success(res) {
 						self.token = res.data.token;
+						self.memberId = res.data.memberId;
 						console.log('获取成功', res);
 					}
 				})

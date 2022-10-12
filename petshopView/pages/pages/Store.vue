@@ -10,8 +10,8 @@
 			<u-list @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" @scroll="scroll"
 				:scrollTop="scrollTop" style="background-color: #fff7fc; margin-top: 5px">
 				<u-list-item v-for="(item, index) in lineTemp" :key="index">
-					<uni-card style="margin:0px; padding: 10px; background-color: #fff7fc">
-						<image slot='cover' @click="clickStore(item.storeId)" :src="imgUrl" mode="aspectFill"
+					<uni-card @click="clickStore(item.storeId)" style="margin:0px; padding: 10px; background-color: #fff7fc">
+						<image slot='cover' :src="imgUrl" mode="aspectFill"
 							style="width: 30%; height: 100px; float: left">
 						</image>
 						<view style="width: 65%; float: left; padding-left: 5%;">
@@ -60,22 +60,26 @@
 			getGood() {
 				this.status = "loading";
 				uni.request({
-					url: this.$baseUrl + '/store-server/storeOV/getAllStoreOV',
-					method: 'POST',
-					data: {},
-					header: {
-						token: this.token,
-						"Content-Type": "application/x-www-form-urlencoded",
+					url: this.$baseUrl + '/store/storeOV/page',
+					method: 'GET',
+					data: {
+						limit: 100,
+						page: 1,
+						storeName: this.searchValue,
 					},
+					// header: {
+					// 	token: this.token,
+					// 	"Content-Type": "application/x-www-form-urlencoded",
+					// },
 					success: ((res) => {
 						console.log(res);
 						this.lineTemp = [];
-						for (let j = 0; j < res.data.data.length; j++) {
+						for (let j = 0; j < res.data.data.total; j++) {
 							this.lineTemp.push({
-								storeName: res.data.data[j].storeName,
-								address: res.data.data[j].address,
-								storeId: res.data.data[j].storeId,
-								rank: res.data.data[j].rank,
+								storeName: res.data.data.list[j].storeName,
+								address: res.data.data.list[j].address,
+								storeId: res.data.data.list[j].storeId,
+								rank: res.data.data.list[j].rank,
 							});
 						}
 						this.status = "nomore";
@@ -117,7 +121,7 @@
 				// this.$refs.uToast.success(`点击了第${name}个`)
 			},
 			backTop() {
-				this.scrollTop = 0;
+				this.scrollTop = this.scrollTop == 0 ? -1 : 0;
 			},
 			scrolltolower() {
 				this.loadmore();
@@ -128,7 +132,6 @@
 			scroll(e) {
 				// console.log(e);
 				this.showBackTop = true;
-				this.scrollTop = e;
 			},
 			firstLoad() {
 				this.loadmore();
